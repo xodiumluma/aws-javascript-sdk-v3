@@ -17,3 +17,17 @@ Choose one of the following:
 - `npm install @aws-sdk/client-dynamodb`
 - `yarn add @aws-sdk/client-dynamodb`
 - `pnpm add @aws-sdk/client-dynamodb`
+
+## Next steps
+
+### Import
+The SDK is divided via clients and commands
+To send a request, import `DynamoDBClient` and the appropriate command, such as `ListBackupsCommand`
+
+```js
+const { DynamoDBClient, ListBackupsCommand } = require("@aws-sdk/client-dynamodb"); // ES5
+```
+
+```ts
+import { DynamoDBClient, ListBackupsCommand } from "@aws-sdk/client-dynamodb";
+```
