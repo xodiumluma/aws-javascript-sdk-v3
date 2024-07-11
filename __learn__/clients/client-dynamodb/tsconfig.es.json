@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig",
+  "compilerOptions": {
+    "lib": [
+      "dom"
+    ],
+    "module": "esnext",
+    "outDir": "dist-es"
+  }
+}
