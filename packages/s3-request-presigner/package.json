@@ -1,6 +1,6 @@
 {
   "name": "@aws-sdk/s3-request-presigner",
-  "version": "3.608.0",
+  "version": "3.614.0",
   "scripts": {
     "build": "concurrently 'yarn:build:cjs' 'yarn:build:es' 'yarn:build:types'",
     "build:cjs": "node ../../scripts/compilation/inline s3-request-presigner",
@@ -24,9 +24,9 @@
     "@aws-sdk/signature-v4-multi-region": "*",
     "@aws-sdk/types": "*",
     "@aws-sdk/util-format-url": "*",
-    "@smithy/middleware-endpoint": "^3.0.4",
-    "@smithy/protocol-http": "^4.0.3",
-    "@smithy/smithy-client": "^3.1.5",
+    "@smithy/middleware-endpoint": "^3.0.5",
+    "@smithy/protocol-http": "^4.0.4",
+    "@smithy/smithy-client": "^3.1.8",
     "@smithy/types": "^3.3.0",
     "tslib": "^2.6.2"
   },

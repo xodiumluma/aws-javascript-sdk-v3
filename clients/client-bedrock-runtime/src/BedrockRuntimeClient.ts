@@ -59,6 +59,7 @@ import {
   HttpAuthSchemeResolvedConfig,
   resolveHttpAuthSchemeConfig,
 } from "./auth/httpAuthSchemeProvider";
+import { ApplyGuardrailCommandInput, ApplyGuardrailCommandOutput } from "./commands/ApplyGuardrailCommand";
 import { ConverseCommandInput, ConverseCommandOutput } from "./commands/ConverseCommand";
 import { ConverseStreamCommandInput, ConverseStreamCommandOutput } from "./commands/ConverseStreamCommand";
 import { InvokeModelCommandInput, InvokeModelCommandOutput } from "./commands/InvokeModelCommand";
@@ -81,6 +82,7 @@ export { __Client };
  * @public
  */
 export type ServiceInputTypes =
+  | ApplyGuardrailCommandInput
   | ConverseCommandInput
   | ConverseStreamCommandInput
   | InvokeModelCommandInput
@@ -90,6 +92,7 @@ export type ServiceInputTypes =
  * @public
  */
 export type ServiceOutputTypes =
+  | ApplyGuardrailCommandOutput
   | ConverseCommandOutput
   | ConverseStreamCommandOutput
   | InvokeModelCommandOutput
@@ -239,9 +242,9 @@ export type BedrockRuntimeClientConfigType = Partial<__SmithyConfiguration<__Htt
   ClientDefaults &
   RegionInputConfig &
   EndpointInputConfig<EndpointParameters> &
-  RetryInputConfig &
   HostHeaderInputConfig &
   UserAgentInputConfig &
+  RetryInputConfig &
   EventStreamSerdeInputConfig &
   HttpAuthSchemeInputConfig &
   ClientInputEndpointParameters;
@@ -260,9 +263,9 @@ export type BedrockRuntimeClientResolvedConfigType = __SmithyResolvedConfigurati
   RuntimeExtensionsConfig &
   RegionResolvedConfig &
   EndpointResolvedConfig<EndpointParameters> &
-  RetryResolvedConfig &
   HostHeaderResolvedConfig &
   UserAgentResolvedConfig &
+  RetryResolvedConfig &
   EventStreamSerdeResolvedConfig &
   HttpAuthSchemeResolvedConfig &
   ClientResolvedEndpointParameters;
@@ -293,20 +296,20 @@ export class BedrockRuntimeClient extends __Client<
     const _config_1 = resolveClientEndpointParameters(_config_0);
     const _config_2 = resolveRegionConfig(_config_1);
     const _config_3 = resolveEndpointConfig(_config_2);
-    const _config_4 = resolveRetryConfig(_config_3);
-    const _config_5 = resolveHostHeaderConfig(_config_4);
-    const _config_6 = resolveUserAgentConfig(_config_5);
+    const _config_4 = resolveHostHeaderConfig(_config_3);
+    const _config_5 = resolveUserAgentConfig(_config_4);
+    const _config_6 = resolveRetryConfig(_config_5);
     const _config_7 = resolveEventStreamSerdeConfig(_config_6);
     const _config_8 = resolveHttpAuthSchemeConfig(_config_7);
     const _config_9 = resolveRuntimeExtensions(_config_8, configuration?.extensions || []);
     super(_config_9);
     this.config = _config_9;
-    this.middlewareStack.use(getRetryPlugin(this.config));
-    this.middlewareStack.use(getContentLengthPlugin(this.config));
     this.middlewareStack.use(getHostHeaderPlugin(this.config));
     this.middlewareStack.use(getLoggerPlugin(this.config));
     this.middlewareStack.use(getRecursionDetectionPlugin(this.config));
     this.middlewareStack.use(getUserAgentPlugin(this.config));
+    this.middlewareStack.use(getRetryPlugin(this.config));
+    this.middlewareStack.use(getContentLengthPlugin(this.config));
     this.middlewareStack.use(
       getHttpAuthSchemeEndpointRuleSetPlugin(this.config, {
         httpAuthSchemeParametersProvider: this.getDefaultHttpAuthSchemeParametersProvider(),

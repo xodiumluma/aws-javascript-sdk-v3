@@ -1,6 +1,6 @@
 {
   "name": "@aws-sdk/middleware-sdk-s3-control",
-  "version": "3.598.0",
+  "version": "3.614.0",
   "scripts": {
     "build": "concurrently 'yarn:build:cjs' 'yarn:build:es' 'yarn:build:types'",
     "build:cjs": "node ../../scripts/compilation/inline middleware-sdk-s3-control",
@@ -26,9 +26,9 @@
     "@aws-sdk/types": "*",
     "@aws-sdk/util-arn-parser": "*",
     "@aws-sdk/util-endpoints": "*",
-    "@smithy/protocol-http": "^4.0.3",
+    "@smithy/protocol-http": "^4.0.4",
     "@smithy/types": "^3.3.0",
-    "@smithy/util-endpoints": "^2.0.4",
+    "@smithy/util-endpoints": "^2.0.5",
     "tslib": "^2.6.2"
   },
   "devDependencies": {

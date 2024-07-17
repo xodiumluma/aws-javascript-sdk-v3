@@ -53,6 +53,14 @@ import {
   HttpAuthSchemeResolvedConfig,
   resolveHttpAuthSchemeConfig,
 } from "./auth/httpAuthSchemeProvider";
+import {
+  BatchCreateTopicReviewedAnswerCommandInput,
+  BatchCreateTopicReviewedAnswerCommandOutput,
+} from "./commands/BatchCreateTopicReviewedAnswerCommand";
+import {
+  BatchDeleteTopicReviewedAnswerCommandInput,
+  BatchDeleteTopicReviewedAnswerCommandOutput,
+} from "./commands/BatchDeleteTopicReviewedAnswerCommand";
 import { CancelIngestionCommandInput, CancelIngestionCommandOutput } from "./commands/CancelIngestionCommand";
 import {
   CreateAccountCustomizationCommandInput,
@@ -385,6 +393,10 @@ import {
   ListTopicRefreshSchedulesCommandInput,
   ListTopicRefreshSchedulesCommandOutput,
 } from "./commands/ListTopicRefreshSchedulesCommand";
+import {
+  ListTopicReviewedAnswersCommandInput,
+  ListTopicReviewedAnswersCommandOutput,
+} from "./commands/ListTopicReviewedAnswersCommand";
 import { ListTopicsCommandInput, ListTopicsCommandOutput } from "./commands/ListTopicsCommand";
 import { ListUserGroupsCommandInput, ListUserGroupsCommandOutput } from "./commands/ListUserGroupsCommand";
 import { ListUsersCommandInput, ListUsersCommandOutput } from "./commands/ListUsersCommand";
@@ -533,6 +545,8 @@ export { __Client };
  * @public
  */
 export type ServiceInputTypes =
+  | BatchCreateTopicReviewedAnswerCommandInput
+  | BatchDeleteTopicReviewedAnswerCommandInput
   | CancelIngestionCommandInput
   | CreateAccountCustomizationCommandInput
   | CreateAccountSubscriptionCommandInput
@@ -655,6 +669,7 @@ export type ServiceInputTypes =
   | ListThemeVersionsCommandInput
   | ListThemesCommandInput
   | ListTopicRefreshSchedulesCommandInput
+  | ListTopicReviewedAnswersCommandInput
   | ListTopicsCommandInput
   | ListUserGroupsCommandInput
   | ListUsersCommandInput
@@ -712,6 +727,8 @@ export type ServiceInputTypes =
  * @public
  */
 export type ServiceOutputTypes =
+  | BatchCreateTopicReviewedAnswerCommandOutput
+  | BatchDeleteTopicReviewedAnswerCommandOutput
   | CancelIngestionCommandOutput
   | CreateAccountCustomizationCommandOutput
   | CreateAccountSubscriptionCommandOutput
@@ -834,6 +851,7 @@ export type ServiceOutputTypes =
   | ListThemeVersionsCommandOutput
   | ListThemesCommandOutput
   | ListTopicRefreshSchedulesCommandOutput
+  | ListTopicReviewedAnswersCommandOutput
   | ListTopicsCommandOutput
   | ListUserGroupsCommandOutput
   | ListUsersCommandOutput
@@ -1026,9 +1044,9 @@ export type QuickSightClientConfigType = Partial<__SmithyConfiguration<__HttpHan
   ClientDefaults &
   RegionInputConfig &
   EndpointInputConfig<EndpointParameters> &
-  RetryInputConfig &
   HostHeaderInputConfig &
   UserAgentInputConfig &
+  RetryInputConfig &
   HttpAuthSchemeInputConfig &
   ClientInputEndpointParameters;
 /**
@@ -1046,9 +1064,9 @@ export type QuickSightClientResolvedConfigType = __SmithyResolvedConfiguration<_
   RuntimeExtensionsConfig &
   RegionResolvedConfig &
   EndpointResolvedConfig<EndpointParameters> &
-  RetryResolvedConfig &
   HostHeaderResolvedConfig &
   UserAgentResolvedConfig &
+  RetryResolvedConfig &
   HttpAuthSchemeResolvedConfig &
   ClientResolvedEndpointParameters;
 /**
@@ -1082,19 +1100,19 @@ export class QuickSightClient extends __Client<
     const _config_1 = resolveClientEndpointParameters(_config_0);
     const _config_2 = resolveRegionConfig(_config_1);
     const _config_3 = resolveEndpointConfig(_config_2);
-    const _config_4 = resolveRetryConfig(_config_3);
-    const _config_5 = resolveHostHeaderConfig(_config_4);
-    const _config_6 = resolveUserAgentConfig(_config_5);
+    const _config_4 = resolveHostHeaderConfig(_config_3);
+    const _config_5 = resolveUserAgentConfig(_config_4);
+    const _config_6 = resolveRetryConfig(_config_5);
     const _config_7 = resolveHttpAuthSchemeConfig(_config_6);
     const _config_8 = resolveRuntimeExtensions(_config_7, configuration?.extensions || []);
     super(_config_8);
     this.config = _config_8;
-    this.middlewareStack.use(getRetryPlugin(this.config));
-    this.middlewareStack.use(getContentLengthPlugin(this.config));
     this.middlewareStack.use(getHostHeaderPlugin(this.config));
     this.middlewareStack.use(getLoggerPlugin(this.config));
     this.middlewareStack.use(getRecursionDetectionPlugin(this.config));
     this.middlewareStack.use(getUserAgentPlugin(this.config));
+    this.middlewareStack.use(getRetryPlugin(this.config));
+    this.middlewareStack.use(getContentLengthPlugin(this.config));
     this.middlewareStack.use(
       getHttpAuthSchemeEndpointRuleSetPlugin(this.config, {
         httpAuthSchemeParametersProvider: this.getDefaultHttpAuthSchemeParametersProvider(),

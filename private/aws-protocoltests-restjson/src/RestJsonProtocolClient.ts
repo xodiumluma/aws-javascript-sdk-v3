@@ -14,10 +14,13 @@ import {
   UserAgentResolvedConfig,
 } from "@aws-sdk/middleware-user-agent";
 import {
+  CustomEndpointsInputConfig,
+  CustomEndpointsResolvedConfig,
   EndpointsInputConfig,
   EndpointsResolvedConfig,
   RegionInputConfig,
   RegionResolvedConfig,
+  resolveCustomEndpointsConfig,
   resolveEndpointsConfig,
   resolveRegionConfig,
 } from "@smithy/config-resolver";
@@ -76,6 +79,10 @@ import {
   ConstantQueryStringCommandInput,
   ConstantQueryStringCommandOutput,
 } from "./commands/ConstantQueryStringCommand";
+import {
+  ContentTypeParametersCommandInput,
+  ContentTypeParametersCommandOutput,
+} from "./commands/ContentTypeParametersCommand";
 import { DatetimeOffsetsCommandInput, DatetimeOffsetsCommandOutput } from "./commands/DatetimeOffsetsCommand";
 import {
   DocumentTypeAsMapValueCommandInput,
@@ -272,6 +279,14 @@ import {
   OmitsSerializingEmptyListsCommandInput,
   OmitsSerializingEmptyListsCommandOutput,
 } from "./commands/OmitsSerializingEmptyListsCommand";
+import {
+  OperationWithDefaultsCommandInput,
+  OperationWithDefaultsCommandOutput,
+} from "./commands/OperationWithDefaultsCommand";
+import {
+  OperationWithNestedStructureCommandInput,
+  OperationWithNestedStructureCommandOutput,
+} from "./commands/OperationWithNestedStructureCommand";
 import { PostPlayerActionCommandInput, PostPlayerActionCommandOutput } from "./commands/PostPlayerActionCommand";
 import {
   PostUnionWithJsonNameCommandInput,
@@ -307,6 +322,10 @@ import {
   StreamingTraitsWithMediaTypeCommandOutput,
 } from "./commands/StreamingTraitsWithMediaTypeCommand";
 import { TestBodyStructureCommandInput, TestBodyStructureCommandOutput } from "./commands/TestBodyStructureCommand";
+import {
+  TestNoInputNoPayloadCommandInput,
+  TestNoInputNoPayloadCommandOutput,
+} from "./commands/TestNoInputNoPayloadCommand";
 import { TestNoPayloadCommandInput, TestNoPayloadCommandOutput } from "./commands/TestNoPayloadCommand";
 import { TestPayloadBlobCommandInput, TestPayloadBlobCommandOutput } from "./commands/TestPayloadBlobCommand";
 import {
@@ -330,6 +349,7 @@ export type ServiceInputTypes =
   | AllQueryStringTypesCommandInput
   | ConstantAndVariableQueryStringCommandInput
   | ConstantQueryStringCommandInput
+  | ContentTypeParametersCommandInput
   | DatetimeOffsetsCommandInput
   | DocumentTypeAsMapValueCommandInput
   | DocumentTypeAsPayloadCommandInput
@@ -403,6 +423,8 @@ export type ServiceInputTypes =
   | NullAndEmptyHeadersServerCommandInput
   | OmitsNullSerializesEmptyStringCommandInput
   | OmitsSerializingEmptyListsCommandInput
+  | OperationWithDefaultsCommandInput
+  | OperationWithNestedStructureCommandInput
   | PostPlayerActionCommandInput
   | PostUnionWithJsonNameCommandInput
   | PutWithContentEncodingCommandInput
@@ -417,6 +439,7 @@ export type ServiceInputTypes =
   | StreamingTraitsRequireLengthCommandInput
   | StreamingTraitsWithMediaTypeCommandInput
   | TestBodyStructureCommandInput
+  | TestNoInputNoPayloadCommandInput
   | TestNoPayloadCommandInput
   | TestPayloadBlobCommandInput
   | TestPayloadStructureCommandInput
@@ -430,6 +453,7 @@ export type ServiceOutputTypes =
   | AllQueryStringTypesCommandOutput
   | ConstantAndVariableQueryStringCommandOutput
   | ConstantQueryStringCommandOutput
+  | ContentTypeParametersCommandOutput
   | DatetimeOffsetsCommandOutput
   | DocumentTypeAsMapValueCommandOutput
   | DocumentTypeAsPayloadCommandOutput
@@ -503,6 +527,8 @@ export type ServiceOutputTypes =
   | NullAndEmptyHeadersServerCommandOutput
   | OmitsNullSerializesEmptyStringCommandOutput
   | OmitsSerializingEmptyListsCommandOutput
+  | OperationWithDefaultsCommandOutput
+  | OperationWithNestedStructureCommandOutput
   | PostPlayerActionCommandOutput
   | PostUnionWithJsonNameCommandOutput
   | PutWithContentEncodingCommandOutput
@@ -517,6 +543,7 @@ export type ServiceOutputTypes =
   | StreamingTraitsRequireLengthCommandOutput
   | StreamingTraitsWithMediaTypeCommandOutput
   | TestBodyStructureCommandOutput
+  | TestNoInputNoPayloadCommandOutput
   | TestNoPayloadCommandOutput
   | TestPayloadBlobCommandOutput
   | TestPayloadStructureCommandOutput
@@ -688,9 +715,10 @@ export type RestJsonProtocolClientConfigType = Partial<__SmithyConfiguration<__H
   ClientDefaults &
   RegionInputConfig &
   EndpointsInputConfig &
-  RetryInputConfig &
   HostHeaderInputConfig &
   UserAgentInputConfig &
+  CustomEndpointsInputConfig &
+  RetryInputConfig &
   HttpAuthSchemeInputConfig &
   CompressionInputConfig;
 /**
@@ -708,9 +736,10 @@ export type RestJsonProtocolClientResolvedConfigType = __SmithyResolvedConfigura
   RuntimeExtensionsConfig &
   RegionResolvedConfig &
   EndpointsResolvedConfig &
-  RetryResolvedConfig &
   HostHeaderResolvedConfig &
   UserAgentResolvedConfig &
+  CustomEndpointsResolvedConfig &
+  RetryResolvedConfig &
   HttpAuthSchemeResolvedConfig &
   CompressionResolvedConfig;
 /**
@@ -739,20 +768,21 @@ export class RestJsonProtocolClient extends __Client<
     const _config_0 = __getRuntimeConfig(configuration || {});
     const _config_1 = resolveRegionConfig(_config_0);
     const _config_2 = resolveEndpointsConfig(_config_1);
-    const _config_3 = resolveRetryConfig(_config_2);
-    const _config_4 = resolveHostHeaderConfig(_config_3);
-    const _config_5 = resolveUserAgentConfig(_config_4);
-    const _config_6 = resolveHttpAuthSchemeConfig(_config_5);
-    const _config_7 = resolveCompressionConfig(_config_6);
-    const _config_8 = resolveRuntimeExtensions(_config_7, configuration?.extensions || []);
-    super(_config_8);
-    this.config = _config_8;
-    this.middlewareStack.use(getRetryPlugin(this.config));
-    this.middlewareStack.use(getContentLengthPlugin(this.config));
+    const _config_3 = resolveHostHeaderConfig(_config_2);
+    const _config_4 = resolveUserAgentConfig(_config_3);
+    const _config_5 = resolveCustomEndpointsConfig(_config_4);
+    const _config_6 = resolveRetryConfig(_config_5);
+    const _config_7 = resolveHttpAuthSchemeConfig(_config_6);
+    const _config_8 = resolveCompressionConfig(_config_7);
+    const _config_9 = resolveRuntimeExtensions(_config_8, configuration?.extensions || []);
+    super(_config_9);
+    this.config = _config_9;
     this.middlewareStack.use(getHostHeaderPlugin(this.config));
     this.middlewareStack.use(getLoggerPlugin(this.config));
     this.middlewareStack.use(getRecursionDetectionPlugin(this.config));
     this.middlewareStack.use(getUserAgentPlugin(this.config));
+    this.middlewareStack.use(getRetryPlugin(this.config));
+    this.middlewareStack.use(getContentLengthPlugin(this.config));
     this.middlewareStack.use(
       getHttpAuthSchemePlugin(this.config, {
         httpAuthSchemeParametersProvider: this.getDefaultHttpAuthSchemeParametersProvider(),

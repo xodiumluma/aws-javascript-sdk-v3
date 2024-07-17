@@ -83,6 +83,17 @@ import { Purchase } from "./models_5";
 import { CapacityReservationSpecification, InstanceMonitoring, Status } from "./models_6";
 
 /**
+ * @public
+ */
+export interface ProvisionByoipCidrResult {
+  /**
+   * <p>Information about the address range.</p>
+   * @public
+   */
+  ByoipCidr?: ByoipCidr;
+}
+
+/**
  * <p>Provides authorization for Amazon to bring an Autonomous System Number (ASN) to a specific Amazon Web Services account using bring your own ASN (BYOASN).
  *             For details on the format of the message and signature, see <a href="https://docs.aws.amazon.com/vpc/latest/ipam/tutorials-byoasn.html">Tutorial: Bring your ASN to IPAM</a> in the <i>Amazon VPC IPAM guide</i>.</p>
  * @public
@@ -244,6 +255,12 @@ export interface ProvisionPublicIpv4PoolCidrRequest {
    * @public
    */
   NetmaskLength: number | undefined;
+
+  /**
+   * <p>The Availability Zone (AZ) or Local Zone (LZ) network border group that the resource that the IP address is assigned to is in. Defaults to an AZ network border group. For more information on available Local Zones, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-byoip.html#byoip-zone-avail">Local Zone availability</a> in the <i>Amazon EC2 User Guide</i>.</p>
+   * @public
+   */
+  NetworkBorderGroup?: string;
 }
 
 /**
@@ -3188,12 +3205,9 @@ export interface RunInstancesRequest {
   SubnetId?: string;
 
   /**
-   * <p>The user data script to make available to the instance. For more information, see
-   *                 <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html">Run
-   *                 commands on your Amazon EC2 instance at launch</a> in the <i>Amazon EC2 User
-   *                 Guide</i>. If you are using a command line tool, base64-encoding is performed
-   *             for you, and you can load the text from a file. Otherwise, you must provide
-   *             base64-encoded text. User data is limited to 16 KB.</p>
+   * <p>The user data to make available to the instance. User data must be base64-encoded.
+   *             Depending on the tool or SDK that you're using, the base64-encoding might be performed for you.
+   *             For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instancedata-add-user-data.html">Work with instance user data</a>.</p>
    * @public
    */
   UserData?: string;

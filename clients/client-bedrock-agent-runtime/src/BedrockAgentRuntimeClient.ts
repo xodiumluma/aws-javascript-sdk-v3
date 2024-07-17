@@ -59,7 +59,10 @@ import {
   HttpAuthSchemeResolvedConfig,
   resolveHttpAuthSchemeConfig,
 } from "./auth/httpAuthSchemeProvider";
+import { DeleteAgentMemoryCommandInput, DeleteAgentMemoryCommandOutput } from "./commands/DeleteAgentMemoryCommand";
+import { GetAgentMemoryCommandInput, GetAgentMemoryCommandOutput } from "./commands/GetAgentMemoryCommand";
 import { InvokeAgentCommandInput, InvokeAgentCommandOutput } from "./commands/InvokeAgentCommand";
+import { InvokeFlowCommandInput, InvokeFlowCommandOutput } from "./commands/InvokeFlowCommand";
 import {
   RetrieveAndGenerateCommandInput,
   RetrieveAndGenerateCommandOutput,
@@ -79,12 +82,24 @@ export { __Client };
 /**
  * @public
  */
-export type ServiceInputTypes = InvokeAgentCommandInput | RetrieveAndGenerateCommandInput | RetrieveCommandInput;
+export type ServiceInputTypes =
+  | DeleteAgentMemoryCommandInput
+  | GetAgentMemoryCommandInput
+  | InvokeAgentCommandInput
+  | InvokeFlowCommandInput
+  | RetrieveAndGenerateCommandInput
+  | RetrieveCommandInput;
 
 /**
  * @public
  */
-export type ServiceOutputTypes = InvokeAgentCommandOutput | RetrieveAndGenerateCommandOutput | RetrieveCommandOutput;
+export type ServiceOutputTypes =
+  | DeleteAgentMemoryCommandOutput
+  | GetAgentMemoryCommandOutput
+  | InvokeAgentCommandOutput
+  | InvokeFlowCommandOutput
+  | RetrieveAndGenerateCommandOutput
+  | RetrieveCommandOutput;
 
 /**
  * @public
@@ -230,9 +245,9 @@ export type BedrockAgentRuntimeClientConfigType = Partial<__SmithyConfiguration<
   ClientDefaults &
   RegionInputConfig &
   EndpointInputConfig<EndpointParameters> &
-  RetryInputConfig &
   HostHeaderInputConfig &
   UserAgentInputConfig &
+  RetryInputConfig &
   EventStreamSerdeInputConfig &
   HttpAuthSchemeInputConfig &
   ClientInputEndpointParameters;
@@ -251,9 +266,9 @@ export type BedrockAgentRuntimeClientResolvedConfigType = __SmithyResolvedConfig
   RuntimeExtensionsConfig &
   RegionResolvedConfig &
   EndpointResolvedConfig<EndpointParameters> &
-  RetryResolvedConfig &
   HostHeaderResolvedConfig &
   UserAgentResolvedConfig &
+  RetryResolvedConfig &
   EventStreamSerdeResolvedConfig &
   HttpAuthSchemeResolvedConfig &
   ClientResolvedEndpointParameters;
@@ -284,20 +299,20 @@ export class BedrockAgentRuntimeClient extends __Client<
     const _config_1 = resolveClientEndpointParameters(_config_0);
     const _config_2 = resolveRegionConfig(_config_1);
     const _config_3 = resolveEndpointConfig(_config_2);
-    const _config_4 = resolveRetryConfig(_config_3);
-    const _config_5 = resolveHostHeaderConfig(_config_4);
-    const _config_6 = resolveUserAgentConfig(_config_5);
+    const _config_4 = resolveHostHeaderConfig(_config_3);
+    const _config_5 = resolveUserAgentConfig(_config_4);
+    const _config_6 = resolveRetryConfig(_config_5);
     const _config_7 = resolveEventStreamSerdeConfig(_config_6);
     const _config_8 = resolveHttpAuthSchemeConfig(_config_7);
     const _config_9 = resolveRuntimeExtensions(_config_8, configuration?.extensions || []);
     super(_config_9);
     this.config = _config_9;
-    this.middlewareStack.use(getRetryPlugin(this.config));
-    this.middlewareStack.use(getContentLengthPlugin(this.config));
     this.middlewareStack.use(getHostHeaderPlugin(this.config));
     this.middlewareStack.use(getLoggerPlugin(this.config));
     this.middlewareStack.use(getRecursionDetectionPlugin(this.config));
     this.middlewareStack.use(getUserAgentPlugin(this.config));
+    this.middlewareStack.use(getRetryPlugin(this.config));
+    this.middlewareStack.use(getContentLengthPlugin(this.config));
     this.middlewareStack.use(
       getHttpAuthSchemeEndpointRuleSetPlugin(this.config, {
         httpAuthSchemeParametersProvider: this.getDefaultHttpAuthSchemeParametersProvider(),

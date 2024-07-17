@@ -3,6 +3,41 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.614.0](https://github.com/aws/aws-sdk-js-v3/compare/v3.613.0...v3.614.0) (2024-07-10)
+
+**Note:** Version bump only for package @aws-sdk/client-payment-cryptography-data
+
+
+
+
+
+# [3.613.0](https://github.com/aws/aws-sdk-js-v3/compare/v3.612.0...v3.613.0) (2024-07-09)
+
+**Note:** Version bump only for package @aws-sdk/client-payment-cryptography-data
+
+
+
+
+
+# [3.611.0](https://github.com/aws/aws-sdk-js-v3/compare/v3.610.0...v3.611.0) (2024-07-05)
+
+
+### Features
+
+* **client-payment-cryptography-data:** Added further restrictions on logging of potentially sensitive inputs and outputs. ([af2d6d5](https://github.com/aws/aws-sdk-js-v3/commit/af2d6d5e70cfbf50834a6d9411a4df89a2bc3bf9))
+
+
+
+
+
+# [3.609.0](https://github.com/aws/aws-sdk-js-v3/compare/v3.608.0...v3.609.0) (2024-07-02)
+
+**Note:** Version bump only for package @aws-sdk/client-payment-cryptography-data
+
+
+
+
+
 # [3.608.0](https://github.com/aws/aws-sdk-js-v3/compare/v3.607.0...v3.608.0) (2024-07-01)
 
 

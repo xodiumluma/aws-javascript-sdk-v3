@@ -653,6 +653,12 @@ export interface CreatePublicIpv4PoolRequest {
    * @public
    */
   TagSpecifications?: TagSpecification[];
+
+  /**
+   * <p>The Availability Zone (AZ) or Local Zone (LZ) network border group that the resource that the IP address is assigned to is in. Defaults to an AZ network border group. For more information on available Local Zones, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-byoip.html#byoip-zone-avail">Local Zone availability</a> in the <i>Amazon EC2 User Guide</i>.</p>
+   * @public
+   */
+  NetworkBorderGroup?: string;
 }
 
 /**
@@ -5495,7 +5501,10 @@ export interface CreateVolumeRequest {
   KmsKeyId?: string;
 
   /**
-   * <p>The Amazon Resource Name (ARN) of the Outpost.</p>
+   * <p>The Amazon Resource Name (ARN) of the Outpost on which to create the volume.</p>
+   *          <p>If you intend to use a volume with an instance running on an outpost, then you must
+   *          create the volume on the same outpost as the instance. You can't use a volume created
+   *          in an Amazon Web Services Region with an instance on an Amazon Web Services outpost, or the other way around.</p>
    * @public
    */
   OutpostArn?: string;

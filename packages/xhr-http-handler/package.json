@@ -1,6 +1,6 @@
 {
   "name": "@aws-sdk/xhr-http-handler",
-  "version": "3.598.0",
+  "version": "3.609.0",
   "description": "Provides a way to make requests using XMLHttpRequest",
   "scripts": {
     "build": "concurrently 'yarn:build:cjs' 'yarn:build:es' 'yarn:build:types'",
@@ -20,7 +20,7 @@
   "types": "./dist-types/index.d.ts",
   "dependencies": {
     "@aws-sdk/types": "*",
-    "@smithy/protocol-http": "^4.0.3",
+    "@smithy/protocol-http": "^4.0.4",
     "@smithy/querystring-builder": "^3.0.3",
     "@smithy/types": "^3.3.0",
     "events": "3.3.0",

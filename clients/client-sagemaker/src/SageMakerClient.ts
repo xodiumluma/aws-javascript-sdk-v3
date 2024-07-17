@@ -176,6 +176,10 @@ import {
   CreateNotebookInstanceLifecycleConfigCommandInput,
   CreateNotebookInstanceLifecycleConfigCommandOutput,
 } from "./commands/CreateNotebookInstanceLifecycleConfigCommand";
+import {
+  CreateOptimizationJobCommandInput,
+  CreateOptimizationJobCommandOutput,
+} from "./commands/CreateOptimizationJobCommand";
 import { CreatePipelineCommandInput, CreatePipelineCommandOutput } from "./commands/CreatePipelineCommand";
 import {
   CreatePresignedDomainUrlCommandInput,
@@ -313,6 +317,10 @@ import {
   DeleteNotebookInstanceLifecycleConfigCommandInput,
   DeleteNotebookInstanceLifecycleConfigCommandOutput,
 } from "./commands/DeleteNotebookInstanceLifecycleConfigCommand";
+import {
+  DeleteOptimizationJobCommandInput,
+  DeleteOptimizationJobCommandOutput,
+} from "./commands/DeleteOptimizationJobCommand";
 import { DeletePipelineCommandInput, DeletePipelineCommandOutput } from "./commands/DeletePipelineCommand";
 import { DeleteProjectCommandInput, DeleteProjectCommandOutput } from "./commands/DeleteProjectCommand";
 import { DeleteSpaceCommandInput, DeleteSpaceCommandOutput } from "./commands/DeleteSpaceCommand";
@@ -470,6 +478,10 @@ import {
   DescribeNotebookInstanceLifecycleConfigCommandInput,
   DescribeNotebookInstanceLifecycleConfigCommandOutput,
 } from "./commands/DescribeNotebookInstanceLifecycleConfigCommand";
+import {
+  DescribeOptimizationJobCommandInput,
+  DescribeOptimizationJobCommandOutput,
+} from "./commands/DescribeOptimizationJobCommand";
 import { DescribePipelineCommandInput, DescribePipelineCommandOutput } from "./commands/DescribePipelineCommand";
 import {
   DescribePipelineDefinitionForExecutionCommandInput,
@@ -693,6 +705,10 @@ import {
   ListNotebookInstancesCommandOutput,
 } from "./commands/ListNotebookInstancesCommand";
 import {
+  ListOptimizationJobsCommandInput,
+  ListOptimizationJobsCommandOutput,
+} from "./commands/ListOptimizationJobsCommand";
+import {
   ListPipelineExecutionsCommandInput,
   ListPipelineExecutionsCommandOutput,
 } from "./commands/ListPipelineExecutionsCommand";
@@ -815,6 +831,10 @@ import {
   StopNotebookInstanceCommandInput,
   StopNotebookInstanceCommandOutput,
 } from "./commands/StopNotebookInstanceCommand";
+import {
+  StopOptimizationJobCommandInput,
+  StopOptimizationJobCommandOutput,
+} from "./commands/StopOptimizationJobCommand";
 import {
   StopPipelineExecutionCommandInput,
   StopPipelineExecutionCommandOutput,
@@ -968,6 +988,7 @@ export type ServiceInputTypes =
   | CreateMonitoringScheduleCommandInput
   | CreateNotebookInstanceCommandInput
   | CreateNotebookInstanceLifecycleConfigCommandInput
+  | CreateOptimizationJobCommandInput
   | CreatePipelineCommandInput
   | CreatePresignedDomainUrlCommandInput
   | CreatePresignedMlflowTrackingServerUrlCommandInput
@@ -1024,6 +1045,7 @@ export type ServiceInputTypes =
   | DeleteMonitoringScheduleCommandInput
   | DeleteNotebookInstanceCommandInput
   | DeleteNotebookInstanceLifecycleConfigCommandInput
+  | DeleteOptimizationJobCommandInput
   | DeletePipelineCommandInput
   | DeleteProjectCommandInput
   | DeleteSpaceCommandInput
@@ -1082,6 +1104,7 @@ export type ServiceInputTypes =
   | DescribeMonitoringScheduleCommandInput
   | DescribeNotebookInstanceCommandInput
   | DescribeNotebookInstanceLifecycleConfigCommandInput
+  | DescribeOptimizationJobCommandInput
   | DescribePipelineCommandInput
   | DescribePipelineDefinitionForExecutionCommandInput
   | DescribePipelineExecutionCommandInput
@@ -1163,6 +1186,7 @@ export type ServiceInputTypes =
   | ListMonitoringSchedulesCommandInput
   | ListNotebookInstanceLifecycleConfigsCommandInput
   | ListNotebookInstancesCommandInput
+  | ListOptimizationJobsCommandInput
   | ListPipelineExecutionStepsCommandInput
   | ListPipelineExecutionsCommandInput
   | ListPipelineParametersForExecutionCommandInput
@@ -1208,6 +1232,7 @@ export type ServiceInputTypes =
   | StopMlflowTrackingServerCommandInput
   | StopMonitoringScheduleCommandInput
   | StopNotebookInstanceCommandInput
+  | StopOptimizationJobCommandInput
   | StopPipelineExecutionCommandInput
   | StopProcessingJobCommandInput
   | StopTrainingJobCommandInput
@@ -1303,6 +1328,7 @@ export type ServiceOutputTypes =
   | CreateMonitoringScheduleCommandOutput
   | CreateNotebookInstanceCommandOutput
   | CreateNotebookInstanceLifecycleConfigCommandOutput
+  | CreateOptimizationJobCommandOutput
   | CreatePipelineCommandOutput
   | CreatePresignedDomainUrlCommandOutput
   | CreatePresignedMlflowTrackingServerUrlCommandOutput
@@ -1359,6 +1385,7 @@ export type ServiceOutputTypes =
   | DeleteMonitoringScheduleCommandOutput
   | DeleteNotebookInstanceCommandOutput
   | DeleteNotebookInstanceLifecycleConfigCommandOutput
+  | DeleteOptimizationJobCommandOutput
   | DeletePipelineCommandOutput
   | DeleteProjectCommandOutput
   | DeleteSpaceCommandOutput
@@ -1417,6 +1444,7 @@ export type ServiceOutputTypes =
   | DescribeMonitoringScheduleCommandOutput
   | DescribeNotebookInstanceCommandOutput
   | DescribeNotebookInstanceLifecycleConfigCommandOutput
+  | DescribeOptimizationJobCommandOutput
   | DescribePipelineCommandOutput
   | DescribePipelineDefinitionForExecutionCommandOutput
   | DescribePipelineExecutionCommandOutput
@@ -1498,6 +1526,7 @@ export type ServiceOutputTypes =
   | ListMonitoringSchedulesCommandOutput
   | ListNotebookInstanceLifecycleConfigsCommandOutput
   | ListNotebookInstancesCommandOutput
+  | ListOptimizationJobsCommandOutput
   | ListPipelineExecutionStepsCommandOutput
   | ListPipelineExecutionsCommandOutput
   | ListPipelineParametersForExecutionCommandOutput
@@ -1543,6 +1572,7 @@ export type ServiceOutputTypes =
   | StopMlflowTrackingServerCommandOutput
   | StopMonitoringScheduleCommandOutput
   | StopNotebookInstanceCommandOutput
+  | StopOptimizationJobCommandOutput
   | StopPipelineExecutionCommandOutput
   | StopProcessingJobCommandOutput
   | StopTrainingJobCommandOutput
@@ -1725,9 +1755,9 @@ export type SageMakerClientConfigType = Partial<__SmithyConfiguration<__HttpHand
   ClientDefaults &
   RegionInputConfig &
   EndpointInputConfig<EndpointParameters> &
-  RetryInputConfig &
   HostHeaderInputConfig &
   UserAgentInputConfig &
+  RetryInputConfig &
   HttpAuthSchemeInputConfig &
   ClientInputEndpointParameters;
 /**
@@ -1745,9 +1775,9 @@ export type SageMakerClientResolvedConfigType = __SmithyResolvedConfiguration<__
   RuntimeExtensionsConfig &
   RegionResolvedConfig &
   EndpointResolvedConfig<EndpointParameters> &
-  RetryResolvedConfig &
   HostHeaderResolvedConfig &
   UserAgentResolvedConfig &
+  RetryResolvedConfig &
   HttpAuthSchemeResolvedConfig &
   ClientResolvedEndpointParameters;
 /**
@@ -1792,19 +1822,19 @@ export class SageMakerClient extends __Client<
     const _config_1 = resolveClientEndpointParameters(_config_0);
     const _config_2 = resolveRegionConfig(_config_1);
     const _config_3 = resolveEndpointConfig(_config_2);
-    const _config_4 = resolveRetryConfig(_config_3);
-    const _config_5 = resolveHostHeaderConfig(_config_4);
-    const _config_6 = resolveUserAgentConfig(_config_5);
+    const _config_4 = resolveHostHeaderConfig(_config_3);
+    const _config_5 = resolveUserAgentConfig(_config_4);
+    const _config_6 = resolveRetryConfig(_config_5);
     const _config_7 = resolveHttpAuthSchemeConfig(_config_6);
     const _config_8 = resolveRuntimeExtensions(_config_7, configuration?.extensions || []);
     super(_config_8);
     this.config = _config_8;
-    this.middlewareStack.use(getRetryPlugin(this.config));
-    this.middlewareStack.use(getContentLengthPlugin(this.config));
     this.middlewareStack.use(getHostHeaderPlugin(this.config));
     this.middlewareStack.use(getLoggerPlugin(this.config));
     this.middlewareStack.use(getRecursionDetectionPlugin(this.config));
     this.middlewareStack.use(getUserAgentPlugin(this.config));
+    this.middlewareStack.use(getRetryPlugin(this.config));
+    this.middlewareStack.use(getContentLengthPlugin(this.config));
     this.middlewareStack.use(
       getHttpAuthSchemeEndpointRuleSetPlugin(this.config, {
         httpAuthSchemeParametersProvider: this.getDefaultHttpAuthSchemeParametersProvider(),
