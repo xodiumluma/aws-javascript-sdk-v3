@@ -1,0 +1,9 @@
+{
+  "name": "@aws-sdk/client-dynamodb",
+  "description": "AWS SDK JS DynamoDB client",
+  "version": "3.614.0",
+  "scripts": {
+    "build": "concurrently 'yarn:build:cjs' 'yarn:build:es' 'yarn:build:types'",
+    "build:cjs": "node ../../scripts/compilation/inline client-dynamodb"
+  }
+}
