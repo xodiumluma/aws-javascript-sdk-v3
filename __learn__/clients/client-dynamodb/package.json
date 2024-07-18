@@ -32,5 +32,17 @@
     "@aws-sdk/region-config-resolver": "*",
     "@aws-sdk/types": "*",
     "@aws-sdk/util-endpoints": "*",
+    "@aws-sdk/util-user-agent-browser": "*",
+    "@aws-sdk/util-user-agent-node": "*",
+    "@smithy/config-resolver": "^3.0.5",
+    "@smithy/core": "^2.2.7",
+    "@smithy/fetch-http-handler": "^3.2.2",
+    "@smithy/hash-node": "^3.0.3",
+    "@smithy/invalid-dependency": "^3.0.3",
+    "@smithy/middleware-content-length": "^3.0.4",
+    "@smithy/middleware-endpoint": "^3.0.5",
+    "@smithy/middleware-retry": "^3.0.10",
+    "@smithy/middleware-serde": "^3.0.3",
+    "@smithy/middleware-stack": "^3.0.3"
   }
 }
