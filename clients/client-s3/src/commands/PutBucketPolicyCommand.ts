@@ -6,7 +6,7 @@ import { Command as $Command } from "@smithy/smithy-client";
 import { MetadataBearer as __MetadataBearer } from "@smithy/types";
 
 import { commonParams } from "../endpoint/EndpointParameters";
-import { PutBucketPolicyRequest } from "../models/models_0";
+import { PutBucketPolicyRequest } from "../models/models_1";
 import { de_PutBucketPolicyCommand, se_PutBucketPolicyCommand } from "../protocols/Aws_restXml";
 import { S3ClientResolvedConfig, ServiceInputTypes, ServiceOutputTypes } from "../S3Client";
 
@@ -168,4 +168,16 @@ export class PutBucketPolicyCommand extends $Command
   .f(void 0, void 0)
   .ser(se_PutBucketPolicyCommand)
   .de(de_PutBucketPolicyCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: PutBucketPolicyRequest;
+      output: {};
+    };
+    sdk: {
+      input: PutBucketPolicyCommandInput;
+      output: PutBucketPolicyCommandOutput;
+    };
+  };
+}

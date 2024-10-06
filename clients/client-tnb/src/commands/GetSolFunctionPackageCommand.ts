@@ -32,7 +32,8 @@ export interface GetSolFunctionPackageCommandInput extends GetSolFunctionPackage
 export interface GetSolFunctionPackageCommandOutput extends GetSolFunctionPackageOutput, __MetadataBearer {}
 
 /**
- * <p>Gets the details of an individual function package, such as the operational state and whether the package is in use.</p>
+ * <p>Gets the details of an individual function package, such as the operational state and
+ *          whether the package is in use.</p>
  *          <p>A function package is a .zip file in CSAR (Cloud Service Archive) format that contains a network function (an ETSI standard telecommunication application) and function package descriptor that uses the TOSCA standard to describe how the network functions should run on your network..</p>
  * @example
  * Use a bare-bones client and the command you need to make an API call.
@@ -93,7 +94,8 @@ export interface GetSolFunctionPackageCommandOutput extends GetSolFunctionPackag
  *  <p>Exception caused by throttling.</p>
  *
  * @throws {@link ValidationException} (client fault)
- *  <p>Unable to process the request because the client provided input failed to satisfy request constraints.</p>
+ *  <p>Unable to process the request because the client provided input failed to satisfy
+ *          request constraints.</p>
  *
  * @throws {@link TnbServiceException}
  * <p>Base exception class for all service exceptions from Tnb service.</p>
@@ -108,9 +110,7 @@ export class GetSolFunctionPackageCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: TnbClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -122,4 +122,16 @@ export class GetSolFunctionPackageCommand extends $Command
   .f(void 0, GetSolFunctionPackageOutputFilterSensitiveLog)
   .ser(se_GetSolFunctionPackageCommand)
   .de(de_GetSolFunctionPackageCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: GetSolFunctionPackageInput;
+      output: GetSolFunctionPackageOutput;
+    };
+    sdk: {
+      input: GetSolFunctionPackageCommandInput;
+      output: GetSolFunctionPackageCommandOutput;
+    };
+  };
+}

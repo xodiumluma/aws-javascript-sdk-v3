@@ -83,6 +83,7 @@ export interface ApplyGuardrailCommandOutput extends ApplyGuardrailResponse, __M
  * //           { // GuardrailContentFilter
  * //             type: "INSULTS" || "HATE" || "SEXUAL" || "VIOLENCE" || "MISCONDUCT" || "PROMPT_ATTACK", // required
  * //             confidence: "NONE" || "LOW" || "MEDIUM" || "HIGH", // required
+ * //             filterStrength: "NONE" || "LOW" || "MEDIUM" || "HIGH",
  * //             action: "BLOCKED", // required
  * //           },
  * //         ],
@@ -129,8 +130,31 @@ export interface ApplyGuardrailCommandOutput extends ApplyGuardrailResponse, __M
  * //           },
  * //         ],
  * //       },
+ * //       invocationMetrics: { // GuardrailInvocationMetrics
+ * //         guardrailProcessingLatency: Number("long"),
+ * //         usage: {
+ * //           topicPolicyUnits: Number("int"), // required
+ * //           contentPolicyUnits: Number("int"), // required
+ * //           wordPolicyUnits: Number("int"), // required
+ * //           sensitiveInformationPolicyUnits: Number("int"), // required
+ * //           sensitiveInformationPolicyFreeUnits: Number("int"), // required
+ * //           contextualGroundingPolicyUnits: Number("int"), // required
+ * //         },
+ * //         guardrailCoverage: { // GuardrailCoverage
+ * //           textCharacters: { // GuardrailTextCharactersCoverage
+ * //             guarded: Number("int"),
+ * //             total: Number("int"),
+ * //           },
+ * //         },
+ * //       },
  * //     },
  * //   ],
+ * //   guardrailCoverage: {
+ * //     textCharacters: {
+ * //       guarded: Number("int"),
+ * //       total: Number("int"),
+ * //     },
+ * //   },
  * // };
  *
  * ```
@@ -151,10 +175,10 @@ export interface ApplyGuardrailCommandOutput extends ApplyGuardrailResponse, __M
  *  <p>The specified resource ARN was not found. Check the ARN and try your request again.</p>
  *
  * @throws {@link ServiceQuotaExceededException} (client fault)
- *  <p>The number of requests exceeds the service quota. Resubmit your request later.</p>
+ *  <p>Your request exceeds the service quota for your account. You can view your quotas at <a href="https://docs.aws.amazon.com/servicequotas/latest/userguide/gs-request-quota.html">Viewing service quotas</a>. You can resubmit your request later.</p>
  *
  * @throws {@link ThrottlingException} (client fault)
- *  <p>The number of requests exceeds the limit. Resubmit your request later.</p>
+ *  <p>Your request was throttled because of service-wide limitations. Resubmit your request later or in a different region. You can also purchase <a href="https://docs.aws.amazon.com/bedrock/latest/userguide/prov-throughput.html">Provisioned Throughput</a> to increase the rate or number of tokens you can process.</p>
  *
  * @throws {@link ValidationException} (client fault)
  *  <p>Input validation failed. Check your request parameters and retry the request.</p>
@@ -172,9 +196,7 @@ export class ApplyGuardrailCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: BedrockRuntimeClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -186,4 +208,16 @@ export class ApplyGuardrailCommand extends $Command
   .f(void 0, void 0)
   .ser(se_ApplyGuardrailCommand)
   .de(de_ApplyGuardrailCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: ApplyGuardrailRequest;
+      output: ApplyGuardrailResponse;
+    };
+    sdk: {
+      input: ApplyGuardrailCommandInput;
+      output: ApplyGuardrailCommandOutput;
+    };
+  };
+}

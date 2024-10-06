@@ -16,12 +16,10 @@ import {
   DataLabelOptionsFilterSensitiveLog,
   DataLabelPosition,
   DimensionField,
-  FieldSort,
   FontConfiguration,
   FormatConfiguration,
   FormatConfigurationFilterSensitiveLog,
   HorizontalTextAlignment,
-  ItemsLimitConfiguration,
   LegendOptions,
   MeasureField,
   MeasureFieldFilterSensitiveLog,
@@ -40,6 +38,82 @@ import {
   VisualInteractionOptions,
   WidgetStatus,
 } from "./models_0";
+
+/**
+ * @public
+ * @enum
+ */
+export const OtherCategories = {
+  EXCLUDE: "EXCLUDE",
+  INCLUDE: "INCLUDE",
+} as const;
+
+/**
+ * @public
+ */
+export type OtherCategories = (typeof OtherCategories)[keyof typeof OtherCategories];
+
+/**
+ * <p>The limit configuration of the visual display for an axis.</p>
+ * @public
+ */
+export interface ItemsLimitConfiguration {
+  /**
+   * <p>The limit on how many items of a field are showed in the chart. For
+   *             example, the number of slices that are displayed in a pie chart.</p>
+   * @public
+   */
+  ItemsLimit?: number;
+
+  /**
+   * <p>The <code>Show
+   *                 other</code> of an axis in the chart. Choose one of the following options:</p>
+   *          <ul>
+   *             <li>
+   *                <p>
+   *                   <code>INCLUDE</code>
+   *                </p>
+   *             </li>
+   *             <li>
+   *                <p>
+   *                   <code>EXCLUDE</code>
+   *                </p>
+   *             </li>
+   *          </ul>
+   * @public
+   */
+  OtherCategories?: OtherCategories;
+}
+
+/**
+ * <p>The sort configuration for a field in a
+ *             field well.</p>
+ * @public
+ */
+export interface FieldSort {
+  /**
+   * <p>The sort configuration target field.</p>
+   * @public
+   */
+  FieldId: string | undefined;
+
+  /**
+   * <p>The sort direction. Choose one of the following
+   *             options:</p>
+   *          <ul>
+   *             <li>
+   *                <p>
+   *                   <code>ASC</code>: Ascending</p>
+   *             </li>
+   *             <li>
+   *                <p>
+   *                   <code>DESC</code>: Descending</p>
+   *             </li>
+   *          </ul>
+   * @public
+   */
+  Direction: SortDirection | undefined;
+}
 
 /**
  * <p>The field sort options in a chart configuration.</p>
@@ -7690,139 +7764,6 @@ export interface TreeMapSortConfiguration {
 }
 
 /**
- * <p>The configuration of a tree map.</p>
- * @public
- */
-export interface TreeMapConfiguration {
-  /**
-   * <p>The field wells of the visual.</p>
-   * @public
-   */
-  FieldWells?: TreeMapFieldWells;
-
-  /**
-   * <p>The sort configuration of a tree map.</p>
-   * @public
-   */
-  SortConfiguration?: TreeMapSortConfiguration;
-
-  /**
-   * <p>The label options (label text, label visibility) of the groups that are displayed in a tree map.</p>
-   * @public
-   */
-  GroupLabelOptions?: ChartAxisLabelOptions;
-
-  /**
-   * <p>The label options (label text, label visibility) of the sizes that are displayed in a tree map.</p>
-   * @public
-   */
-  SizeLabelOptions?: ChartAxisLabelOptions;
-
-  /**
-   * <p>The label options (label text, label visibility) for the colors displayed in a tree map.</p>
-   * @public
-   */
-  ColorLabelOptions?: ChartAxisLabelOptions;
-
-  /**
-   * <p>The color options (gradient color, point of divergence) of a tree map.</p>
-   * @public
-   */
-  ColorScale?: ColorScale;
-
-  /**
-   * <p>The legend display setup of the visual.</p>
-   * @public
-   */
-  Legend?: LegendOptions;
-
-  /**
-   * <p>The options that determine if visual data labels are displayed.</p>
-   * @public
-   */
-  DataLabels?: DataLabelOptions;
-
-  /**
-   * <p>The tooltip display setup of the visual.</p>
-   * @public
-   */
-  Tooltip?: TooltipOptions;
-
-  /**
-   * <p>The general visual interactions setup for a visual.</p>
-   * @public
-   */
-  Interactions?: VisualInteractionOptions;
-}
-
-/**
- * <p>A tree map.</p>
- *          <p>For more information, see <a href="https://docs.aws.amazon.com/quicksight/latest/user/tree-map.html">Using tree maps</a> in the <i>Amazon QuickSight User Guide</i>.</p>
- * @public
- */
-export interface TreeMapVisual {
-  /**
-   * <p>The unique identifier of a visual. This identifier must be unique within the context of a dashboard, template, or analysis. Two dashboards, analyses, or templates can have visuals with the same identifiers..</p>
-   * @public
-   */
-  VisualId: string | undefined;
-
-  /**
-   * <p>The title that is displayed on the visual.</p>
-   * @public
-   */
-  Title?: VisualTitleLabelOptions;
-
-  /**
-   * <p>The subtitle that is displayed on the visual.</p>
-   * @public
-   */
-  Subtitle?: VisualSubtitleLabelOptions;
-
-  /**
-   * <p>The configuration settings of the visual.</p>
-   * @public
-   */
-  ChartConfiguration?: TreeMapConfiguration;
-
-  /**
-   * <p>The list of custom actions that are configured for a visual.</p>
-   * @public
-   */
-  Actions?: VisualCustomAction[];
-
-  /**
-   * <p>The column hierarchy that is used during drill-downs and drill-ups.</p>
-   * @public
-   */
-  ColumnHierarchies?: ColumnHierarchy[];
-}
-
-/**
- * <p>The color configuration for individual groups within a waterfall visual.</p>
- * @public
- */
-export interface WaterfallChartGroupColorConfiguration {
-  /**
-   * <p>Defines the color for the positive bars of a waterfall chart.</p>
-   * @public
-   */
-  PositiveBarColor?: string;
-
-  /**
-   * <p>Defines the color for the negative bars of a waterfall chart.</p>
-   * @public
-   */
-  NegativeBarColor?: string;
-
-  /**
-   * <p>Defines the color for the total bars of a waterfall chart.</p>
-   * @public
-   */
-  TotalBarColor?: string;
-}
-
-/**
  * @internal
  */
 export const DataPathValueFilterSensitiveLog = (obj: DataPathValue): any => ({
@@ -8977,20 +8918,5 @@ export const TreeMapAggregatedFieldWellsFilterSensitiveLog = (obj: TreeMapAggreg
  * @internal
  */
 export const TreeMapFieldWellsFilterSensitiveLog = (obj: TreeMapFieldWells): any => ({
-  ...obj,
-});
-
-/**
- * @internal
- */
-export const TreeMapConfigurationFilterSensitiveLog = (obj: TreeMapConfiguration): any => ({
-  ...obj,
-  ...(obj.DataLabels && { DataLabels: DataLabelOptionsFilterSensitiveLog(obj.DataLabels) }),
-});
-
-/**
- * @internal
- */
-export const TreeMapVisualFilterSensitiveLog = (obj: TreeMapVisual): any => ({
   ...obj,
 });

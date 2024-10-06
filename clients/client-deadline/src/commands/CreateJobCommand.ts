@@ -28,8 +28,9 @@ export interface CreateJobCommandInput extends CreateJobRequest {}
 export interface CreateJobCommandOutput extends CreateJobResponse, __MetadataBearer {}
 
 /**
- * <p>Creates a job. A job is a render submission submitted by a user. It contains specific
- *          job properties outlined as steps and tasks.</p>
+ * <p>Creates a job. A job is a set of instructions that AWS Deadline Cloud uses to schedule
+ *          and run work on available workers. For more information, see <a href="https://docs.aws.amazon.com/deadline-cloud/latest/userguide/deadline-cloud-jobs.html">Deadline Cloud
+ *             jobs</a>.</p>
  * @example
  * Use a bare-bones client and the command you need to make an API call.
  * ```javascript
@@ -118,9 +119,7 @@ export class CreateJobCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: DeadlineClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -132,4 +131,16 @@ export class CreateJobCommand extends $Command
   .f(CreateJobRequestFilterSensitiveLog, void 0)
   .ser(se_CreateJobCommand)
   .de(de_CreateJobCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: CreateJobRequest;
+      output: CreateJobResponse;
+    };
+    sdk: {
+      input: CreateJobCommandInput;
+      output: CreateJobCommandOutput;
+    };
+  };
+}

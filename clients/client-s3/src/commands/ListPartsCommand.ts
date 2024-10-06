@@ -1,4 +1,5 @@
 // smithy-typescript generated code
+import { getThrow200ExceptionsPlugin } from "@aws-sdk/middleware-sdk-s3";
 import { getSsecPlugin } from "@aws-sdk/middleware-ssec";
 import { getEndpointPlugin } from "@smithy/middleware-endpoint";
 import { getSerdePlugin } from "@smithy/middleware-serde";
@@ -236,6 +237,7 @@ export class ListPartsCommand extends $Command
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
       getEndpointPlugin(config, Command.getEndpointParameterInstructions()),
+      getThrow200ExceptionsPlugin(config),
       getSsecPlugin(config),
     ];
   })
@@ -244,4 +246,16 @@ export class ListPartsCommand extends $Command
   .f(ListPartsRequestFilterSensitiveLog, void 0)
   .ser(se_ListPartsCommand)
   .de(de_ListPartsCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: ListPartsRequest;
+      output: ListPartsOutput;
+    };
+    sdk: {
+      input: ListPartsCommandInput;
+      output: ListPartsCommandOutput;
+    };
+  };
+}

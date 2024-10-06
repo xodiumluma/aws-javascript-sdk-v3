@@ -6,11 +6,8 @@ import { MetadataBearer as __MetadataBearer } from "@smithy/types";
 
 import { CleanRoomsClientResolvedConfig, ServiceInputTypes, ServiceOutputTypes } from "../CleanRoomsClient";
 import { commonParams } from "../endpoint/EndpointParameters";
-import {
-  UpdateProtectedQueryInput,
-  UpdateProtectedQueryOutput,
-  UpdateProtectedQueryOutputFilterSensitiveLog,
-} from "../models/models_0";
+import { UpdateProtectedQueryInput } from "../models/models_0";
+import { UpdateProtectedQueryOutput, UpdateProtectedQueryOutputFilterSensitiveLog } from "../models/models_1";
 import { de_UpdateProtectedQueryCommand, se_UpdateProtectedQueryCommand } from "../protocols/Aws_restJson1";
 
 /**
@@ -66,6 +63,9 @@ export interface UpdateProtectedQueryCommandOutput extends UpdateProtectedQueryO
  * //           resultFormat: "STRING_VALUE", // required
  * //           bucket: "STRING_VALUE", // required
  * //           keyPrefix: "STRING_VALUE",
+ * //         },
+ * //         member: { // ProtectedQueryMemberOutputConfiguration
+ * //           accountId: "STRING_VALUE", // required
  * //         },
  * //       },
  * //     },
@@ -141,9 +141,7 @@ export class UpdateProtectedQueryCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: CleanRoomsClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -155,4 +153,16 @@ export class UpdateProtectedQueryCommand extends $Command
   .f(void 0, UpdateProtectedQueryOutputFilterSensitiveLog)
   .ser(se_UpdateProtectedQueryCommand)
   .de(de_UpdateProtectedQueryCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: UpdateProtectedQueryInput;
+      output: UpdateProtectedQueryOutput;
+    };
+    sdk: {
+      input: UpdateProtectedQueryCommandInput;
+      output: UpdateProtectedQueryCommandOutput;
+    };
+  };
+}

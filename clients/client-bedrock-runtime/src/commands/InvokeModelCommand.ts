@@ -93,7 +93,10 @@ export interface InvokeModelCommandOutput extends InvokeModelCommandOutputType, 
  *  <p>The request failed due to an error while processing the model.</p>
  *
  * @throws {@link ModelNotReadyException} (client fault)
- *  <p>The model specified in the request is not ready to serve inference requests.</p>
+ *  <p>The model specified in the request is not ready to serve inference requests. The AWS SDK
+ *            will automatically retry the operation up to 5 times. For information about configuring
+ *            automatic retries, see <a href="https://docs.aws.amazon.com/sdkref/latest/guide/feature-retry-behavior.html">Retry behavior</a> in the <i>AWS SDKs and Tools</i>
+ *            reference guide.</p>
  *
  * @throws {@link ModelTimeoutException} (client fault)
  *  <p>The request took too long to process. Processing time exceeded the model timeout length.</p>
@@ -102,10 +105,13 @@ export interface InvokeModelCommandOutput extends InvokeModelCommandOutputType, 
  *  <p>The specified resource ARN was not found. Check the ARN and try your request again.</p>
  *
  * @throws {@link ServiceQuotaExceededException} (client fault)
- *  <p>The number of requests exceeds the service quota. Resubmit your request later.</p>
+ *  <p>Your request exceeds the service quota for your account. You can view your quotas at <a href="https://docs.aws.amazon.com/servicequotas/latest/userguide/gs-request-quota.html">Viewing service quotas</a>. You can resubmit your request later.</p>
+ *
+ * @throws {@link ServiceUnavailableException} (server fault)
+ *  <p>The service isn't currently available. Try again later.</p>
  *
  * @throws {@link ThrottlingException} (client fault)
- *  <p>The number of requests exceeds the limit. Resubmit your request later.</p>
+ *  <p>Your request was throttled because of service-wide limitations. Resubmit your request later or in a different region. You can also purchase <a href="https://docs.aws.amazon.com/bedrock/latest/userguide/prov-throughput.html">Provisioned Throughput</a> to increase the rate or number of tokens you can process.</p>
  *
  * @throws {@link ValidationException} (client fault)
  *  <p>Input validation failed. Check your request parameters and retry the request.</p>
@@ -123,9 +129,7 @@ export class InvokeModelCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: BedrockRuntimeClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -137,4 +141,16 @@ export class InvokeModelCommand extends $Command
   .f(InvokeModelRequestFilterSensitiveLog, InvokeModelResponseFilterSensitiveLog)
   .ser(se_InvokeModelCommand)
   .de(de_InvokeModelCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: InvokeModelRequest;
+      output: InvokeModelResponse;
+    };
+    sdk: {
+      input: InvokeModelCommandInput;
+      output: InvokeModelCommandOutput;
+    };
+  };
+}

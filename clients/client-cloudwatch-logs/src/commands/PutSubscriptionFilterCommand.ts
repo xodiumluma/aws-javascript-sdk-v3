@@ -55,6 +55,12 @@ export interface PutSubscriptionFilterCommandOutput extends __MetadataBearer {}
  *          <p>Each log group can have up to two subscription filters associated with it. If you are
  *       updating an existing filter, you must specify the correct name in <code>filterName</code>.
  *       </p>
+ *          <p>Using regular expressions to create subscription filters is supported. For these filters,
+ *       there is a quotas of quota of two regular expression patterns within a single filter pattern. There
+ *       is also a quota of five regular expression patterns per log group.
+ *       For more information about using regular expressions in subscription filters,
+ *       see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/FilterAndPatternSyntax.html">
+ *         Filter pattern syntax for metric filters, subscription filters, filter log events, and Live Tail</a>.</p>
  *          <p>To perform a <code>PutSubscriptionFilter</code> operation for any destination except a Lambda function,
  *     you must also have the
  *       <code>iam:PassRole</code> permission.</p>
@@ -112,9 +118,7 @@ export class PutSubscriptionFilterCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: CloudWatchLogsClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -126,4 +130,16 @@ export class PutSubscriptionFilterCommand extends $Command
   .f(void 0, void 0)
   .ser(se_PutSubscriptionFilterCommand)
   .de(de_PutSubscriptionFilterCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: PutSubscriptionFilterRequest;
+      output: {};
+    };
+    sdk: {
+      input: PutSubscriptionFilterCommandInput;
+      output: PutSubscriptionFilterCommandOutput;
+    };
+  };
+}

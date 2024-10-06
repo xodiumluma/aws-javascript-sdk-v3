@@ -33,10 +33,10 @@ export interface CreateShareCommandOutput extends CreateShareResponse, __Metadat
  *          <p>The following resources support cross-account sharing:</p>
  *          <ul>
  *             <li>
- *                <p>Healthomics variant stores</p>
+ *                <p>HealthOmics variant stores</p>
  *             </li>
  *             <li>
- *                <p>Healthomics annotation stores</p>
+ *                <p>HealthOmics annotation stores</p>
  *             </li>
  *             <li>
  *                <p>Private workflows</p>
@@ -103,9 +103,7 @@ export class CreateShareCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: OmicsClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -117,4 +115,16 @@ export class CreateShareCommand extends $Command
   .f(void 0, void 0)
   .ser(se_CreateShareCommand)
   .de(de_CreateShareCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: CreateShareRequest;
+      output: CreateShareResponse;
+    };
+    sdk: {
+      input: CreateShareCommandInput;
+      output: CreateShareCommandOutput;
+    };
+  };
+}

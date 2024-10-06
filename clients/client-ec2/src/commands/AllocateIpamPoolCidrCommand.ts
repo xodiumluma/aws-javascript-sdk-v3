@@ -62,7 +62,7 @@ export interface AllocateIpamPoolCidrCommandOutput extends AllocateIpamPoolCidrR
  * //     IpamPoolAllocationId: "STRING_VALUE",
  * //     Description: "STRING_VALUE",
  * //     ResourceId: "STRING_VALUE",
- * //     ResourceType: "ipam-pool" || "vpc" || "ec2-public-ipv4-pool" || "custom" || "subnet",
+ * //     ResourceType: "ipam-pool" || "vpc" || "ec2-public-ipv4-pool" || "custom" || "subnet" || "eip",
  * //     ResourceRegion: "STRING_VALUE",
  * //     ResourceOwner: "STRING_VALUE",
  * //   },
@@ -89,9 +89,7 @@ export class AllocateIpamPoolCidrCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: EC2ClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -103,4 +101,16 @@ export class AllocateIpamPoolCidrCommand extends $Command
   .f(void 0, void 0)
   .ser(se_AllocateIpamPoolCidrCommand)
   .de(de_AllocateIpamPoolCidrCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: AllocateIpamPoolCidrRequest;
+      output: AllocateIpamPoolCidrResult;
+    };
+    sdk: {
+      input: AllocateIpamPoolCidrCommandInput;
+      output: AllocateIpamPoolCidrCommandOutput;
+    };
+  };
+}

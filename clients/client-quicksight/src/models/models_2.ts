@@ -25,7 +25,6 @@ import {
   Edition,
   FilterControl,
   FilterGroup,
-  ItemsLimitConfiguration,
   Layout,
   LegendOptions,
   MeasureField,
@@ -34,6 +33,7 @@ import {
   ParameterControl,
   ParameterDeclaration,
   ParameterDeclarationFilterSensitiveLog,
+  QueryExecutionOptions,
   ResourceStatus,
   SheetContentType,
   SheetControlLayout,
@@ -48,6 +48,7 @@ import {
 import {
   BarChartVisual,
   BoxPlotVisual,
+  ColorScale,
   ColumnHierarchy,
   ComboChartVisual,
   CustomContentVisual,
@@ -63,6 +64,7 @@ import {
   HistogramVisualFilterSensitiveLog,
   InsightVisual,
   InsightVisualFilterSensitiveLog,
+  ItemsLimitConfiguration,
   KPIVisual,
   KPIVisualFilterSensitiveLog,
   LineChartVisual,
@@ -73,15 +75,149 @@ import {
   ScatterPlotVisual,
   ScatterPlotVisualFilterSensitiveLog,
   TableVisual,
-  TreeMapVisual,
+  TooltipOptions,
+  TreeMapFieldWells,
+  TreeMapSortConfiguration,
   VisualPalette,
   VisualPaletteFilterSensitiveLog,
   VisualSubtitleLabelOptions,
   VisualTitleLabelOptions,
-  WaterfallChartGroupColorConfiguration,
 } from "./models_1";
 
 import { QuickSightServiceException as __BaseException } from "./QuickSightServiceException";
+
+/**
+ * <p>The configuration of a tree map.</p>
+ * @public
+ */
+export interface TreeMapConfiguration {
+  /**
+   * <p>The field wells of the visual.</p>
+   * @public
+   */
+  FieldWells?: TreeMapFieldWells;
+
+  /**
+   * <p>The sort configuration of a tree map.</p>
+   * @public
+   */
+  SortConfiguration?: TreeMapSortConfiguration;
+
+  /**
+   * <p>The label options (label text, label visibility) of the groups that are displayed in a tree map.</p>
+   * @public
+   */
+  GroupLabelOptions?: ChartAxisLabelOptions;
+
+  /**
+   * <p>The label options (label text, label visibility) of the sizes that are displayed in a tree map.</p>
+   * @public
+   */
+  SizeLabelOptions?: ChartAxisLabelOptions;
+
+  /**
+   * <p>The label options (label text, label visibility) for the colors displayed in a tree map.</p>
+   * @public
+   */
+  ColorLabelOptions?: ChartAxisLabelOptions;
+
+  /**
+   * <p>The color options (gradient color, point of divergence) of a tree map.</p>
+   * @public
+   */
+  ColorScale?: ColorScale;
+
+  /**
+   * <p>The legend display setup of the visual.</p>
+   * @public
+   */
+  Legend?: LegendOptions;
+
+  /**
+   * <p>The options that determine if visual data labels are displayed.</p>
+   * @public
+   */
+  DataLabels?: DataLabelOptions;
+
+  /**
+   * <p>The tooltip display setup of the visual.</p>
+   * @public
+   */
+  Tooltip?: TooltipOptions;
+
+  /**
+   * <p>The general visual interactions setup for a visual.</p>
+   * @public
+   */
+  Interactions?: VisualInteractionOptions;
+}
+
+/**
+ * <p>A tree map.</p>
+ *          <p>For more information, see <a href="https://docs.aws.amazon.com/quicksight/latest/user/tree-map.html">Using tree maps</a> in the <i>Amazon QuickSight User Guide</i>.</p>
+ * @public
+ */
+export interface TreeMapVisual {
+  /**
+   * <p>The unique identifier of a visual. This identifier must be unique within the context of a dashboard, template, or analysis. Two dashboards, analyses, or templates can have visuals with the same identifiers..</p>
+   * @public
+   */
+  VisualId: string | undefined;
+
+  /**
+   * <p>The title that is displayed on the visual.</p>
+   * @public
+   */
+  Title?: VisualTitleLabelOptions;
+
+  /**
+   * <p>The subtitle that is displayed on the visual.</p>
+   * @public
+   */
+  Subtitle?: VisualSubtitleLabelOptions;
+
+  /**
+   * <p>The configuration settings of the visual.</p>
+   * @public
+   */
+  ChartConfiguration?: TreeMapConfiguration;
+
+  /**
+   * <p>The list of custom actions that are configured for a visual.</p>
+   * @public
+   */
+  Actions?: VisualCustomAction[];
+
+  /**
+   * <p>The column hierarchy that is used during drill-downs and drill-ups.</p>
+   * @public
+   */
+  ColumnHierarchies?: ColumnHierarchy[];
+}
+
+/**
+ * <p>The color configuration for individual groups within a waterfall visual.</p>
+ * @public
+ */
+export interface WaterfallChartGroupColorConfiguration {
+  /**
+   * <p>Defines the color for the positive bars of a waterfall chart.</p>
+   * @public
+   */
+  PositiveBarColor?: string;
+
+  /**
+   * <p>Defines the color for the negative bars of a waterfall chart.</p>
+   * @public
+   */
+  NegativeBarColor?: string;
+
+  /**
+   * <p>Defines the color for the total bars of a waterfall chart.</p>
+   * @public
+   */
+  TotalBarColor?: string;
+}
 
 /**
  * <p>The color configuration of a waterfall visual.</p>
@@ -838,6 +974,12 @@ export interface AnalysisDefinition {
    * @public
    */
   Options?: AssetOptions;
+
+  /**
+   * <p>A structure that describes the query execution options.</p>
+   * @public
+   */
+  QueryExecutionOptions?: QueryExecutionOptions;
 }
 
 /**
@@ -1058,6 +1200,58 @@ export interface Anchor {
 }
 
 /**
+ * @public
+ * @enum
+ */
+export const AnonymousUserDashboardEmbeddingConfigurationDisabledFeature = {
+  SHARED_VIEW: "SHARED_VIEW",
+} as const;
+
+/**
+ * @public
+ */
+export type AnonymousUserDashboardEmbeddingConfigurationDisabledFeature =
+  (typeof AnonymousUserDashboardEmbeddingConfigurationDisabledFeature)[keyof typeof AnonymousUserDashboardEmbeddingConfigurationDisabledFeature];
+
+/**
+ * @public
+ * @enum
+ */
+export const AnonymousUserDashboardEmbeddingConfigurationEnabledFeature = {
+  SHARED_VIEW: "SHARED_VIEW",
+} as const;
+
+/**
+ * @public
+ */
+export type AnonymousUserDashboardEmbeddingConfigurationEnabledFeature =
+  (typeof AnonymousUserDashboardEmbeddingConfigurationEnabledFeature)[keyof typeof AnonymousUserDashboardEmbeddingConfigurationEnabledFeature];
+
+/**
+ * <p>The shared view settings of an embedded dashboard.</p>
+ * @public
+ */
+export interface SharedViewConfigurations {
+  /**
+   * <p>The shared view settings of an embedded dashboard.</p>
+   * @public
+   */
+  Enabled: boolean | undefined;
+}
+
+/**
+ * <p>The feature configuration for an embedded dashboard.</p>
+ * @public
+ */
+export interface AnonymousUserDashboardFeatureConfigurations {
+  /**
+   * <p>The shared view settings of an embedded dashboard.</p>
+   * @public
+   */
+  SharedView?: SharedViewConfigurations;
+}
+
+/**
  * <p>Information about the dashboard that you want to embed.</p>
  * @public
  */
@@ -1068,6 +1262,24 @@ export interface AnonymousUserDashboardEmbeddingConfiguration {
    * @public
    */
   InitialDashboardId: string | undefined;
+
+  /**
+   * <p>A list of all enabled features of a specified anonymous dashboard.</p>
+   * @public
+   */
+  EnabledFeatures?: AnonymousUserDashboardEmbeddingConfigurationEnabledFeature[];
+
+  /**
+   * <p>A list of all disabled features of a specified anonymous dashboard.</p>
+   * @public
+   */
+  DisabledFeatures?: AnonymousUserDashboardEmbeddingConfigurationDisabledFeature[];
+
+  /**
+   * <p>The feature configuration for an embedded dashboard.</p>
+   * @public
+   */
+  FeatureConfigurations?: AnonymousUserDashboardFeatureConfigurations;
 }
 
 /**
@@ -1518,6 +1730,39 @@ export interface AssetBundleExportJobDataSourceOverrideProperties {
  * @public
  * @enum
  */
+export const AssetBundleExportJobFolderPropertyToOverride = {
+  NAME: "Name",
+  PARENT_FOLDER_ARN: "ParentFolderArn",
+} as const;
+
+/**
+ * @public
+ */
+export type AssetBundleExportJobFolderPropertyToOverride =
+  (typeof AssetBundleExportJobFolderPropertyToOverride)[keyof typeof AssetBundleExportJobFolderPropertyToOverride];
+
+/**
+ * <p>Controls how a specific <code>Folder</code> resource is parameterized in the returned CloudFormation template.</p>
+ * @public
+ */
+export interface AssetBundleExportJobFolderOverrideProperties {
+  /**
+   * <p>The ARN of the specific <code>Folder</code> resource whose override properties are configured in this structure.</p>
+   * @public
+   */
+  Arn: string | undefined;
+
+  /**
+   * <p>A list of <code>Folder</code> resource properties to generate variables for in the returned CloudFormation template.</p>
+   * @public
+   */
+  Properties: AssetBundleExportJobFolderPropertyToOverride[] | undefined;
+}
+
+/**
+ * @public
+ * @enum
+ */
 export const AssetBundleExportJobRefreshSchedulePropertyToOverride = {
   START_AFTER_DATE_TIME: "StartAfterDateTime",
 } as const;
@@ -1676,6 +1921,12 @@ export interface AssetBundleCloudFormationOverridePropertyConfiguration {
    * @public
    */
   Dashboards?: AssetBundleExportJobDashboardOverrideProperties[];
+
+  /**
+   * <p>An optional list of structures that controls how <code>Folder</code> resources are parameterized in the returned CloudFormation template.</p>
+   * @public
+   */
+  Folders?: AssetBundleExportJobFolderOverrideProperties[];
 }
 
 /**
@@ -3838,6 +4089,66 @@ export interface AssetBundleImportJobError {
 }
 
 /**
+ * <p>The override parameters for a single folder that is being imported.</p>
+ * @public
+ */
+export interface AssetBundleImportJobFolderOverrideParameters {
+  /**
+   * <p>The ID of the folder that you want to apply overrides to.</p>
+   * @public
+   */
+  FolderId: string | undefined;
+
+  /**
+   * <p>A new name for the folder.</p>
+   * @public
+   */
+  Name?: string;
+
+  /**
+   * <p>A new parent folder arn. This change can only be applied if the import creates a brand new folder. Existing folders cannot be moved.</p>
+   * @public
+   */
+  ParentFolderArn?: string;
+}
+
+/**
+ * <p>An object that contains a list of permissions to be applied to a list of folder IDs.</p>
+ * @public
+ */
+export interface AssetBundleImportJobFolderOverridePermissions {
+  /**
+   * <p>A list of folder IDs that you want to apply overrides to. You can use <code>*</code> to override all folders in this asset bundle.</p>
+   * @public
+   */
+  FolderIds: string[] | undefined;
+
+  /**
+   * <p>A structure that contains the permissions for the resource that you want to override in an asset bundle import job.</p>
+   * @public
+   */
+  Permissions?: AssetBundleResourcePermissions;
+}
+
+/**
+ * <p>An object that contains a list of tags to be assigned to a list of folder IDs.</p>
+ * @public
+ */
+export interface AssetBundleImportJobFolderOverrideTags {
+  /**
+   * <p>A list of folder IDs that you want to apply overrides to. You can use <code>*</code> to override all folders in this asset bundle.</p>
+   * @public
+   */
+  FolderIds: string[] | undefined;
+
+  /**
+   * <p>A list of tags for the folders that you want to apply overrides to.</p>
+   * @public
+   */
+  Tags: Tag[] | undefined;
+}
+
+/**
  * <p>A list of overrides for a specific <code>RefreshsSchedule</code> resource that is present in the asset bundle that is imported.</p>
  * @public
  */
@@ -3989,6 +4300,12 @@ export interface AssetBundleImportJobOverrideParameters {
    * @public
    */
   Dashboards?: AssetBundleImportJobDashboardOverrideParameters[];
+
+  /**
+   * <p>A list of overrides for any <code>Folder</code> resources that are present in the asset bundle that is imported.</p>
+   * @public
+   */
+  Folders?: AssetBundleImportJobFolderOverrideParameters[];
 }
 
 /**
@@ -4043,6 +4360,12 @@ export interface AssetBundleImportJobOverridePermissions {
    * @public
    */
   Dashboards?: AssetBundleImportJobDashboardOverridePermissions[];
+
+  /**
+   * <p>A list of permissions for the folders that you want to apply overrides to.</p>
+   * @public
+   */
+  Folders?: AssetBundleImportJobFolderOverridePermissions[];
 }
 
 /**
@@ -4121,6 +4444,12 @@ export interface AssetBundleImportJobOverrideTags {
    * @public
    */
   Dashboards?: AssetBundleImportJobDashboardOverrideTags[];
+
+  /**
+   * <p>A list of tag overrides for any <code>Folder</code> resources that are present in the asset bundle that is imported.</p>
+   * @public
+   */
+  Folders?: AssetBundleImportJobFolderOverrideTags[];
 }
 
 /**
@@ -8322,502 +8651,19 @@ export interface RowLevelPermissionDataSet {
 }
 
 /**
- * <p>A set of rules associated with a tag.</p>
- * @public
+ * @internal
  */
-export interface RowLevelPermissionTagRule {
-  /**
-   * <p>The unique key for a tag.</p>
-   * @public
-   */
-  TagKey: string | undefined;
-
-  /**
-   * <p>The column name that a tag key is assigned to.</p>
-   * @public
-   */
-  ColumnName: string | undefined;
-
-  /**
-   * <p>A string that you want to use to delimit the values when you pass the values at run time. For example, you can delimit the values with a comma.</p>
-   * @public
-   */
-  TagMultiValueDelimiter?: string;
-
-  /**
-   * <p>A string that you want to use to filter by all the values in a column in the dataset and don’t want to list the values one by one. For example, you can use an asterisk as your match all value.</p>
-   * @public
-   */
-  MatchAllValue?: string;
-}
+export const TreeMapConfigurationFilterSensitiveLog = (obj: TreeMapConfiguration): any => ({
+  ...obj,
+  ...(obj.DataLabels && { DataLabels: DataLabelOptionsFilterSensitiveLog(obj.DataLabels) }),
+});
 
 /**
- * <p>The configuration of tags on a dataset to set row-level security. </p>
- * @public
+ * @internal
  */
-export interface RowLevelPermissionTagConfiguration {
-  /**
-   * <p>The status of row-level security tags. If enabled, the status is <code>ENABLED</code>. If disabled, the status is <code>DISABLED</code>.</p>
-   * @public
-   */
-  Status?: Status;
-
-  /**
-   * <p>A set of rules associated with row-level security, such as the tag names and columns that they are assigned to.</p>
-   * @public
-   */
-  TagRules: RowLevelPermissionTagRule[] | undefined;
-
-  /**
-   * <p>A list of tag configuration rules to apply to a dataset. All tag configurations have the OR condition. Tags within each tile will be joined (AND). At least one rule in this structure must have all tag values assigned to it to apply Row-level security (RLS) to the dataset.</p>
-   * @public
-   */
-  TagRuleConfigurations?: string[][];
-}
-
-/**
- * @public
- */
-export interface CreateDataSetRequest {
-  /**
-   * <p>The Amazon Web Services account ID.</p>
-   * @public
-   */
-  AwsAccountId: string | undefined;
-
-  /**
-   * <p>An ID for the dataset that you want to create. This ID is unique per Amazon Web Services Region for each Amazon Web Services account.</p>
-   * @public
-   */
-  DataSetId: string | undefined;
-
-  /**
-   * <p>The display name for the dataset.</p>
-   * @public
-   */
-  Name: string | undefined;
-
-  /**
-   * <p>Declares the physical tables that are available in the underlying data sources.</p>
-   * @public
-   */
-  PhysicalTableMap: Record<string, PhysicalTable> | undefined;
-
-  /**
-   * <p>Configures the combination and transformation of the data from the physical tables.</p>
-   * @public
-   */
-  LogicalTableMap?: Record<string, LogicalTable>;
-
-  /**
-   * <p>Indicates whether you want to import the data into SPICE.</p>
-   * @public
-   */
-  ImportMode: DataSetImportMode | undefined;
-
-  /**
-   * <p>Groupings of columns that work together in certain Amazon QuickSight features. Currently, only geospatial hierarchy is supported.</p>
-   * @public
-   */
-  ColumnGroups?: ColumnGroup[];
-
-  /**
-   * <p>The folder that contains fields and nested subfolders for your dataset.</p>
-   * @public
-   */
-  FieldFolders?: Record<string, FieldFolder>;
-
-  /**
-   * <p>A list of resource permissions on the dataset.</p>
-   * @public
-   */
-  Permissions?: ResourcePermission[];
-
-  /**
-   * <p>The row-level security configuration for the data that you want to create.</p>
-   * @public
-   */
-  RowLevelPermissionDataSet?: RowLevelPermissionDataSet;
-
-  /**
-   * <p>The configuration of tags on a dataset to set row-level security. Row-level security tags are currently supported for anonymous embedding only.</p>
-   * @public
-   */
-  RowLevelPermissionTagConfiguration?: RowLevelPermissionTagConfiguration;
-
-  /**
-   * <p>A set of one or more definitions of a <code>
-   *                <a href="https://docs.aws.amazon.com/quicksight/latest/APIReference/API_ColumnLevelPermissionRule.html">ColumnLevelPermissionRule</a>
-   *             </code>.</p>
-   * @public
-   */
-  ColumnLevelPermissionRules?: ColumnLevelPermissionRule[];
-
-  /**
-   * <p>Contains a map of the key-value pairs for the resource tag or tags assigned to the dataset.</p>
-   * @public
-   */
-  Tags?: Tag[];
-
-  /**
-   * <p>The usage configuration to apply to child datasets that reference this dataset as a source.</p>
-   * @public
-   */
-  DataSetUsageConfiguration?: DataSetUsageConfiguration;
-
-  /**
-   * <p>The parameter declarations of the dataset.</p>
-   * @public
-   */
-  DatasetParameters?: DatasetParameter[];
-
-  /**
-   * <p>When you create the dataset, Amazon QuickSight adds the dataset to these folders.</p>
-   * @public
-   */
-  FolderArns?: string[];
-}
-
-/**
- * @public
- */
-export interface CreateDataSetResponse {
-  /**
-   * <p>The Amazon Resource Name (ARN) of the dataset.</p>
-   * @public
-   */
-  Arn?: string;
-
-  /**
-   * <p>The ID for the dataset that you want to create. This ID is unique per Amazon Web Services Region for each Amazon Web Services account.</p>
-   * @public
-   */
-  DataSetId?: string;
-
-  /**
-   * <p>The ARN for the ingestion, which is triggered as a result of dataset creation if the import
-   * 			mode is SPICE.</p>
-   * @public
-   */
-  IngestionArn?: string;
-
-  /**
-   * <p>The ID of the ingestion, which is triggered as a result of dataset creation if the import
-   * 			mode is SPICE.</p>
-   * @public
-   */
-  IngestionId?: string;
-
-  /**
-   * <p>The Amazon Web Services request ID for this operation.</p>
-   * @public
-   */
-  RequestId?: string;
-
-  /**
-   * <p>The HTTP status of the request.</p>
-   * @public
-   */
-  Status?: number;
-}
-
-/**
- * <p>The combination of user name and password that are used as credentials.</p>
- * @public
- */
-export interface CredentialPair {
-  /**
-   * <p>User name.</p>
-   * @public
-   */
-  Username: string | undefined;
-
-  /**
-   * <p>Password.</p>
-   * @public
-   */
-  Password: string | undefined;
-
-  /**
-   * <p>A set of alternate data source parameters that you want to share for these
-   *             credentials. The credentials are applied in tandem with the data source parameters when
-   *             you copy a data source by using a create or update request. The API operation compares
-   *             the <code>DataSourceParameters</code> structure that's in the request with the
-   *             structures in the <code>AlternateDataSourceParameters</code> allow list. If the
-   *             structures are an exact match, the request is allowed to use the new data source with
-   *             the existing credentials. If the <code>AlternateDataSourceParameters</code> list is
-   *             null, the <code>DataSourceParameters</code> originally used with these
-   *                 <code>Credentials</code> is automatically allowed.</p>
-   * @public
-   */
-  AlternateDataSourceParameters?: DataSourceParameters[];
-}
-
-/**
- * <p>Data source credentials. This is a variant type structure. For this structure to be
- *             valid, only one of the attributes can be non-null.</p>
- * @public
- */
-export interface DataSourceCredentials {
-  /**
-   * <p>Credential pair. For more information, see
-   *             <code>
-   *                <a href="https://docs.aws.amazon.com/quicksight/latest/APIReference/API_CredentialPair.html">CredentialPair</a>
-   *             </code>.</p>
-   * @public
-   */
-  CredentialPair?: CredentialPair;
-
-  /**
-   * <p>The Amazon Resource Name (ARN) of a data source that has the credential pair that you
-   *             want to use. When <code>CopySourceArn</code> is not null, the credential pair from the
-   *             data source in the ARN is used as the credentials for the
-   *             <code>DataSourceCredentials</code> structure.</p>
-   * @public
-   */
-  CopySourceArn?: string;
-
-  /**
-   * <p>The Amazon Resource Name (ARN) of the secret associated with the data source in Amazon Secrets Manager.</p>
-   * @public
-   */
-  SecretArn?: string;
-}
-
-/**
- * @public
- * @enum
- */
-export const DataSourceType = {
-  ADOBE_ANALYTICS: "ADOBE_ANALYTICS",
-  AMAZON_ELASTICSEARCH: "AMAZON_ELASTICSEARCH",
-  AMAZON_OPENSEARCH: "AMAZON_OPENSEARCH",
-  ATHENA: "ATHENA",
-  AURORA: "AURORA",
-  AURORA_POSTGRESQL: "AURORA_POSTGRESQL",
-  AWS_IOT_ANALYTICS: "AWS_IOT_ANALYTICS",
-  BIGQUERY: "BIGQUERY",
-  DATABRICKS: "DATABRICKS",
-  EXASOL: "EXASOL",
-  GITHUB: "GITHUB",
-  JIRA: "JIRA",
-  MARIADB: "MARIADB",
-  MYSQL: "MYSQL",
-  ORACLE: "ORACLE",
-  POSTGRESQL: "POSTGRESQL",
-  PRESTO: "PRESTO",
-  REDSHIFT: "REDSHIFT",
-  S3: "S3",
-  SALESFORCE: "SALESFORCE",
-  SERVICENOW: "SERVICENOW",
-  SNOWFLAKE: "SNOWFLAKE",
-  SPARK: "SPARK",
-  SQLSERVER: "SQLSERVER",
-  STARBURST: "STARBURST",
-  TERADATA: "TERADATA",
-  TIMESTREAM: "TIMESTREAM",
-  TRINO: "TRINO",
-  TWITTER: "TWITTER",
-} as const;
-
-/**
- * @public
- */
-export type DataSourceType = (typeof DataSourceType)[keyof typeof DataSourceType];
-
-/**
- * @public
- */
-export interface CreateDataSourceRequest {
-  /**
-   * <p>The Amazon Web Services account ID.</p>
-   * @public
-   */
-  AwsAccountId: string | undefined;
-
-  /**
-   * <p>An ID for the data source. This ID is unique per Amazon Web Services Region for each Amazon Web Services account. </p>
-   * @public
-   */
-  DataSourceId: string | undefined;
-
-  /**
-   * <p>A display name for the data source.</p>
-   * @public
-   */
-  Name: string | undefined;
-
-  /**
-   * <p>The type of the data source. To return a
-   * 			list of all data sources, use <code>ListDataSources</code>.</p>
-   *          <p>Use <code>AMAZON_ELASTICSEARCH</code> for Amazon OpenSearch Service.</p>
-   * @public
-   */
-  Type: DataSourceType | undefined;
-
-  /**
-   * <p>The parameters that Amazon QuickSight uses to connect to your underlying source.</p>
-   * @public
-   */
-  DataSourceParameters?: DataSourceParameters;
-
-  /**
-   * <p>The credentials Amazon QuickSight that uses to connect to your underlying source. Currently, only
-   * 			credentials based on user name and password are supported.</p>
-   * @public
-   */
-  Credentials?: DataSourceCredentials;
-
-  /**
-   * <p>A list of resource permissions on the data source.</p>
-   * @public
-   */
-  Permissions?: ResourcePermission[];
-
-  /**
-   * <p>Use this parameter only when you want Amazon QuickSight to use a VPC connection when connecting to
-   * 			your underlying source.</p>
-   * @public
-   */
-  VpcConnectionProperties?: VpcConnectionProperties;
-
-  /**
-   * <p>Secure Socket Layer (SSL) properties that apply when Amazon QuickSight connects to your underlying source.</p>
-   * @public
-   */
-  SslProperties?: SslProperties;
-
-  /**
-   * <p>Contains a map of the key-value pairs for the resource tag or tags assigned to the data source.</p>
-   * @public
-   */
-  Tags?: Tag[];
-
-  /**
-   * <p>When you create the data source, Amazon QuickSight adds the data source to these folders.</p>
-   * @public
-   */
-  FolderArns?: string[];
-}
-
-/**
- * @public
- */
-export interface CreateDataSourceResponse {
-  /**
-   * <p>The Amazon Resource Name (ARN) of the data source.</p>
-   * @public
-   */
-  Arn?: string;
-
-  /**
-   * <p>The ID of the data source. This ID is unique per Amazon Web Services Region for each Amazon Web Services account.</p>
-   * @public
-   */
-  DataSourceId?: string;
-
-  /**
-   * <p>The status of creating the data source.</p>
-   * @public
-   */
-  CreationStatus?: ResourceStatus;
-
-  /**
-   * <p>The Amazon Web Services request ID for this operation.</p>
-   * @public
-   */
-  RequestId?: string;
-
-  /**
-   * <p>The HTTP status of the request.</p>
-   * @public
-   */
-  Status?: number;
-}
-
-/**
- * @public
- * @enum
- */
-export const FolderType = {
-  RESTRICTED: "RESTRICTED",
-  SHARED: "SHARED",
-} as const;
-
-/**
- * @public
- */
-export type FolderType = (typeof FolderType)[keyof typeof FolderType];
-
-/**
- * @public
- * @enum
- */
-export const SharingModel = {
-  ACCOUNT: "ACCOUNT",
-  NAMESPACE: "NAMESPACE",
-} as const;
-
-/**
- * @public
- */
-export type SharingModel = (typeof SharingModel)[keyof typeof SharingModel];
-
-/**
- * @public
- */
-export interface CreateFolderRequest {
-  /**
-   * <p>The ID for the Amazon Web Services account where you want to create the folder.</p>
-   * @public
-   */
-  AwsAccountId: string | undefined;
-
-  /**
-   * <p>The ID of the folder.</p>
-   * @public
-   */
-  FolderId: string | undefined;
-
-  /**
-   * <p>The name of the folder.</p>
-   * @public
-   */
-  Name?: string;
-
-  /**
-   * <p>The type of folder. By default, <code>folderType</code> is <code>SHARED</code>.</p>
-   * @public
-   */
-  FolderType?: FolderType;
-
-  /**
-   * <p>The Amazon Resource Name (ARN) for the parent folder.</p>
-   *          <p>
-   *             <code>ParentFolderArn</code> can be null. An empty <code>parentFolderArn</code> creates a root-level folder.</p>
-   * @public
-   */
-  ParentFolderArn?: string;
-
-  /**
-   * <p>A structure that describes the principals and the resource-level permissions of a folder.</p>
-   *          <p>To specify no permissions, omit <code>Permissions</code>.</p>
-   * @public
-   */
-  Permissions?: ResourcePermission[];
-
-  /**
-   * <p>Tags for the folder.</p>
-   * @public
-   */
-  Tags?: Tag[];
-
-  /**
-   * <p>An optional parameter that determines the sharing scope of the folder. The default value for this parameter is <code>ACCOUNT</code>.</p>
-   * @public
-   */
-  SharingModel?: SharingModel;
-}
+export const TreeMapVisualFilterSensitiveLog = (obj: TreeMapVisual): any => ({
+  ...obj,
+});
 
 /**
  * @internal
@@ -9024,6 +8870,22 @@ export const CalculatedColumnFilterSensitiveLog = (obj: CalculatedColumn): any =
 /**
  * @internal
  */
+export const ColumnDescriptionFilterSensitiveLog = (obj: ColumnDescription): any => ({
+  ...obj,
+  ...(obj.Text && { Text: SENSITIVE_STRING }),
+});
+
+/**
+ * @internal
+ */
+export const ColumnTagFilterSensitiveLog = (obj: ColumnTag): any => ({
+  ...obj,
+  ...(obj.ColumnDescription && { ColumnDescription: ColumnDescriptionFilterSensitiveLog(obj.ColumnDescription) }),
+});
+
+/**
+ * @internal
+ */
 export const DateTimeParameterFilterSensitiveLog = (obj: DateTimeParameter): any => ({
   ...obj,
   ...(obj.Values && { Values: SENSITIVE_STRING }),
@@ -9123,6 +8985,14 @@ export const FilterOperationFilterSensitiveLog = (obj: FilterOperation): any => 
 /**
  * @internal
  */
+export const TagColumnOperationFilterSensitiveLog = (obj: TagColumnOperation): any => ({
+  ...obj,
+  ...(obj.Tags && { Tags: obj.Tags.map((item) => ColumnTagFilterSensitiveLog(item)) }),
+});
+
+/**
+ * @internal
+ */
 export const TransformOperationFilterSensitiveLog = (obj: TransformOperation): any => {
   if (obj.ProjectOperation !== undefined) return { ProjectOperation: obj.ProjectOperation };
   if (obj.FilterOperation !== undefined)
@@ -9131,7 +9001,8 @@ export const TransformOperationFilterSensitiveLog = (obj: TransformOperation): a
     return { CreateColumnsOperation: CreateColumnsOperationFilterSensitiveLog(obj.CreateColumnsOperation) };
   if (obj.RenameColumnOperation !== undefined) return { RenameColumnOperation: obj.RenameColumnOperation };
   if (obj.CastColumnTypeOperation !== undefined) return { CastColumnTypeOperation: obj.CastColumnTypeOperation };
-  if (obj.TagColumnOperation !== undefined) return { TagColumnOperation: obj.TagColumnOperation };
+  if (obj.TagColumnOperation !== undefined)
+    return { TagColumnOperation: TagColumnOperationFilterSensitiveLog(obj.TagColumnOperation) };
   if (obj.UntagColumnOperation !== undefined) return { UntagColumnOperation: obj.UntagColumnOperation };
   if (obj.OverrideDatasetParameterOperation !== undefined)
     return { OverrideDatasetParameterOperation: obj.OverrideDatasetParameterOperation };
@@ -9146,61 +9017,4 @@ export const LogicalTableFilterSensitiveLog = (obj: LogicalTable): any => ({
   ...(obj.DataTransforms && {
     DataTransforms: obj.DataTransforms.map((item) => TransformOperationFilterSensitiveLog(item)),
   }),
-});
-
-/**
- * @internal
- */
-export const RowLevelPermissionTagRuleFilterSensitiveLog = (obj: RowLevelPermissionTagRule): any => ({
-  ...obj,
-  ...(obj.MatchAllValue && { MatchAllValue: SENSITIVE_STRING }),
-});
-
-/**
- * @internal
- */
-export const RowLevelPermissionTagConfigurationFilterSensitiveLog = (obj: RowLevelPermissionTagConfiguration): any => ({
-  ...obj,
-  ...(obj.TagRules && { TagRules: obj.TagRules.map((item) => RowLevelPermissionTagRuleFilterSensitiveLog(item)) }),
-});
-
-/**
- * @internal
- */
-export const CreateDataSetRequestFilterSensitiveLog = (obj: CreateDataSetRequest): any => ({
-  ...obj,
-  ...(obj.PhysicalTableMap && {
-    PhysicalTableMap: Object.entries(obj.PhysicalTableMap).reduce(
-      (acc: any, [key, value]: [string, PhysicalTable]) => ((acc[key] = value), acc),
-      {}
-    ),
-  }),
-  ...(obj.LogicalTableMap && {
-    LogicalTableMap: Object.entries(obj.LogicalTableMap).reduce(
-      (acc: any, [key, value]: [string, LogicalTable]) => ((acc[key] = LogicalTableFilterSensitiveLog(value)), acc),
-      {}
-    ),
-  }),
-  ...(obj.RowLevelPermissionTagConfiguration && {
-    RowLevelPermissionTagConfiguration: RowLevelPermissionTagConfigurationFilterSensitiveLog(
-      obj.RowLevelPermissionTagConfiguration
-    ),
-  }),
-});
-
-/**
- * @internal
- */
-export const DataSourceCredentialsFilterSensitiveLog = (obj: DataSourceCredentials): any => ({
-  ...obj,
-  ...(obj.CredentialPair && { CredentialPair: obj.CredentialPair }),
-});
-
-/**
- * @internal
- */
-export const CreateDataSourceRequestFilterSensitiveLog = (obj: CreateDataSourceRequest): any => ({
-  ...obj,
-  ...(obj.DataSourceParameters && { DataSourceParameters: obj.DataSourceParameters }),
-  ...(obj.Credentials && { Credentials: SENSITIVE_STRING }),
 });

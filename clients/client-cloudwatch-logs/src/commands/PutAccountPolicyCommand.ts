@@ -85,7 +85,7 @@ export interface PutAccountPolicyCommandOutput extends PutAccountPolicyResponse,
  *         delivery. Kinesis Data Streams and Firehose are supported as logical destinations.</p>
  *             </li>
  *          </ul>
- *          <p>Each account can have one account-level subscription filter policy.
+ *          <p>Each account can have one account-level subscription filter policy per Region.
  *       If you are updating an existing filter, you must specify the correct name in <code>PolicyName</code>.
  *       To perform a <code>PutAccountPolicy</code> subscription filter operation for any destination except a Lambda
  *       function, you must also have the <code>iam:PassRole</code> permission.</p>
@@ -149,9 +149,7 @@ export class PutAccountPolicyCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: CloudWatchLogsClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -163,4 +161,16 @@ export class PutAccountPolicyCommand extends $Command
   .f(void 0, void 0)
   .ser(se_PutAccountPolicyCommand)
   .de(de_PutAccountPolicyCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: PutAccountPolicyRequest;
+      output: PutAccountPolicyResponse;
+    };
+    sdk: {
+      input: PutAccountPolicyCommandInput;
+      output: PutAccountPolicyCommandOutput;
+    };
+  };
+}

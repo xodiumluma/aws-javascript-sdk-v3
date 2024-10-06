@@ -41,7 +41,7 @@ export interface GetConnectionsCommandOutput extends GetConnectionsResponse, __M
  *     MatchCriteria: [ // MatchCriteria
  *       "STRING_VALUE",
  *     ],
- *     ConnectionType: "JDBC" || "SFTP" || "MONGODB" || "KAFKA" || "NETWORK" || "MARKETPLACE" || "CUSTOM" || "SALESFORCE",
+ *     ConnectionType: "JDBC" || "SFTP" || "MONGODB" || "KAFKA" || "NETWORK" || "MARKETPLACE" || "CUSTOM" || "SALESFORCE" || "VIEW_VALIDATION_REDSHIFT" || "VIEW_VALIDATION_ATHENA",
  *   },
  *   HidePassword: true || false,
  *   NextToken: "STRING_VALUE",
@@ -54,11 +54,14 @@ export interface GetConnectionsCommandOutput extends GetConnectionsResponse, __M
  * //     { // Connection
  * //       Name: "STRING_VALUE",
  * //       Description: "STRING_VALUE",
- * //       ConnectionType: "JDBC" || "SFTP" || "MONGODB" || "KAFKA" || "NETWORK" || "MARKETPLACE" || "CUSTOM" || "SALESFORCE",
+ * //       ConnectionType: "JDBC" || "SFTP" || "MONGODB" || "KAFKA" || "NETWORK" || "MARKETPLACE" || "CUSTOM" || "SALESFORCE" || "VIEW_VALIDATION_REDSHIFT" || "VIEW_VALIDATION_ATHENA",
  * //       MatchCriteria: [ // MatchCriteria
  * //         "STRING_VALUE",
  * //       ],
  * //       ConnectionProperties: { // ConnectionProperties
+ * //         "<keys>": "STRING_VALUE",
+ * //       },
+ * //       AthenaProperties: { // PropertyMap
  * //         "<keys>": "STRING_VALUE",
  * //       },
  * //       PhysicalConnectionRequirements: { // PhysicalConnectionRequirements
@@ -127,9 +130,7 @@ export class GetConnectionsCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: GlueClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -141,4 +142,16 @@ export class GetConnectionsCommand extends $Command
   .f(void 0, void 0)
   .ser(se_GetConnectionsCommand)
   .de(de_GetConnectionsCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: GetConnectionsRequest;
+      output: GetConnectionsResponse;
+    };
+    sdk: {
+      input: GetConnectionsCommandInput;
+      output: GetConnectionsCommandOutput;
+    };
+  };
+}

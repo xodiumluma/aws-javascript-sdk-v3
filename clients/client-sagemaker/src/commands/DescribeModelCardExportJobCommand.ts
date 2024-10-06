@@ -5,8 +5,7 @@ import { Command as $Command } from "@smithy/smithy-client";
 import { MetadataBearer as __MetadataBearer } from "@smithy/types";
 
 import { commonParams } from "../endpoint/EndpointParameters";
-import { DescribeModelCardExportJobRequest } from "../models/models_2";
-import { DescribeModelCardExportJobResponse } from "../models/models_3";
+import { DescribeModelCardExportJobRequest, DescribeModelCardExportJobResponse } from "../models/models_3";
 import { de_DescribeModelCardExportJobCommand, se_DescribeModelCardExportJobCommand } from "../protocols/Aws_json1_1";
 import { SageMakerClientResolvedConfig, ServiceInputTypes, ServiceOutputTypes } from "../SageMakerClient";
 
@@ -82,9 +81,7 @@ export class DescribeModelCardExportJobCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: SageMakerClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -96,4 +93,16 @@ export class DescribeModelCardExportJobCommand extends $Command
   .f(void 0, void 0)
   .ser(se_DescribeModelCardExportJobCommand)
   .de(de_DescribeModelCardExportJobCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: DescribeModelCardExportJobRequest;
+      output: DescribeModelCardExportJobResponse;
+    };
+    sdk: {
+      input: DescribeModelCardExportJobCommandInput;
+      output: DescribeModelCardExportJobCommandOutput;
+    };
+  };
+}

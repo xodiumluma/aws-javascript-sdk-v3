@@ -65,6 +65,7 @@ export interface PutAttributeMappingCommandOutput extends PutAttributeMappingRes
  * //     createdAt: new Date("TIMESTAMP"),
  * //     updatedAt: new Date("TIMESTAMP"),
  * //     durationSeconds: Number("int"),
+ * //     acceptRoleSessionName: true || false,
  * //     attributeMappings: [ // AttributeMappings
  * //       { // AttributeMapping
  * //         certificateField: "STRING_VALUE",
@@ -108,9 +109,7 @@ export class PutAttributeMappingCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: RolesAnywhereClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -122,4 +121,16 @@ export class PutAttributeMappingCommand extends $Command
   .f(void 0, void 0)
   .ser(se_PutAttributeMappingCommand)
   .de(de_PutAttributeMappingCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: PutAttributeMappingRequest;
+      output: PutAttributeMappingResponse;
+    };
+    sdk: {
+      input: PutAttributeMappingCommandInput;
+      output: PutAttributeMappingCommandOutput;
+    };
+  };
+}

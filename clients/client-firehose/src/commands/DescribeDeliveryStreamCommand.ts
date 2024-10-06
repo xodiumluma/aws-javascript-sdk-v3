@@ -88,6 +88,7 @@ export interface DescribeDeliveryStreamCommandOutput extends DescribeDeliveryStr
  * //           Connectivity: "PUBLIC" || "PRIVATE", // required
  * //         },
  * //         DeliveryStartTimestamp: new Date("TIMESTAMP"),
+ * //         ReadFromTimestamp: new Date("TIMESTAMP"),
  * //       },
  * //     },
  * //     Destinations: [ // DestinationDescriptionList // required
@@ -508,6 +509,10 @@ export interface DescribeDeliveryStreamCommandOutput extends DescribeDeliveryStr
  * //             RoleARN: "STRING_VALUE",
  * //             Enabled: true || false, // required
  * //           },
+ * //           BufferingHints: { // SnowflakeBufferingHints
+ * //             SizeInMBs: Number("int"),
+ * //             IntervalInSeconds: Number("int"),
+ * //           },
  * //         },
  * //         AmazonOpenSearchServerlessDestinationDescription: { // AmazonOpenSearchServerlessDestinationDescription
  * //           RoleARN: "STRING_VALUE",
@@ -534,6 +539,30 @@ export interface DescribeDeliveryStreamCommandOutput extends DescribeDeliveryStr
  * //             ],
  * //             VpcId: "STRING_VALUE", // required
  * //           },
+ * //         },
+ * //         IcebergDestinationDescription: { // IcebergDestinationDescription
+ * //           DestinationTableConfigurationList: [ // DestinationTableConfigurationList
+ * //             { // DestinationTableConfiguration
+ * //               DestinationTableName: "STRING_VALUE", // required
+ * //               DestinationDatabaseName: "STRING_VALUE", // required
+ * //               UniqueKeys: [
+ * //                 "STRING_VALUE",
+ * //               ],
+ * //               S3ErrorOutputPrefix: "STRING_VALUE",
+ * //             },
+ * //           ],
+ * //           BufferingHints: "<BufferingHints>",
+ * //           CloudWatchLoggingOptions: "<CloudWatchLoggingOptions>",
+ * //           ProcessingConfiguration: "<ProcessingConfiguration>",
+ * //           S3BackupMode: "FailedDataOnly" || "AllData",
+ * //           RetryOptions: {
+ * //             DurationInSeconds: Number("int"),
+ * //           },
+ * //           RoleARN: "STRING_VALUE",
+ * //           CatalogConfiguration: { // CatalogConfiguration
+ * //             CatalogARN: "STRING_VALUE",
+ * //           },
+ * //           S3DestinationDescription: "<S3DestinationDescription>",
  * //         },
  * //       },
  * //     ],
@@ -565,9 +594,7 @@ export class DescribeDeliveryStreamCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: FirehoseClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -579,4 +606,16 @@ export class DescribeDeliveryStreamCommand extends $Command
   .f(void 0, DescribeDeliveryStreamOutputFilterSensitiveLog)
   .ser(se_DescribeDeliveryStreamCommand)
   .de(de_DescribeDeliveryStreamCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: DescribeDeliveryStreamInput;
+      output: DescribeDeliveryStreamOutput;
+    };
+    sdk: {
+      input: DescribeDeliveryStreamCommandInput;
+      output: DescribeDeliveryStreamCommandOutput;
+    };
+  };
+}

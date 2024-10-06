@@ -118,6 +118,10 @@ import {
   DescribeAccountPoliciesCommandInput,
   DescribeAccountPoliciesCommandOutput,
 } from "./commands/DescribeAccountPoliciesCommand";
+import {
+  DescribeConfigurationTemplatesCommandInput,
+  DescribeConfigurationTemplatesCommandOutput,
+} from "./commands/DescribeConfigurationTemplatesCommand";
 import { DescribeDeliveriesCommandInput, DescribeDeliveriesCommandOutput } from "./commands/DescribeDeliveriesCommand";
 import {
   DescribeDeliveryDestinationsCommandInput,
@@ -226,6 +230,10 @@ import { UntagLogGroupCommandInput, UntagLogGroupCommandOutput } from "./command
 import { UntagResourceCommandInput, UntagResourceCommandOutput } from "./commands/UntagResourceCommand";
 import { UpdateAnomalyCommandInput, UpdateAnomalyCommandOutput } from "./commands/UpdateAnomalyCommand";
 import {
+  UpdateDeliveryConfigurationCommandInput,
+  UpdateDeliveryConfigurationCommandOutput,
+} from "./commands/UpdateDeliveryConfigurationCommand";
+import {
   UpdateLogAnomalyDetectorCommandInput,
   UpdateLogAnomalyDetectorCommandOutput,
 } from "./commands/UpdateLogAnomalyDetectorCommand";
@@ -267,6 +275,7 @@ export type ServiceInputTypes =
   | DeleteRetentionPolicyCommandInput
   | DeleteSubscriptionFilterCommandInput
   | DescribeAccountPoliciesCommandInput
+  | DescribeConfigurationTemplatesCommandInput
   | DescribeDeliveriesCommandInput
   | DescribeDeliveryDestinationsCommandInput
   | DescribeDeliverySourcesCommandInput
@@ -317,6 +326,7 @@ export type ServiceInputTypes =
   | UntagLogGroupCommandInput
   | UntagResourceCommandInput
   | UpdateAnomalyCommandInput
+  | UpdateDeliveryConfigurationCommandInput
   | UpdateLogAnomalyDetectorCommandInput;
 
 /**
@@ -346,6 +356,7 @@ export type ServiceOutputTypes =
   | DeleteRetentionPolicyCommandOutput
   | DeleteSubscriptionFilterCommandOutput
   | DescribeAccountPoliciesCommandOutput
+  | DescribeConfigurationTemplatesCommandOutput
   | DescribeDeliveriesCommandOutput
   | DescribeDeliveryDestinationsCommandOutput
   | DescribeDeliverySourcesCommandOutput
@@ -396,6 +407,7 @@ export type ServiceOutputTypes =
   | UntagLogGroupCommandOutput
   | UntagResourceCommandOutput
   | UpdateAnomalyCommandOutput
+  | UpdateDeliveryConfigurationCommandOutput
   | UpdateLogAnomalyDetectorCommandOutput;
 
 /**
@@ -540,11 +552,11 @@ export interface ClientDefaults extends Partial<__SmithyConfiguration<__HttpHand
  */
 export type CloudWatchLogsClientConfigType = Partial<__SmithyConfiguration<__HttpHandlerOptions>> &
   ClientDefaults &
-  RegionInputConfig &
-  EndpointInputConfig<EndpointParameters> &
-  HostHeaderInputConfig &
   UserAgentInputConfig &
   RetryInputConfig &
+  RegionInputConfig &
+  HostHeaderInputConfig &
+  EndpointInputConfig<EndpointParameters> &
   EventStreamSerdeInputConfig &
   HttpAuthSchemeInputConfig &
   ClientInputEndpointParameters;
@@ -561,11 +573,11 @@ export interface CloudWatchLogsClientConfig extends CloudWatchLogsClientConfigTy
 export type CloudWatchLogsClientResolvedConfigType = __SmithyResolvedConfiguration<__HttpHandlerOptions> &
   Required<ClientDefaults> &
   RuntimeExtensionsConfig &
-  RegionResolvedConfig &
-  EndpointResolvedConfig<EndpointParameters> &
-  HostHeaderResolvedConfig &
   UserAgentResolvedConfig &
   RetryResolvedConfig &
+  RegionResolvedConfig &
+  HostHeaderResolvedConfig &
+  EndpointResolvedConfig<EndpointParameters> &
   EventStreamSerdeResolvedConfig &
   HttpAuthSchemeResolvedConfig &
   ClientResolvedEndpointParameters;
@@ -628,26 +640,29 @@ export class CloudWatchLogsClient extends __Client<
   constructor(...[configuration]: __CheckOptionalClientConfig<CloudWatchLogsClientConfig>) {
     const _config_0 = __getRuntimeConfig(configuration || {});
     const _config_1 = resolveClientEndpointParameters(_config_0);
-    const _config_2 = resolveRegionConfig(_config_1);
-    const _config_3 = resolveEndpointConfig(_config_2);
-    const _config_4 = resolveHostHeaderConfig(_config_3);
-    const _config_5 = resolveUserAgentConfig(_config_4);
-    const _config_6 = resolveRetryConfig(_config_5);
+    const _config_2 = resolveUserAgentConfig(_config_1);
+    const _config_3 = resolveRetryConfig(_config_2);
+    const _config_4 = resolveRegionConfig(_config_3);
+    const _config_5 = resolveHostHeaderConfig(_config_4);
+    const _config_6 = resolveEndpointConfig(_config_5);
     const _config_7 = resolveEventStreamSerdeConfig(_config_6);
     const _config_8 = resolveHttpAuthSchemeConfig(_config_7);
     const _config_9 = resolveRuntimeExtensions(_config_8, configuration?.extensions || []);
     super(_config_9);
     this.config = _config_9;
-    this.middlewareStack.use(getHostHeaderPlugin(this.config));
-    this.middlewareStack.use(getLoggerPlugin(this.config));
-    this.middlewareStack.use(getRecursionDetectionPlugin(this.config));
     this.middlewareStack.use(getUserAgentPlugin(this.config));
     this.middlewareStack.use(getRetryPlugin(this.config));
     this.middlewareStack.use(getContentLengthPlugin(this.config));
+    this.middlewareStack.use(getHostHeaderPlugin(this.config));
+    this.middlewareStack.use(getLoggerPlugin(this.config));
+    this.middlewareStack.use(getRecursionDetectionPlugin(this.config));
     this.middlewareStack.use(
       getHttpAuthSchemeEndpointRuleSetPlugin(this.config, {
-        httpAuthSchemeParametersProvider: this.getDefaultHttpAuthSchemeParametersProvider(),
-        identityProviderConfigProvider: this.getIdentityProviderConfigProvider(),
+        httpAuthSchemeParametersProvider: defaultCloudWatchLogsHttpAuthSchemeParametersProvider,
+        identityProviderConfigProvider: async (config: CloudWatchLogsClientResolvedConfig) =>
+          new DefaultIdentityProviderConfig({
+            "aws.auth#sigv4": config.credentials,
+          }),
       })
     );
     this.middlewareStack.use(getHttpSigningPlugin(this.config));
@@ -660,14 +675,5 @@ export class CloudWatchLogsClient extends __Client<
    */
   destroy(): void {
     super.destroy();
-  }
-  private getDefaultHttpAuthSchemeParametersProvider() {
-    return defaultCloudWatchLogsHttpAuthSchemeParametersProvider;
-  }
-  private getIdentityProviderConfigProvider() {
-    return async (config: CloudWatchLogsClientResolvedConfig) =>
-      new DefaultIdentityProviderConfig({
-        "aws.auth#sigv4": config.credentials,
-      });
   }
 }

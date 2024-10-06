@@ -58,6 +58,8 @@ import {
   AcceptSubscriptionRequestCommandInput,
   AcceptSubscriptionRequestCommandOutput,
 } from "./commands/AcceptSubscriptionRequestCommand";
+import { AddEntityOwnerCommandInput, AddEntityOwnerCommandOutput } from "./commands/AddEntityOwnerCommand";
+import { AddPolicyGrantCommandInput, AddPolicyGrantCommandOutput } from "./commands/AddPolicyGrantCommand";
 import {
   AssociateEnvironmentRoleCommandInput,
   AssociateEnvironmentRoleCommandOutput,
@@ -68,13 +70,20 @@ import {
 } from "./commands/CancelMetadataGenerationRunCommand";
 import { CancelSubscriptionCommandInput, CancelSubscriptionCommandOutput } from "./commands/CancelSubscriptionCommand";
 import { CreateAssetCommandInput, CreateAssetCommandOutput } from "./commands/CreateAssetCommand";
+import { CreateAssetFilterCommandInput, CreateAssetFilterCommandOutput } from "./commands/CreateAssetFilterCommand";
 import {
   CreateAssetRevisionCommandInput,
   CreateAssetRevisionCommandOutput,
 } from "./commands/CreateAssetRevisionCommand";
 import { CreateAssetTypeCommandInput, CreateAssetTypeCommandOutput } from "./commands/CreateAssetTypeCommand";
+import { CreateDataProductCommandInput, CreateDataProductCommandOutput } from "./commands/CreateDataProductCommand";
+import {
+  CreateDataProductRevisionCommandInput,
+  CreateDataProductRevisionCommandOutput,
+} from "./commands/CreateDataProductRevisionCommand";
 import { CreateDataSourceCommandInput, CreateDataSourceCommandOutput } from "./commands/CreateDataSourceCommand";
 import { CreateDomainCommandInput, CreateDomainCommandOutput } from "./commands/CreateDomainCommand";
+import { CreateDomainUnitCommandInput, CreateDomainUnitCommandOutput } from "./commands/CreateDomainUnitCommand";
 import {
   CreateEnvironmentActionCommandInput,
   CreateEnvironmentActionCommandOutput,
@@ -111,9 +120,12 @@ import {
 } from "./commands/CreateSubscriptionTargetCommand";
 import { CreateUserProfileCommandInput, CreateUserProfileCommandOutput } from "./commands/CreateUserProfileCommand";
 import { DeleteAssetCommandInput, DeleteAssetCommandOutput } from "./commands/DeleteAssetCommand";
+import { DeleteAssetFilterCommandInput, DeleteAssetFilterCommandOutput } from "./commands/DeleteAssetFilterCommand";
 import { DeleteAssetTypeCommandInput, DeleteAssetTypeCommandOutput } from "./commands/DeleteAssetTypeCommand";
+import { DeleteDataProductCommandInput, DeleteDataProductCommandOutput } from "./commands/DeleteDataProductCommand";
 import { DeleteDataSourceCommandInput, DeleteDataSourceCommandOutput } from "./commands/DeleteDataSourceCommand";
 import { DeleteDomainCommandInput, DeleteDomainCommandOutput } from "./commands/DeleteDomainCommand";
+import { DeleteDomainUnitCommandInput, DeleteDomainUnitCommandOutput } from "./commands/DeleteDomainUnitCommand";
 import {
   DeleteEnvironmentActionCommandInput,
   DeleteEnvironmentActionCommandOutput,
@@ -157,10 +169,13 @@ import {
   DisassociateEnvironmentRoleCommandOutput,
 } from "./commands/DisassociateEnvironmentRoleCommand";
 import { GetAssetCommandInput, GetAssetCommandOutput } from "./commands/GetAssetCommand";
+import { GetAssetFilterCommandInput, GetAssetFilterCommandOutput } from "./commands/GetAssetFilterCommand";
 import { GetAssetTypeCommandInput, GetAssetTypeCommandOutput } from "./commands/GetAssetTypeCommand";
+import { GetDataProductCommandInput, GetDataProductCommandOutput } from "./commands/GetDataProductCommand";
 import { GetDataSourceCommandInput, GetDataSourceCommandOutput } from "./commands/GetDataSourceCommand";
 import { GetDataSourceRunCommandInput, GetDataSourceRunCommandOutput } from "./commands/GetDataSourceRunCommand";
 import { GetDomainCommandInput, GetDomainCommandOutput } from "./commands/GetDomainCommand";
+import { GetDomainUnitCommandInput, GetDomainUnitCommandOutput } from "./commands/GetDomainUnitCommand";
 import {
   GetEnvironmentActionCommandInput,
   GetEnvironmentActionCommandOutput,
@@ -174,6 +189,10 @@ import {
   GetEnvironmentBlueprintConfigurationCommandOutput,
 } from "./commands/GetEnvironmentBlueprintConfigurationCommand";
 import { GetEnvironmentCommandInput, GetEnvironmentCommandOutput } from "./commands/GetEnvironmentCommand";
+import {
+  GetEnvironmentCredentialsCommandInput,
+  GetEnvironmentCredentialsCommandOutput,
+} from "./commands/GetEnvironmentCredentialsCommand";
 import {
   GetEnvironmentProfileCommandInput,
   GetEnvironmentProfileCommandOutput,
@@ -211,7 +230,12 @@ import {
   GetTimeSeriesDataPointCommandOutput,
 } from "./commands/GetTimeSeriesDataPointCommand";
 import { GetUserProfileCommandInput, GetUserProfileCommandOutput } from "./commands/GetUserProfileCommand";
+import { ListAssetFiltersCommandInput, ListAssetFiltersCommandOutput } from "./commands/ListAssetFiltersCommand";
 import { ListAssetRevisionsCommandInput, ListAssetRevisionsCommandOutput } from "./commands/ListAssetRevisionsCommand";
+import {
+  ListDataProductRevisionsCommandInput,
+  ListDataProductRevisionsCommandOutput,
+} from "./commands/ListDataProductRevisionsCommand";
 import {
   ListDataSourceRunActivitiesCommandInput,
   ListDataSourceRunActivitiesCommandOutput,
@@ -219,6 +243,11 @@ import {
 import { ListDataSourceRunsCommandInput, ListDataSourceRunsCommandOutput } from "./commands/ListDataSourceRunsCommand";
 import { ListDataSourcesCommandInput, ListDataSourcesCommandOutput } from "./commands/ListDataSourcesCommand";
 import { ListDomainsCommandInput, ListDomainsCommandOutput } from "./commands/ListDomainsCommand";
+import {
+  ListDomainUnitsForParentCommandInput,
+  ListDomainUnitsForParentCommandOutput,
+} from "./commands/ListDomainUnitsForParentCommand";
+import { ListEntityOwnersCommandInput, ListEntityOwnersCommandOutput } from "./commands/ListEntityOwnersCommand";
 import {
   ListEnvironmentActionsCommandInput,
   ListEnvironmentActionsCommandOutput,
@@ -245,6 +274,7 @@ import {
   ListMetadataGenerationRunsCommandOutput,
 } from "./commands/ListMetadataGenerationRunsCommand";
 import { ListNotificationsCommandInput, ListNotificationsCommandOutput } from "./commands/ListNotificationsCommand";
+import { ListPolicyGrantsCommandInput, ListPolicyGrantsCommandOutput } from "./commands/ListPolicyGrantsCommand";
 import {
   ListProjectMembershipsCommandInput,
   ListProjectMembershipsCommandOutput,
@@ -285,6 +315,8 @@ import {
   RejectSubscriptionRequestCommandInput,
   RejectSubscriptionRequestCommandOutput,
 } from "./commands/RejectSubscriptionRequestCommand";
+import { RemoveEntityOwnerCommandInput, RemoveEntityOwnerCommandOutput } from "./commands/RemoveEntityOwnerCommand";
+import { RemovePolicyGrantCommandInput, RemovePolicyGrantCommandOutput } from "./commands/RemovePolicyGrantCommand";
 import { RevokeSubscriptionCommandInput, RevokeSubscriptionCommandOutput } from "./commands/RevokeSubscriptionCommand";
 import { SearchCommandInput, SearchCommandOutput } from "./commands/SearchCommand";
 import {
@@ -301,8 +333,10 @@ import {
 } from "./commands/StartMetadataGenerationRunCommand";
 import { TagResourceCommandInput, TagResourceCommandOutput } from "./commands/TagResourceCommand";
 import { UntagResourceCommandInput, UntagResourceCommandOutput } from "./commands/UntagResourceCommand";
+import { UpdateAssetFilterCommandInput, UpdateAssetFilterCommandOutput } from "./commands/UpdateAssetFilterCommand";
 import { UpdateDataSourceCommandInput, UpdateDataSourceCommandOutput } from "./commands/UpdateDataSourceCommand";
 import { UpdateDomainCommandInput, UpdateDomainCommandOutput } from "./commands/UpdateDomainCommand";
+import { UpdateDomainUnitCommandInput, UpdateDomainUnitCommandOutput } from "./commands/UpdateDomainUnitCommand";
 import {
   UpdateEnvironmentActionCommandInput,
   UpdateEnvironmentActionCommandOutput,
@@ -346,14 +380,20 @@ export { __Client };
 export type ServiceInputTypes =
   | AcceptPredictionsCommandInput
   | AcceptSubscriptionRequestCommandInput
+  | AddEntityOwnerCommandInput
+  | AddPolicyGrantCommandInput
   | AssociateEnvironmentRoleCommandInput
   | CancelMetadataGenerationRunCommandInput
   | CancelSubscriptionCommandInput
   | CreateAssetCommandInput
+  | CreateAssetFilterCommandInput
   | CreateAssetRevisionCommandInput
   | CreateAssetTypeCommandInput
+  | CreateDataProductCommandInput
+  | CreateDataProductRevisionCommandInput
   | CreateDataSourceCommandInput
   | CreateDomainCommandInput
+  | CreateDomainUnitCommandInput
   | CreateEnvironmentActionCommandInput
   | CreateEnvironmentCommandInput
   | CreateEnvironmentProfileCommandInput
@@ -369,9 +409,12 @@ export type ServiceInputTypes =
   | CreateSubscriptionTargetCommandInput
   | CreateUserProfileCommandInput
   | DeleteAssetCommandInput
+  | DeleteAssetFilterCommandInput
   | DeleteAssetTypeCommandInput
+  | DeleteDataProductCommandInput
   | DeleteDataSourceCommandInput
   | DeleteDomainCommandInput
+  | DeleteDomainUnitCommandInput
   | DeleteEnvironmentActionCommandInput
   | DeleteEnvironmentBlueprintConfigurationCommandInput
   | DeleteEnvironmentCommandInput
@@ -388,14 +431,18 @@ export type ServiceInputTypes =
   | DeleteTimeSeriesDataPointsCommandInput
   | DisassociateEnvironmentRoleCommandInput
   | GetAssetCommandInput
+  | GetAssetFilterCommandInput
   | GetAssetTypeCommandInput
+  | GetDataProductCommandInput
   | GetDataSourceCommandInput
   | GetDataSourceRunCommandInput
   | GetDomainCommandInput
+  | GetDomainUnitCommandInput
   | GetEnvironmentActionCommandInput
   | GetEnvironmentBlueprintCommandInput
   | GetEnvironmentBlueprintConfigurationCommandInput
   | GetEnvironmentCommandInput
+  | GetEnvironmentCredentialsCommandInput
   | GetEnvironmentProfileCommandInput
   | GetFormTypeCommandInput
   | GetGlossaryCommandInput
@@ -412,11 +459,15 @@ export type ServiceInputTypes =
   | GetSubscriptionTargetCommandInput
   | GetTimeSeriesDataPointCommandInput
   | GetUserProfileCommandInput
+  | ListAssetFiltersCommandInput
   | ListAssetRevisionsCommandInput
+  | ListDataProductRevisionsCommandInput
   | ListDataSourceRunActivitiesCommandInput
   | ListDataSourceRunsCommandInput
   | ListDataSourcesCommandInput
+  | ListDomainUnitsForParentCommandInput
   | ListDomainsCommandInput
+  | ListEntityOwnersCommandInput
   | ListEnvironmentActionsCommandInput
   | ListEnvironmentBlueprintConfigurationsCommandInput
   | ListEnvironmentBlueprintsCommandInput
@@ -425,6 +476,7 @@ export type ServiceInputTypes =
   | ListLineageNodeHistoryCommandInput
   | ListMetadataGenerationRunsCommandInput
   | ListNotificationsCommandInput
+  | ListPolicyGrantsCommandInput
   | ListProjectMembershipsCommandInput
   | ListProjectsCommandInput
   | ListSubscriptionGrantsCommandInput
@@ -438,6 +490,8 @@ export type ServiceInputTypes =
   | PutEnvironmentBlueprintConfigurationCommandInput
   | RejectPredictionsCommandInput
   | RejectSubscriptionRequestCommandInput
+  | RemoveEntityOwnerCommandInput
+  | RemovePolicyGrantCommandInput
   | RevokeSubscriptionCommandInput
   | SearchCommandInput
   | SearchGroupProfilesCommandInput
@@ -448,8 +502,10 @@ export type ServiceInputTypes =
   | StartMetadataGenerationRunCommandInput
   | TagResourceCommandInput
   | UntagResourceCommandInput
+  | UpdateAssetFilterCommandInput
   | UpdateDataSourceCommandInput
   | UpdateDomainCommandInput
+  | UpdateDomainUnitCommandInput
   | UpdateEnvironmentActionCommandInput
   | UpdateEnvironmentCommandInput
   | UpdateEnvironmentProfileCommandInput
@@ -468,14 +524,20 @@ export type ServiceInputTypes =
 export type ServiceOutputTypes =
   | AcceptPredictionsCommandOutput
   | AcceptSubscriptionRequestCommandOutput
+  | AddEntityOwnerCommandOutput
+  | AddPolicyGrantCommandOutput
   | AssociateEnvironmentRoleCommandOutput
   | CancelMetadataGenerationRunCommandOutput
   | CancelSubscriptionCommandOutput
   | CreateAssetCommandOutput
+  | CreateAssetFilterCommandOutput
   | CreateAssetRevisionCommandOutput
   | CreateAssetTypeCommandOutput
+  | CreateDataProductCommandOutput
+  | CreateDataProductRevisionCommandOutput
   | CreateDataSourceCommandOutput
   | CreateDomainCommandOutput
+  | CreateDomainUnitCommandOutput
   | CreateEnvironmentActionCommandOutput
   | CreateEnvironmentCommandOutput
   | CreateEnvironmentProfileCommandOutput
@@ -491,9 +553,12 @@ export type ServiceOutputTypes =
   | CreateSubscriptionTargetCommandOutput
   | CreateUserProfileCommandOutput
   | DeleteAssetCommandOutput
+  | DeleteAssetFilterCommandOutput
   | DeleteAssetTypeCommandOutput
+  | DeleteDataProductCommandOutput
   | DeleteDataSourceCommandOutput
   | DeleteDomainCommandOutput
+  | DeleteDomainUnitCommandOutput
   | DeleteEnvironmentActionCommandOutput
   | DeleteEnvironmentBlueprintConfigurationCommandOutput
   | DeleteEnvironmentCommandOutput
@@ -510,14 +575,18 @@ export type ServiceOutputTypes =
   | DeleteTimeSeriesDataPointsCommandOutput
   | DisassociateEnvironmentRoleCommandOutput
   | GetAssetCommandOutput
+  | GetAssetFilterCommandOutput
   | GetAssetTypeCommandOutput
+  | GetDataProductCommandOutput
   | GetDataSourceCommandOutput
   | GetDataSourceRunCommandOutput
   | GetDomainCommandOutput
+  | GetDomainUnitCommandOutput
   | GetEnvironmentActionCommandOutput
   | GetEnvironmentBlueprintCommandOutput
   | GetEnvironmentBlueprintConfigurationCommandOutput
   | GetEnvironmentCommandOutput
+  | GetEnvironmentCredentialsCommandOutput
   | GetEnvironmentProfileCommandOutput
   | GetFormTypeCommandOutput
   | GetGlossaryCommandOutput
@@ -534,11 +603,15 @@ export type ServiceOutputTypes =
   | GetSubscriptionTargetCommandOutput
   | GetTimeSeriesDataPointCommandOutput
   | GetUserProfileCommandOutput
+  | ListAssetFiltersCommandOutput
   | ListAssetRevisionsCommandOutput
+  | ListDataProductRevisionsCommandOutput
   | ListDataSourceRunActivitiesCommandOutput
   | ListDataSourceRunsCommandOutput
   | ListDataSourcesCommandOutput
+  | ListDomainUnitsForParentCommandOutput
   | ListDomainsCommandOutput
+  | ListEntityOwnersCommandOutput
   | ListEnvironmentActionsCommandOutput
   | ListEnvironmentBlueprintConfigurationsCommandOutput
   | ListEnvironmentBlueprintsCommandOutput
@@ -547,6 +620,7 @@ export type ServiceOutputTypes =
   | ListLineageNodeHistoryCommandOutput
   | ListMetadataGenerationRunsCommandOutput
   | ListNotificationsCommandOutput
+  | ListPolicyGrantsCommandOutput
   | ListProjectMembershipsCommandOutput
   | ListProjectsCommandOutput
   | ListSubscriptionGrantsCommandOutput
@@ -560,6 +634,8 @@ export type ServiceOutputTypes =
   | PutEnvironmentBlueprintConfigurationCommandOutput
   | RejectPredictionsCommandOutput
   | RejectSubscriptionRequestCommandOutput
+  | RemoveEntityOwnerCommandOutput
+  | RemovePolicyGrantCommandOutput
   | RevokeSubscriptionCommandOutput
   | SearchCommandOutput
   | SearchGroupProfilesCommandOutput
@@ -570,8 +646,10 @@ export type ServiceOutputTypes =
   | StartMetadataGenerationRunCommandOutput
   | TagResourceCommandOutput
   | UntagResourceCommandOutput
+  | UpdateAssetFilterCommandOutput
   | UpdateDataSourceCommandOutput
   | UpdateDomainCommandOutput
+  | UpdateDomainUnitCommandOutput
   | UpdateEnvironmentActionCommandOutput
   | UpdateEnvironmentCommandOutput
   | UpdateEnvironmentProfileCommandOutput
@@ -721,11 +799,11 @@ export interface ClientDefaults extends Partial<__SmithyConfiguration<__HttpHand
  */
 export type DataZoneClientConfigType = Partial<__SmithyConfiguration<__HttpHandlerOptions>> &
   ClientDefaults &
-  RegionInputConfig &
-  EndpointInputConfig<EndpointParameters> &
-  HostHeaderInputConfig &
   UserAgentInputConfig &
   RetryInputConfig &
+  RegionInputConfig &
+  HostHeaderInputConfig &
+  EndpointInputConfig<EndpointParameters> &
   HttpAuthSchemeInputConfig &
   ClientInputEndpointParameters;
 /**
@@ -741,11 +819,11 @@ export interface DataZoneClientConfig extends DataZoneClientConfigType {}
 export type DataZoneClientResolvedConfigType = __SmithyResolvedConfiguration<__HttpHandlerOptions> &
   Required<ClientDefaults> &
   RuntimeExtensionsConfig &
-  RegionResolvedConfig &
-  EndpointResolvedConfig<EndpointParameters> &
-  HostHeaderResolvedConfig &
   UserAgentResolvedConfig &
   RetryResolvedConfig &
+  RegionResolvedConfig &
+  HostHeaderResolvedConfig &
+  EndpointResolvedConfig<EndpointParameters> &
   HttpAuthSchemeResolvedConfig &
   ClientResolvedEndpointParameters;
 /**
@@ -777,25 +855,28 @@ export class DataZoneClient extends __Client<
   constructor(...[configuration]: __CheckOptionalClientConfig<DataZoneClientConfig>) {
     const _config_0 = __getRuntimeConfig(configuration || {});
     const _config_1 = resolveClientEndpointParameters(_config_0);
-    const _config_2 = resolveRegionConfig(_config_1);
-    const _config_3 = resolveEndpointConfig(_config_2);
-    const _config_4 = resolveHostHeaderConfig(_config_3);
-    const _config_5 = resolveUserAgentConfig(_config_4);
-    const _config_6 = resolveRetryConfig(_config_5);
+    const _config_2 = resolveUserAgentConfig(_config_1);
+    const _config_3 = resolveRetryConfig(_config_2);
+    const _config_4 = resolveRegionConfig(_config_3);
+    const _config_5 = resolveHostHeaderConfig(_config_4);
+    const _config_6 = resolveEndpointConfig(_config_5);
     const _config_7 = resolveHttpAuthSchemeConfig(_config_6);
     const _config_8 = resolveRuntimeExtensions(_config_7, configuration?.extensions || []);
     super(_config_8);
     this.config = _config_8;
-    this.middlewareStack.use(getHostHeaderPlugin(this.config));
-    this.middlewareStack.use(getLoggerPlugin(this.config));
-    this.middlewareStack.use(getRecursionDetectionPlugin(this.config));
     this.middlewareStack.use(getUserAgentPlugin(this.config));
     this.middlewareStack.use(getRetryPlugin(this.config));
     this.middlewareStack.use(getContentLengthPlugin(this.config));
+    this.middlewareStack.use(getHostHeaderPlugin(this.config));
+    this.middlewareStack.use(getLoggerPlugin(this.config));
+    this.middlewareStack.use(getRecursionDetectionPlugin(this.config));
     this.middlewareStack.use(
       getHttpAuthSchemeEndpointRuleSetPlugin(this.config, {
-        httpAuthSchemeParametersProvider: this.getDefaultHttpAuthSchemeParametersProvider(),
-        identityProviderConfigProvider: this.getIdentityProviderConfigProvider(),
+        httpAuthSchemeParametersProvider: defaultDataZoneHttpAuthSchemeParametersProvider,
+        identityProviderConfigProvider: async (config: DataZoneClientResolvedConfig) =>
+          new DefaultIdentityProviderConfig({
+            "aws.auth#sigv4": config.credentials,
+          }),
       })
     );
     this.middlewareStack.use(getHttpSigningPlugin(this.config));
@@ -808,14 +889,5 @@ export class DataZoneClient extends __Client<
    */
   destroy(): void {
     super.destroy();
-  }
-  private getDefaultHttpAuthSchemeParametersProvider() {
-    return defaultDataZoneHttpAuthSchemeParametersProvider;
-  }
-  private getIdentityProviderConfigProvider() {
-    return async (config: DataZoneClientResolvedConfig) =>
-      new DefaultIdentityProviderConfig({
-        "aws.auth#sigv4": config.credentials,
-      });
   }
 }

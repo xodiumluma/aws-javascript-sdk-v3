@@ -78,6 +78,7 @@ export interface GetWorkgroupCommandOutput extends GetWorkgroupResponse, __Metad
  * //               subnetId: "STRING_VALUE",
  * //               privateIpAddress: "STRING_VALUE",
  * //               availabilityZone: "STRING_VALUE",
+ * //               ipv6Address: "STRING_VALUE",
  * //             },
  * //           ],
  * //         },
@@ -95,6 +96,7 @@ export interface GetWorkgroupCommandOutput extends GetWorkgroupResponse, __Metad
  * //     crossAccountVpcs: [ // VpcIds
  * //       "STRING_VALUE",
  * //     ],
+ * //     ipAddressType: "STRING_VALUE",
  * //   },
  * // };
  *
@@ -128,9 +130,7 @@ export class GetWorkgroupCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: RedshiftServerlessClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -142,4 +142,16 @@ export class GetWorkgroupCommand extends $Command
   .f(void 0, void 0)
   .ser(se_GetWorkgroupCommand)
   .de(de_GetWorkgroupCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: GetWorkgroupRequest;
+      output: GetWorkgroupResponse;
+    };
+    sdk: {
+      input: GetWorkgroupCommandInput;
+      output: GetWorkgroupCommandOutput;
+    };
+  };
+}

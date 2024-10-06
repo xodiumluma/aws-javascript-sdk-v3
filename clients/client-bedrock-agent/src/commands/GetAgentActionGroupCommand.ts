@@ -80,6 +80,7 @@ export interface GetAgentActionGroupCommandOutput extends GetAgentActionGroupRes
  * //               required: true || false,
  * //             },
  * //           },
+ * //           requireConfirmation: "ENABLED" || "DISABLED",
  * //         },
  * //       ],
  * //     },
@@ -123,9 +124,7 @@ export class GetAgentActionGroupCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: BedrockAgentClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -137,4 +136,16 @@ export class GetAgentActionGroupCommand extends $Command
   .f(void 0, GetAgentActionGroupResponseFilterSensitiveLog)
   .ser(se_GetAgentActionGroupCommand)
   .de(de_GetAgentActionGroupCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: GetAgentActionGroupRequest;
+      output: GetAgentActionGroupResponse;
+    };
+    sdk: {
+      input: GetAgentActionGroupCommandInput;
+      output: GetAgentActionGroupCommandOutput;
+    };
+  };
+}

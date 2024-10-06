@@ -84,6 +84,9 @@ export interface UpdateAppCommandOutput extends UpdateAppResult, __MetadataBeare
  *   repository: "STRING_VALUE",
  *   oauthToken: "STRING_VALUE",
  *   accessToken: "STRING_VALUE",
+ *   cacheConfig: { // CacheConfig
+ *     type: "AMPLIFY_MANAGED" || "AMPLIFY_MANAGED_NO_COOKIES", // required
+ *   },
  * };
  * const command = new UpdateAppCommand(input);
  * const response = await client.send(command);
@@ -144,6 +147,9 @@ export interface UpdateAppCommandOutput extends UpdateAppResult, __MetadataBeare
  * //       pullRequestEnvironmentName: "STRING_VALUE",
  * //     },
  * //     repositoryCloneMethod: "SSH" || "TOKEN" || "SIGV4",
+ * //     cacheConfig: { // CacheConfig
+ * //       type: "AMPLIFY_MANAGED" || "AMPLIFY_MANAGED_NO_COOKIES", // required
+ * //     },
  * //   },
  * // };
  *
@@ -180,9 +186,7 @@ export class UpdateAppCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: AmplifyClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -194,4 +198,16 @@ export class UpdateAppCommand extends $Command
   .f(UpdateAppRequestFilterSensitiveLog, UpdateAppResultFilterSensitiveLog)
   .ser(se_UpdateAppCommand)
   .de(de_UpdateAppCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: UpdateAppRequest;
+      output: UpdateAppResult;
+    };
+    sdk: {
+      input: UpdateAppCommandInput;
+      output: UpdateAppCommandOutput;
+    };
+  };
+}

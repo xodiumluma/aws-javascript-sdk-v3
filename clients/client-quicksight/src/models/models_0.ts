@@ -1906,6 +1906,20 @@ export interface CategoryFilterConfiguration {
 }
 
 /**
+ * @public
+ * @enum
+ */
+export const CommitMode = {
+  AUTO: "AUTO",
+  MANUAL: "MANUAL",
+} as const;
+
+/**
+ * @public
+ */
+export type CommitMode = (typeof CommitMode)[keyof typeof CommitMode];
+
+/**
  * <p>A control to display info icons for filters and parameters.</p>
  * @public
  */
@@ -2143,6 +2157,12 @@ export interface DefaultDateTimePickerControlOptions {
    * @public
    */
   DisplayOptions?: DateTimePickerControlDisplayOptions;
+
+  /**
+   * <p>The visibility configuration of the Apply button on a <code>DateTimePickerControl</code>.</p>
+   * @public
+   */
+  CommitMode?: CommitMode;
 }
 
 /**
@@ -2240,6 +2260,12 @@ export interface DefaultFilterDropDownControlOptions {
    * @public
    */
   SelectableValues?: FilterSelectableValues;
+
+  /**
+   * <p>The visibility configuration of the Apply button on a <code>FilterDropDownControl</code>.</p>
+   * @public
+   */
+  CommitMode?: CommitMode;
 }
 
 /**
@@ -2352,6 +2378,12 @@ export interface DefaultRelativeDateTimeControlOptions {
    * @public
    */
   DisplayOptions?: RelativeDateTimeControlDisplayOptions;
+
+  /**
+   * <p>The visibility configuration of the Apply button on a <code>RelativeDateTimeControl</code>.</p>
+   * @public
+   */
+  CommitMode?: CommitMode;
 }
 
 /**
@@ -4005,6 +4037,32 @@ export interface ParameterDeclaration {
 }
 
 /**
+ * @public
+ * @enum
+ */
+export const QueryExecutionMode = {
+  AUTO: "AUTO",
+  MANUAL: "MANUAL",
+} as const;
+
+/**
+ * @public
+ */
+export type QueryExecutionMode = (typeof QueryExecutionMode)[keyof typeof QueryExecutionMode];
+
+/**
+ * <p>A structure that describes the query execution options.</p>
+ * @public
+ */
+export interface QueryExecutionOptions {
+  /**
+   * <p>A structure that describes the query execution mode.</p>
+   * @public
+   */
+  QueryExecutionMode?: QueryExecutionMode;
+}
+
+/**
  * <p>The source controls that are used in a <code>CascadingControlConfiguration</code>.</p>
  * @public
  */
@@ -4102,6 +4160,12 @@ export interface FilterDateTimePickerControl {
    * @public
    */
   Type?: SheetControlDateTimePickerType;
+
+  /**
+   * <p>The visibility configurationof the Apply button on a <code>DateTimePickerControl</code>.</p>
+   * @public
+   */
+  CommitMode?: CommitMode;
 }
 
 /**
@@ -4160,6 +4224,12 @@ export interface FilterDropDownControl {
    * @public
    */
   CascadingControlConfiguration?: CascadingControlConfiguration;
+
+  /**
+   * <p>The visibility configuration of the Apply button on a <code>FilterDropDownControl</code>.</p>
+   * @public
+   */
+  CommitMode?: CommitMode;
 }
 
 /**
@@ -4248,6 +4318,12 @@ export interface FilterRelativeDateTimeControl {
    * @public
    */
   DisplayOptions?: RelativeDateTimeControlDisplayOptions;
+
+  /**
+   * <p>The visibility configuration of the Apply button on a <code>FilterRelativeDateTimeControl</code>.</p>
+   * @public
+   */
+  CommitMode?: CommitMode;
 }
 
 /**
@@ -5142,6 +5218,12 @@ export interface ParameterDropDownControl {
    * @public
    */
   CascadingControlConfiguration?: CascadingControlConfiguration;
+
+  /**
+   * <p>The visibility configuration of the Apply button on a <code>ParameterDropDownControl</code>.</p>
+   * @public
+   */
+  CommitMode?: CommitMode;
 }
 
 /**
@@ -7446,82 +7528,6 @@ export interface SmallMultiplesOptions {
    * @public
    */
   YAxis?: SmallMultiplesAxisProperties;
-}
-
-/**
- * @public
- * @enum
- */
-export const OtherCategories = {
-  EXCLUDE: "EXCLUDE",
-  INCLUDE: "INCLUDE",
-} as const;
-
-/**
- * @public
- */
-export type OtherCategories = (typeof OtherCategories)[keyof typeof OtherCategories];
-
-/**
- * <p>The limit configuration of the visual display for an axis.</p>
- * @public
- */
-export interface ItemsLimitConfiguration {
-  /**
-   * <p>The limit on how many items of a field are showed in the chart. For
-   *             example, the number of slices that are displayed in a pie chart.</p>
-   * @public
-   */
-  ItemsLimit?: number;
-
-  /**
-   * <p>The <code>Show
-   *                 other</code> of an axis in the chart. Choose one of the following options:</p>
-   *          <ul>
-   *             <li>
-   *                <p>
-   *                   <code>INCLUDE</code>
-   *                </p>
-   *             </li>
-   *             <li>
-   *                <p>
-   *                   <code>EXCLUDE</code>
-   *                </p>
-   *             </li>
-   *          </ul>
-   * @public
-   */
-  OtherCategories?: OtherCategories;
-}
-
-/**
- * <p>The sort configuration for a field in a
- *             field well.</p>
- * @public
- */
-export interface FieldSort {
-  /**
-   * <p>The sort configuration target field.</p>
-   * @public
-   */
-  FieldId: string | undefined;
-
-  /**
-   * <p>The sort direction. Choose one of the following
-   *             options:</p>
-   *          <ul>
-   *             <li>
-   *                <p>
-   *                   <code>ASC</code>: Ascending</p>
-   *             </li>
-   *             <li>
-   *                <p>
-   *                   <code>DESC</code>: Descending</p>
-   *             </li>
-   *          </ul>
-   * @public
-   */
-  Direction: SortDirection | undefined;
 }
 
 /**

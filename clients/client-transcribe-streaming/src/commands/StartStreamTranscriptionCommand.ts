@@ -1,5 +1,6 @@
 // smithy-typescript generated code
 import { getEventStreamPlugin } from "@aws-sdk/middleware-eventstream";
+import { getTranscribeStreamingPlugin } from "@aws-sdk/middleware-sdk-transcribe-streaming";
 import { getWebSocketPlugin } from "@aws-sdk/middleware-websocket";
 import { getEndpointPlugin } from "@smithy/middleware-endpoint";
 import { getSerdePlugin } from "@smithy/middleware-serde";
@@ -242,15 +243,16 @@ export class StartStreamTranscriptionCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: TranscribeStreamingClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
       getEndpointPlugin(config, Command.getEndpointParameterInstructions()),
       getEventStreamPlugin(config),
-      getWebSocketPlugin(config, { headerPrefix: "x-amzn-transcribe-" }),
+      getWebSocketPlugin(config, {
+        headerPrefix: "x-amzn-transcribe-",
+      }),
+      getTranscribeStreamingPlugin(config),
     ];
   })
   .s("Transcribe", "StartStreamTranscription", {
@@ -266,4 +268,16 @@ export class StartStreamTranscriptionCommand extends $Command
   .f(StartStreamTranscriptionRequestFilterSensitiveLog, StartStreamTranscriptionResponseFilterSensitiveLog)
   .ser(se_StartStreamTranscriptionCommand)
   .de(de_StartStreamTranscriptionCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: StartStreamTranscriptionRequest;
+      output: StartStreamTranscriptionResponse;
+    };
+    sdk: {
+      input: StartStreamTranscriptionCommandInput;
+      output: StartStreamTranscriptionCommandOutput;
+    };
+  };
+}

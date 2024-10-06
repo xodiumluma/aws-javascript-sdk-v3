@@ -75,6 +75,9 @@ export interface GenerateEmbedUrlForRegisteredUserCommandOutput
  *         StatePersistence: { // StatePersistenceConfigurations
  *           Enabled: true || false, // required
  *         },
+ *         SharedView: { // SharedViewConfigurations
+ *           Enabled: true || false, // required
+ *         },
  *         Bookmarks: { // BookmarksConfigurations
  *           Enabled: true || false, // required
  *         },
@@ -84,6 +87,9 @@ export interface GenerateEmbedUrlForRegisteredUserCommandOutput
  *       InitialPath: "STRING_VALUE",
  *       FeatureConfigurations: { // RegisteredUserConsoleFeatureConfigurations
  *         StatePersistence: {
+ *           Enabled: true || false, // required
+ *         },
+ *         SharedView: {
  *           Enabled: true || false, // required
  *         },
  *       },
@@ -179,9 +185,7 @@ export class GenerateEmbedUrlForRegisteredUserCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: QuickSightClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -193,4 +197,16 @@ export class GenerateEmbedUrlForRegisteredUserCommand extends $Command
   .f(void 0, GenerateEmbedUrlForRegisteredUserResponseFilterSensitiveLog)
   .ser(se_GenerateEmbedUrlForRegisteredUserCommand)
   .de(de_GenerateEmbedUrlForRegisteredUserCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: GenerateEmbedUrlForRegisteredUserRequest;
+      output: GenerateEmbedUrlForRegisteredUserResponse;
+    };
+    sdk: {
+      input: GenerateEmbedUrlForRegisteredUserCommandInput;
+      output: GenerateEmbedUrlForRegisteredUserCommandOutput;
+    };
+  };
+}

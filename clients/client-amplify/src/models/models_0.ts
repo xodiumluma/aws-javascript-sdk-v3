@@ -112,6 +112,40 @@ export interface AutoBranchCreationConfig {
 }
 
 /**
+ * @public
+ * @enum
+ */
+export const CacheConfigType = {
+  AMPLIFY_MANAGED: "AMPLIFY_MANAGED",
+  AMPLIFY_MANAGED_NO_COOKIES: "AMPLIFY_MANAGED_NO_COOKIES",
+} as const;
+
+/**
+ * @public
+ */
+export type CacheConfigType = (typeof CacheConfigType)[keyof typeof CacheConfigType];
+
+/**
+ * <p>Describes the cache configuration for an Amplify app.</p>
+ *          <p>For more
+ *             information about how Amplify applies an optimal cache configuration for
+ *             your app based on the type of content that is being served, see <a href="https://docs.aws.amazon.com/amplify/latest/userguide/managing-cache-configuration">Managing cache configuration</a> in the <i>Amplify User
+ *                 guide</i>.</p>
+ * @public
+ */
+export interface CacheConfig {
+  /**
+   * <p>The type of cache configuration to use for an Amplify app.</p>
+   *          <p>The <code>AMPLIFY_MANAGED</code> cache configuration automatically applies an
+   *             optimized cache configuration for your app based on its platform, routing rules, and
+   *             rewrite rules. This is the default setting.</p>
+   *          <p>The <code>AMPLIFY_MANAGED_NO_COOKIES</code> cache configuration type is the same as <code>AMPLIFY_MANAGED</code>, except that it excludes all cookies from the cache key.</p>
+   * @public
+   */
+  type: CacheConfigType | undefined;
+}
+
+/**
  * <p>Describes a custom rewrite or redirect rule. </p>
  * @public
  */
@@ -207,6 +241,11 @@ export interface CreateAppRequest {
    *                 <code>WEB</code>. For a dynamic server-side rendered (SSR) app, set the platform
    *             type to <code>WEB_COMPUTE</code>. For an app requiring Amplify Hosting's original SSR
    *             support only, set the platform type to <code>WEB_DYNAMIC</code>.</p>
+   *          <p>If you are deploying an SSG only app with Next.js version 14 or later, you must set
+   *             the platform type to <code>WEB_COMPUTE</code> and set the artifacts
+   *                 <code>baseDirectory</code> to <code>.next</code> in the application's build
+   *             settings. For an example of the build specification settings, see <a href="https://docs.aws.amazon.com/amplify/latest/userguide/deploy-nextjs-app.html#build-setting-detection-ssg-14">Amplify build
+   *                 settings for a Next.js 14 SSG application</a> in the <i>Amplify Hosting User Guide</i>.</p>
    * @public
    */
   platform?: Platform;
@@ -329,6 +368,12 @@ export interface CreateAppRequest {
    * @public
    */
   autoBranchCreationConfig?: AutoBranchCreationConfig;
+
+  /**
+   * <p>The cache configuration for the Amplify app.</p>
+   * @public
+   */
+  cacheConfig?: CacheConfig;
 }
 
 /**
@@ -423,6 +468,8 @@ export interface App {
    *                 <code>WEB</code>. For a dynamic server-side rendered (SSR) app, set the platform
    *             type to <code>WEB_COMPUTE</code>. For an app requiring Amplify Hosting's original SSR
    *             support only, set the platform type to <code>WEB_DYNAMIC</code>.</p>
+   *          <p>If you are deploying an SSG only app with Next.js 14 or later, you must use the
+   *             platform type <code>WEB_COMPUTE</code>.</p>
    * @public
    */
   platform: Platform | undefined;
@@ -543,6 +590,14 @@ export interface App {
    * @public
    */
   repositoryCloneMethod?: RepositoryCloneMethod;
+
+  /**
+   * <p>The cache configuration for the Amplify app. If you don't specify the
+   *             cache configuration <code>type</code>, Amplify uses the default
+   *                 <code>AMPLIFY_MANAGED</code> setting.</p>
+   * @public
+   */
+  cacheConfig?: CacheConfig;
 }
 
 /**
@@ -1278,7 +1333,7 @@ export interface Certificate {
    *             import) the certificate in the US East (N. Virginia) Region (us-east-1). For more
    *             information about using ACM, see <a href="https://docs.aws.amazon.com/acm/latest/userguide/import-certificate.html">Importing certificates into
    *                     Certificate Manager</a> in the <i>ACM User
-   *                 guide</i> .</p>
+   *                 guide</i>.</p>
    * @public
    */
   type: CertificateType | undefined;
@@ -2819,6 +2874,8 @@ export interface UpdateAppRequest {
    *                 <code>WEB</code>. For a dynamic server-side rendered (SSR) app, set the platform
    *             type to <code>WEB_COMPUTE</code>. For an app requiring Amplify Hosting's original SSR
    *             support only, set the platform type to <code>WEB_DYNAMIC</code>.</p>
+   *          <p>If you are deploying an SSG only app with Next.js version 14 or later, you must set
+   *             the platform type to <code>WEB_COMPUTE</code>.</p>
    * @public
    */
   platform?: Platform;
@@ -2937,6 +2994,12 @@ export interface UpdateAppRequest {
    * @public
    */
   accessToken?: string;
+
+  /**
+   * <p>The cache configuration for the Amplify app.</p>
+   * @public
+   */
+  cacheConfig?: CacheConfig;
 }
 
 /**

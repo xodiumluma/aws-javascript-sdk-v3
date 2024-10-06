@@ -96,16 +96,44 @@ export interface SearchUsersCommandOutput extends SearchUsersResponse, __Metadat
  *           Value: "STRING_VALUE",
  *           ComparisonType: "STARTS_WITH" || "CONTAINS" || "EXACT",
  *         },
+ *         ListCondition: { // ListCondition
+ *           TargetListType: "PROFICIENCIES",
+ *           Conditions: [ // Conditions
+ *             { // Condition
+ *               StringCondition: {
+ *                 FieldName: "STRING_VALUE",
+ *                 Value: "STRING_VALUE",
+ *                 ComparisonType: "STARTS_WITH" || "CONTAINS" || "EXACT",
+ *               },
+ *               NumberCondition: { // NumberCondition
+ *                 FieldName: "STRING_VALUE",
+ *                 MinValue: Number("int"),
+ *                 MaxValue: Number("int"),
+ *                 ComparisonType: "GREATER_OR_EQUAL" || "GREATER" || "LESSER_OR_EQUAL" || "LESSER" || "EQUAL" || "NOT_EQUAL" || "RANGE",
+ *               },
+ *             },
+ *           ],
+ *         },
  *         HierarchyGroupCondition: "<HierarchyGroupCondition>",
  *       },
  *     ],
  *     AndConditions: [
  *       "<UserSearchCriteria>",
  *     ],
- *     StringCondition: {
- *       FieldName: "STRING_VALUE",
- *       Value: "STRING_VALUE",
- *       ComparisonType: "STARTS_WITH" || "CONTAINS" || "EXACT",
+ *     StringCondition: "<StringCondition>",
+ *     ListCondition: {
+ *       TargetListType: "PROFICIENCIES",
+ *       Conditions: [
+ *         {
+ *           StringCondition: "<StringCondition>",
+ *           NumberCondition: {
+ *             FieldName: "STRING_VALUE",
+ *             MinValue: Number("int"),
+ *             MaxValue: Number("int"),
+ *             ComparisonType: "GREATER_OR_EQUAL" || "GREATER" || "LESSER_OR_EQUAL" || "LESSER" || "EQUAL" || "NOT_EQUAL" || "RANGE",
+ *           },
+ *         },
+ *       ],
  *     },
  *     HierarchyGroupCondition: "<HierarchyGroupCondition>",
  *   },
@@ -179,9 +207,7 @@ export class SearchUsersCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: ConnectClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -193,4 +219,16 @@ export class SearchUsersCommand extends $Command
   .f(void 0, SearchUsersResponseFilterSensitiveLog)
   .ser(se_SearchUsersCommand)
   .de(de_SearchUsersCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: SearchUsersRequest;
+      output: SearchUsersResponse;
+    };
+    sdk: {
+      input: SearchUsersCommandInput;
+      output: SearchUsersCommandOutput;
+    };
+  };
+}

@@ -29,6 +29,11 @@ export interface DeleteClusterCommandOutput extends DeleteClusterResponse, __Met
 
 /**
  * <p>Deletes a cluster. It also deletes all associated nodes and node endpoints</p>
+ *          <note>
+ *             <p>
+ *                <code>CreateSnapshot</code> permission is required to create a final snapshot.
+ *          Without this permission, the API call will fail with an <code>Access Denied</code> exception.</p>
+ *          </note>
  * @example
  * Use a bare-bones client and the command you need to make an API call.
  * ```javascript
@@ -153,9 +158,7 @@ export class DeleteClusterCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: MemoryDBClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -167,4 +170,16 @@ export class DeleteClusterCommand extends $Command
   .f(void 0, void 0)
   .ser(se_DeleteClusterCommand)
   .de(de_DeleteClusterCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: DeleteClusterRequest;
+      output: DeleteClusterResponse;
+    };
+    sdk: {
+      input: DeleteClusterCommandInput;
+      output: DeleteClusterCommandOutput;
+    };
+  };
+}

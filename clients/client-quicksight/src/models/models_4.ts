@@ -35,21 +35,17 @@ import {
   DataSetImportMode,
   DatasetParameter,
   DataSetUsageConfiguration,
-  DataSourceCredentials,
   DataSourceParameters,
   FieldFolder,
   FilterOperator,
-  FolderType,
   LinkSharingConfiguration,
   LogicalTable,
   LogicalTableFilterSensitiveLog,
   PhysicalTable,
   ResourcePermission,
   RowLevelPermissionDataSet,
-  RowLevelPermissionTagConfiguration,
-  RowLevelPermissionTagConfigurationFilterSensitiveLog,
   ServiceType,
-  SharingModel,
+  SharedViewConfigurations,
   SslProperties,
   Tag,
   TopicIR,
@@ -68,19 +64,22 @@ import {
   DataSetSearchFilter,
   DataSetSummary,
   DataSource,
+  DataSourceCredentials,
   DataSourceSearchFilter,
   DataSourceSummary,
-  EmbeddingIdentityType,
-  FailedKeyRegistrationEntry,
+  FolderType,
   Group,
   GroupMember,
-  IdentityType,
+  IncludeFolderMembers,
   Ingestion,
   NamespaceInfoV2,
-  NetworkInterface,
+  PersonalizationMode,
   RefreshSchedule,
   RegisteredCustomerManagedKey,
   Role,
+  RowLevelPermissionTagConfiguration,
+  RowLevelPermissionTagConfigurationFilterSensitiveLog,
+  SharingModel,
   SnapshotConfiguration,
   TemplateAlias,
   TemplateSourceEntity,
@@ -91,13 +90,604 @@ import {
   TopicDetails,
   TopicRefreshSchedule,
   TopicUserExperienceVersion,
-  User,
-  UserRole,
   VPCConnectionAvailabilityStatus,
   VPCConnectionResourceStatus,
 } from "./models_3";
 
 import { QuickSightServiceException as __BaseException } from "./QuickSightServiceException";
+
+/**
+ * @public
+ * @enum
+ */
+export const TopicRefreshStatus = {
+  CANCELLED: "CANCELLED",
+  COMPLETED: "COMPLETED",
+  FAILED: "FAILED",
+  INITIALIZED: "INITIALIZED",
+  RUNNING: "RUNNING",
+} as const;
+
+/**
+ * @public
+ */
+export type TopicRefreshStatus = (typeof TopicRefreshStatus)[keyof typeof TopicRefreshStatus];
+
+/**
+ * <p>The details about the refresh of a topic.</p>
+ * @public
+ */
+export interface TopicRefreshDetails {
+  /**
+   * <p>The Amazon Resource Name (ARN) of the topic refresh.</p>
+   * @public
+   */
+  RefreshArn?: string;
+
+  /**
+   * <p>The ID of the refresh, which occurs as a result of topic creation or topic update.</p>
+   * @public
+   */
+  RefreshId?: string;
+
+  /**
+   * <p>The status of the refresh job that indicates whether the job is still running, completed successfully, or failed.</p>
+   * @public
+   */
+  RefreshStatus?: TopicRefreshStatus;
+}
+
+/**
+ * @public
+ */
+export interface DescribeTopicRefreshResponse {
+  /**
+   * <p>Details of the refresh, which is performed when the topic is created or updated.</p>
+   * @public
+   */
+  RefreshDetails?: TopicRefreshDetails;
+
+  /**
+   * <p>The Amazon Web Services request ID for this operation.</p>
+   * @public
+   */
+  RequestId?: string;
+
+  /**
+   * <p>The HTTP status of the request.</p>
+   * @public
+   */
+  Status?: number;
+}
+
+/**
+ * @public
+ */
+export interface DescribeTopicRefreshScheduleRequest {
+  /**
+   * <p>The Amazon Web Services account ID.</p>
+   * @public
+   */
+  AwsAccountId: string | undefined;
+
+  /**
+   * <p>The ID of the topic that contains the refresh schedule that you want to describe. This
+   *          ID is unique per Amazon Web Services Region for each Amazon Web Services account.</p>
+   * @public
+   */
+  TopicId: string | undefined;
+
+  /**
+   * <p>The ID of the dataset.</p>
+   * @public
+   */
+  DatasetId: string | undefined;
+}
+
+/**
+ * @public
+ */
+export interface DescribeTopicRefreshScheduleResponse {
+  /**
+   * <p>The ID of the topic that contains the refresh schedule that you want to describe. This
+   *          ID is unique per Amazon Web Services Region for each Amazon Web Services account.</p>
+   * @public
+   */
+  TopicId?: string;
+
+  /**
+   * <p>The Amazon Resource Name (ARN) of the topic.</p>
+   * @public
+   */
+  TopicArn?: string;
+
+  /**
+   * <p>The Amazon Resource Name (ARN) of the dataset.</p>
+   * @public
+   */
+  DatasetArn?: string;
+
+  /**
+   * <p>The definition of a refresh schedule.</p>
+   * @public
+   */
+  RefreshSchedule?: TopicRefreshSchedule;
+
+  /**
+   * <p>The HTTP status of the request.</p>
+   * @public
+   */
+  Status?: number;
+
+  /**
+   * <p>The Amazon Web Services request ID for this operation.</p>
+   * @public
+   */
+  RequestId?: string;
+}
+
+/**
+ * @public
+ */
+export interface DescribeUserRequest {
+  /**
+   * <p>The name of the user that you want to describe.</p>
+   * @public
+   */
+  UserName: string | undefined;
+
+  /**
+   * <p>The ID for the Amazon Web Services account that the user is in. Currently, you use the ID for the
+   * 			Amazon Web Services account that contains your Amazon QuickSight account.</p>
+   * @public
+   */
+  AwsAccountId: string | undefined;
+
+  /**
+   * <p>The namespace. Currently, you should set this to <code>default</code>.</p>
+   * @public
+   */
+  Namespace: string | undefined;
+}
+
+/**
+ * @public
+ * @enum
+ */
+export const IdentityType = {
+  IAM: "IAM",
+  IAM_IDENTITY_CENTER: "IAM_IDENTITY_CENTER",
+  QUICKSIGHT: "QUICKSIGHT",
+} as const;
+
+/**
+ * @public
+ */
+export type IdentityType = (typeof IdentityType)[keyof typeof IdentityType];
+
+/**
+ * @public
+ * @enum
+ */
+export const UserRole = {
+  ADMIN: "ADMIN",
+  ADMIN_PRO: "ADMIN_PRO",
+  AUTHOR: "AUTHOR",
+  AUTHOR_PRO: "AUTHOR_PRO",
+  READER: "READER",
+  READER_PRO: "READER_PRO",
+  RESTRICTED_AUTHOR: "RESTRICTED_AUTHOR",
+  RESTRICTED_READER: "RESTRICTED_READER",
+} as const;
+
+/**
+ * @public
+ */
+export type UserRole = (typeof UserRole)[keyof typeof UserRole];
+
+/**
+ * <p>A registered user of Amazon QuickSight. </p>
+ * @public
+ */
+export interface User {
+  /**
+   * <p>The Amazon Resource Name (ARN) for the user.</p>
+   * @public
+   */
+  Arn?: string;
+
+  /**
+   * <p>The user's user name. This value is required if you are registering a user that will be managed in Amazon QuickSight. In the output, the value for <code>UserName</code> is
+   *                 <code>N/A</code> when the value for <code>IdentityType</code> is <code>IAM</code>
+   *             and the corresponding IAM user is deleted.</p>
+   * @public
+   */
+  UserName?: string;
+
+  /**
+   * <p>The user's email address.</p>
+   * @public
+   */
+  Email?: string;
+
+  /**
+   * <p>The Amazon QuickSight role for the user. The user role can be one of the
+   *             following:.</p>
+   *          <ul>
+   *             <li>
+   *                <p>
+   *                   <code>READER</code>: A user who has read-only access to dashboards.</p>
+   *             </li>
+   *             <li>
+   *                <p>
+   *                   <code>AUTHOR</code>: A user who can create data sources, datasets, analyses,
+   *                     and dashboards.</p>
+   *             </li>
+   *             <li>
+   *                <p>
+   *                   <code>ADMIN</code>: A user who is an author, who can also manage Amazon
+   *                     Amazon QuickSight settings.</p>
+   *             </li>
+   *             <li>
+   *                <p>
+   *                   <code>READER_PRO</code>: Reader Pro adds Generative BI capabilities to the Reader role. Reader Pros have access to Amazon Q in Amazon QuickSight, can build stories with Amazon Q, and can generate executive summaries from dashboards.</p>
+   *             </li>
+   *             <li>
+   *                <p>
+   *                   <code>AUTHOR_PRO</code>: Author Pro adds Generative BI capabilities to the Author role. Author Pros can author dashboards with natural language with Amazon Q, build stories with Amazon Q, create Topics for Q&A, and generate executive summaries from dashboards.</p>
+   *             </li>
+   *             <li>
+   *                <p>
+   *                   <code>ADMIN_PRO</code>: Admin Pros are Author Pros who can also manage Amazon QuickSight administrative settings. Admin Pro users are billed at Author Pro pricing.</p>
+   *             </li>
+   *             <li>
+   *                <p>
+   *                   <code>RESTRICTED_READER</code>: This role isn't currently available for
+   *                     use.</p>
+   *             </li>
+   *             <li>
+   *                <p>
+   *                   <code>RESTRICTED_AUTHOR</code>: This role isn't currently available for
+   *                     use.</p>
+   *             </li>
+   *          </ul>
+   * @public
+   */
+  Role?: UserRole;
+
+  /**
+   * <p>The type of identity authentication used by the user.</p>
+   * @public
+   */
+  IdentityType?: IdentityType;
+
+  /**
+   * <p>The active status of user. When you create an Amazon QuickSight user that's not an IAM user or an Active Directory user, that user is inactive until they sign in and provide a
+   *             password.</p>
+   * @public
+   */
+  Active?: boolean;
+
+  /**
+   * <p>The principal ID of the user.</p>
+   * @public
+   */
+  PrincipalId?: string;
+
+  /**
+   * <p>The custom permissions profile associated with this user.</p>
+   * @public
+   */
+  CustomPermissionsName?: string;
+
+  /**
+   * <p>The type of supported external login provider that provides identity to let the user
+   *             federate into Amazon QuickSight with an associated IAM role. The type can be one of the following.</p>
+   *          <ul>
+   *             <li>
+   *                <p>
+   *                   <code>COGNITO</code>: Amazon Cognito. The provider URL is cognito-identity.amazonaws.com.</p>
+   *             </li>
+   *             <li>
+   *                <p>
+   *                   <code>CUSTOM_OIDC</code>: Custom OpenID Connect (OIDC) provider.</p>
+   *             </li>
+   *          </ul>
+   * @public
+   */
+  ExternalLoginFederationProviderType?: string;
+
+  /**
+   * <p>The URL of the external login provider.</p>
+   * @public
+   */
+  ExternalLoginFederationProviderUrl?: string;
+
+  /**
+   * <p>The identity ID for the user in the external login provider.</p>
+   * @public
+   */
+  ExternalLoginId?: string;
+}
+
+/**
+ * @public
+ */
+export interface DescribeUserResponse {
+  /**
+   * <p>The user name.</p>
+   * @public
+   */
+  User?: User;
+
+  /**
+   * <p>The Amazon Web Services request ID for this operation.</p>
+   * @public
+   */
+  RequestId?: string;
+
+  /**
+   * <p>The HTTP status of the request.</p>
+   * @public
+   */
+  Status?: number;
+}
+
+/**
+ * @public
+ */
+export interface DescribeVPCConnectionRequest {
+  /**
+   * <p>The Amazon Web Services account ID of the account that contains the VPC connection that
+   * 			you want described.</p>
+   * @public
+   */
+  AwsAccountId: string | undefined;
+
+  /**
+   * <p>The ID of the VPC connection that
+   * 			you're creating. This ID is a unique identifier for each Amazon Web Services Region in an Amazon Web Services account.</p>
+   * @public
+   */
+  VPCConnectionId: string | undefined;
+}
+
+/**
+ * @public
+ * @enum
+ */
+export const NetworkInterfaceStatus = {
+  ATTACHMENT_FAILED_ROLLBACK_FAILED: "ATTACHMENT_FAILED_ROLLBACK_FAILED",
+  AVAILABLE: "AVAILABLE",
+  CREATING: "CREATING",
+  CREATION_FAILED: "CREATION_FAILED",
+  DELETED: "DELETED",
+  DELETING: "DELETING",
+  DELETION_FAILED: "DELETION_FAILED",
+  DELETION_SCHEDULED: "DELETION_SCHEDULED",
+  UPDATE_FAILED: "UPDATE_FAILED",
+  UPDATING: "UPDATING",
+} as const;
+
+/**
+ * @public
+ */
+export type NetworkInterfaceStatus = (typeof NetworkInterfaceStatus)[keyof typeof NetworkInterfaceStatus];
+
+/**
+ * <p>The structure that contains information about a network interface.</p>
+ * @public
+ */
+export interface NetworkInterface {
+  /**
+   * <p>The subnet ID associated with the network interface.</p>
+   * @public
+   */
+  SubnetId?: string;
+
+  /**
+   * <p>The availability zone that the network interface resides in.</p>
+   * @public
+   */
+  AvailabilityZone?: string;
+
+  /**
+   * <p>An error message.</p>
+   * @public
+   */
+  ErrorMessage?: string;
+
+  /**
+   * <p>The status of the network interface.</p>
+   * @public
+   */
+  Status?: NetworkInterfaceStatus;
+
+  /**
+   * <p>The network interface ID.</p>
+   * @public
+   */
+  NetworkInterfaceId?: string;
+}
+
+/**
+ * <p>The structure of a VPC connection.</p>
+ * @public
+ */
+export interface VPCConnection {
+  /**
+   * <p>The ID of the VPC connection that you're creating. This ID is a unique identifier for each Amazon Web Services Region in an
+   *                 Amazon Web Services account.</p>
+   * @public
+   */
+  VPCConnectionId?: string;
+
+  /**
+   * <p>The Amazon Resource Name (ARN) of the VPC connection.</p>
+   * @public
+   */
+  Arn?: string;
+
+  /**
+   * <p>The display name for the VPC connection.</p>
+   * @public
+   */
+  Name?: string;
+
+  /**
+   * <p>The Amazon EC2 VPC ID associated with the VPC connection.</p>
+   * @public
+   */
+  VPCId?: string;
+
+  /**
+   * <p>The Amazon EC2 security group IDs associated with the VPC connection.</p>
+   * @public
+   */
+  SecurityGroupIds?: string[];
+
+  /**
+   * <p>A list of IP addresses of DNS resolver endpoints for the VPC connection.</p>
+   * @public
+   */
+  DnsResolvers?: string[];
+
+  /**
+   * <p>The status of the VPC connection.</p>
+   * @public
+   */
+  Status?: VPCConnectionResourceStatus;
+
+  /**
+   * <p>The availability status of the VPC connection.</p>
+   * @public
+   */
+  AvailabilityStatus?: VPCConnectionAvailabilityStatus;
+
+  /**
+   * <p>A list of network interfaces.</p>
+   * @public
+   */
+  NetworkInterfaces?: NetworkInterface[];
+
+  /**
+   * <p>The ARN of the
+   *                 IAM role associated with the VPC
+   *             connection.</p>
+   * @public
+   */
+  RoleArn?: string;
+
+  /**
+   * <p>The time that the VPC connection was created.</p>
+   * @public
+   */
+  CreatedTime?: Date;
+
+  /**
+   * <p>The time that the VPC connection was last updated.</p>
+   * @public
+   */
+  LastUpdatedTime?: Date;
+}
+
+/**
+ * @public
+ */
+export interface DescribeVPCConnectionResponse {
+  /**
+   * <p>A response object that provides information for the specified VPC connection.</p>
+   * @public
+   */
+  VPCConnection?: VPCConnection;
+
+  /**
+   * <p>The Amazon Web Services request ID for this operation.</p>
+   * @public
+   */
+  RequestId?: string;
+
+  /**
+   * <p>The HTTP status of the request.</p>
+   * @public
+   */
+  Status?: number;
+}
+
+/**
+ * <p>The domain specified isn't on the allow list. All domains for embedded dashboards must be
+ * 			added to the approved list by an Amazon QuickSight admin.</p>
+ * @public
+ */
+export class DomainNotWhitelistedException extends __BaseException {
+  readonly name: "DomainNotWhitelistedException" = "DomainNotWhitelistedException";
+  readonly $fault: "client" = "client";
+  Message?: string;
+  /**
+   * <p>The Amazon Web Services request ID for this request.</p>
+   * @public
+   */
+  RequestId?: string;
+  /**
+   * @internal
+   */
+  constructor(opts: __ExceptionOptionType<DomainNotWhitelistedException, __BaseException>) {
+    super({
+      name: "DomainNotWhitelistedException",
+      $fault: "client",
+      ...opts,
+    });
+    Object.setPrototypeOf(this, DomainNotWhitelistedException.prototype);
+    this.Message = opts.Message;
+    this.RequestId = opts.RequestId;
+  }
+}
+
+/**
+ * @public
+ * @enum
+ */
+export const EmbeddingIdentityType = {
+  ANONYMOUS: "ANONYMOUS",
+  IAM: "IAM",
+  QUICKSIGHT: "QUICKSIGHT",
+} as const;
+
+/**
+ * @public
+ */
+export type EmbeddingIdentityType = (typeof EmbeddingIdentityType)[keyof typeof EmbeddingIdentityType];
+
+/**
+ * <p>An entry that appears when a <code>KeyRegistration</code> update to Amazon QuickSight fails.</p>
+ * @public
+ */
+export interface FailedKeyRegistrationEntry {
+  /**
+   * <p>The ARN of the KMS key that failed to update.</p>
+   * @public
+   */
+  KeyArn?: string;
+
+  /**
+   * <p>A message that provides information about why a <code>FailedKeyRegistrationEntry</code> error occurred.</p>
+   * @public
+   */
+  Message: string | undefined;
+
+  /**
+   * <p>The HTTP status of a <code>FailedKeyRegistrationEntry</code> error.</p>
+   * @public
+   */
+  StatusCode: number | undefined;
+
+  /**
+   * <p>A boolean that indicates whether a <code>FailedKeyRegistrationEntry</code> resulted from user error. If the value of this property is <code>True</code>, the error was caused by user error. If the value of this property is <code>False</code>, the error occurred on the backend. If your job continues fail and with a <code>False</code>
+   *             <code>SenderFault</code> value, contact Amazon Web Services Support.</p>
+   * @public
+   */
+  SenderFault: boolean | undefined;
+}
 
 /**
  * @public
@@ -437,6 +1027,12 @@ export interface RegisteredUserDashboardFeatureConfigurations {
   StatePersistence?: StatePersistenceConfigurations;
 
   /**
+   * <p>The shared view settings of an embedded dashboard.</p>
+   * @public
+   */
+  SharedView?: SharedViewConfigurations;
+
+  /**
    * <p>The bookmarks configuration for an embedded dashboard in Amazon QuickSight.</p>
    * @public
    */
@@ -514,6 +1110,12 @@ export interface RegisteredUserConsoleFeatureConfigurations {
    * @public
    */
   StatePersistence?: StatePersistenceConfigurations;
+
+  /**
+   * <p>The shared view settings of an embedded dashboard.</p>
+   * @public
+   */
+  SharedView?: SharedViewConfigurations;
 }
 
 /**
@@ -1555,6 +2157,64 @@ export interface ListFoldersResponse {
    * @public
    */
   FolderSummaryList?: FolderSummary[];
+
+  /**
+   * <p>The token for the next set of results, or null if there are no more results.</p>
+   * @public
+   */
+  NextToken?: string;
+
+  /**
+   * <p>The Amazon Web Services request ID for this operation.</p>
+   * @public
+   */
+  RequestId?: string;
+}
+
+/**
+ * @public
+ */
+export interface ListFoldersForResourceRequest {
+  /**
+   * <p>The ID for the Amazon Web Services account that contains the resource.</p>
+   * @public
+   */
+  AwsAccountId: string | undefined;
+
+  /**
+   * <p>The Amazon Resource Name (ARN) the resource whose folders you need to list.</p>
+   * @public
+   */
+  ResourceArn: string | undefined;
+
+  /**
+   * <p>The token for the next set of results, or null if there are no more results.</p>
+   * @public
+   */
+  NextToken?: string;
+
+  /**
+   * <p>The maximum number of results to be returned per request.</p>
+   * @public
+   */
+  MaxResults?: number;
+}
+
+/**
+ * @public
+ */
+export interface ListFoldersForResourceResponse {
+  /**
+   * <p>The HTTP status of the request.</p>
+   * @public
+   */
+  Status?: number;
+
+  /**
+   * <p>A list that contains the Amazon Resource Names (ARNs) of all folders that the resource is a member of.</p>
+   * @public
+   */
+  Folders?: string[];
 
   /**
    * <p>The token for the next set of results, or null if there are no more results.</p>
@@ -3845,6 +4505,18 @@ export interface StartAssetBundleExportJobRequest {
    * @public
    */
   ValidationStrategy?: AssetBundleExportJobValidationStrategy;
+
+  /**
+   * <p>A Boolean that determines if the exported asset carries over information about the folders that the asset is a member of. </p>
+   * @public
+   */
+  IncludeFolderMemberships?: boolean;
+
+  /**
+   * <p>A setting that indicates whether you want to include folder assets. You can also use this setting to recusrsively include all subfolders of an exported folder.</p>
+   * @public
+   */
+  IncludeFolderMembers?: IncludeFolderMembers;
 }
 
 /**
@@ -5549,6 +6221,46 @@ export interface UpdatePublicSharingSettingsRequest {
  * @public
  */
 export interface UpdatePublicSharingSettingsResponse {
+  /**
+   * <p>The Amazon Web Services request ID for this operation.</p>
+   * @public
+   */
+  RequestId?: string;
+
+  /**
+   * <p>The HTTP status of the request.</p>
+   * @public
+   */
+  Status?: number;
+}
+
+/**
+ * @public
+ */
+export interface UpdateQPersonalizationConfigurationRequest {
+  /**
+   * <p>The ID of the Amazon Web Services account account that contains the personalization configuration that the user wants to update.</p>
+   * @public
+   */
+  AwsAccountId: string | undefined;
+
+  /**
+   * <p>An option to allow Amazon QuickSight to customize data stories with user specific metadata, specifically location and job information, in your IAM Identity Center instance.</p>
+   * @public
+   */
+  PersonalizationMode: PersonalizationMode | undefined;
+}
+
+/**
+ * @public
+ */
+export interface UpdateQPersonalizationConfigurationResponse {
+  /**
+   * <p>The personalization mode that is used for the personalization configuration.</p>
+   * @public
+   */
+  PersonalizationMode?: PersonalizationMode;
+
   /**
    * <p>The Amazon Web Services request ID for this operation.</p>
    * @public

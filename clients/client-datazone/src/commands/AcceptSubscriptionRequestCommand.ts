@@ -44,6 +44,14 @@ export interface AcceptSubscriptionRequestCommandOutput extends AcceptSubscripti
  *   domainIdentifier: "STRING_VALUE", // required
  *   identifier: "STRING_VALUE", // required
  *   decisionComment: "STRING_VALUE",
+ *   assetScopes: [ // AcceptedAssetScopes
+ *     { // AcceptedAssetScope
+ *       assetId: "STRING_VALUE", // required
+ *       filterIds: [ // FilterIds // required
+ *         "STRING_VALUE",
+ *       ],
+ *     },
+ *   ],
  * };
  * const command = new AcceptSubscriptionRequestCommand(input);
  * const response = await client.send(command);
@@ -80,6 +88,33 @@ export interface AcceptSubscriptionRequestCommandOutput extends AcceptSubscripti
  * //             { // DetailedGlossaryTerm
  * //               name: "STRING_VALUE",
  * //               shortDescription: "STRING_VALUE",
+ * //             },
+ * //           ],
+ * //           assetScope: { // AssetScope
+ * //             assetId: "STRING_VALUE", // required
+ * //             filterIds: [ // FilterIds // required
+ * //               "STRING_VALUE",
+ * //             ],
+ * //             status: "STRING_VALUE", // required
+ * //             errorMessage: "STRING_VALUE",
+ * //           },
+ * //         },
+ * //         productListing: { // SubscribedProductListing
+ * //           entityId: "STRING_VALUE",
+ * //           entityRevision: "STRING_VALUE",
+ * //           glossaryTerms: [
+ * //             {
+ * //               name: "STRING_VALUE",
+ * //               shortDescription: "STRING_VALUE",
+ * //             },
+ * //           ],
+ * //           name: "STRING_VALUE",
+ * //           description: "STRING_VALUE",
+ * //           assetListings: [ // AssetInDataProductListingItems
+ * //             { // AssetInDataProductListingItem
+ * //               entityId: "STRING_VALUE",
+ * //               entityRevision: "STRING_VALUE",
+ * //               entityType: "STRING_VALUE",
  * //             },
  * //           ],
  * //         },
@@ -134,9 +169,7 @@ export class AcceptSubscriptionRequestCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: DataZoneClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -148,4 +181,16 @@ export class AcceptSubscriptionRequestCommand extends $Command
   .f(AcceptSubscriptionRequestInputFilterSensitiveLog, AcceptSubscriptionRequestOutputFilterSensitiveLog)
   .ser(se_AcceptSubscriptionRequestCommand)
   .de(de_AcceptSubscriptionRequestCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: AcceptSubscriptionRequestInput;
+      output: AcceptSubscriptionRequestOutput;
+    };
+    sdk: {
+      input: AcceptSubscriptionRequestCommandInput;
+      output: AcceptSubscriptionRequestCommandOutput;
+    };
+  };
+}

@@ -57,8 +57,10 @@ export interface CreateHostedConfigurationVersionCommandOutput
     __MetadataBearer {}
 
 /**
- * <p>Creates a new configuration in the AppConfig hosted configuration
- *          store.</p>
+ * <p>Creates a new configuration in the AppConfig hosted configuration store. If
+ *          you're creating a feature flag, we recommend you familiarize yourself with the JSON schema
+ *          for feature flag data. For more information, see <a href="https://docs.aws.amazon.com/appconfig/latest/userguide/appconfig-creating-configuration-and-profile-feature-flags.html#appconfig-type-reference-feature-flags">Type reference for AWS.AppConfig.FeatureFlags</a> in the
+ *             <i>AppConfig User Guide</i>.</p>
  * @example
  * Use a bare-bones client and the command you need to make an API call.
  * ```javascript
@@ -158,9 +160,7 @@ export class CreateHostedConfigurationVersionCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: AppConfigClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -172,4 +172,16 @@ export class CreateHostedConfigurationVersionCommand extends $Command
   .f(CreateHostedConfigurationVersionRequestFilterSensitiveLog, HostedConfigurationVersionFilterSensitiveLog)
   .ser(se_CreateHostedConfigurationVersionCommand)
   .de(de_CreateHostedConfigurationVersionCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: CreateHostedConfigurationVersionRequest;
+      output: HostedConfigurationVersion;
+    };
+    sdk: {
+      input: CreateHostedConfigurationVersionCommandInput;
+      output: CreateHostedConfigurationVersionCommandOutput;
+    };
+  };
+}

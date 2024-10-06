@@ -38,6 +38,9 @@ export interface InvokeFlowCommandOutput extends InvokeFlowResponse, __MetadataB
 
 /**
  * <p>Invokes an alias of a flow to run the inputs that you specify and return the output of each node as a stream. If there's an error, the error is returned. For more information, see <a href="https://docs.aws.amazon.com/bedrock/latest/userguide/flows-test.html">Test a flow in Amazon Bedrock</a> in the Amazon Bedrock User Guide.</p>
+ *          <note>
+ *             <p>The CLI doesn't support streaming operations in Amazon Bedrock, including <code>InvokeFlow</code>.</p>
+ *          </note>
  * @example
  * Use a bare-bones client and the command you need to make an API call.
  * ```javascript
@@ -151,9 +154,7 @@ export class InvokeFlowCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: BedrockAgentRuntimeClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -172,4 +173,16 @@ export class InvokeFlowCommand extends $Command
   .f(InvokeFlowRequestFilterSensitiveLog, InvokeFlowResponseFilterSensitiveLog)
   .ser(se_InvokeFlowCommand)
   .de(de_InvokeFlowCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: InvokeFlowRequest;
+      output: InvokeFlowResponse;
+    };
+    sdk: {
+      input: InvokeFlowCommandInput;
+      output: InvokeFlowCommandOutput;
+    };
+  };
+}

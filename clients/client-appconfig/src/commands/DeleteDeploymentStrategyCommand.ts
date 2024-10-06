@@ -28,8 +28,7 @@ export interface DeleteDeploymentStrategyCommandInput extends DeleteDeploymentSt
 export interface DeleteDeploymentStrategyCommandOutput extends __MetadataBearer {}
 
 /**
- * <p>Deletes a deployment strategy. Deleting a deployment strategy does not delete a
- *          configuration from a host.</p>
+ * <p>Deletes a deployment strategy.</p>
  * @example
  * Use a bare-bones client and the command you need to make an API call.
  * ```javascript
@@ -84,9 +83,7 @@ export class DeleteDeploymentStrategyCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: AppConfigClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -98,4 +95,16 @@ export class DeleteDeploymentStrategyCommand extends $Command
   .f(void 0, void 0)
   .ser(se_DeleteDeploymentStrategyCommand)
   .de(de_DeleteDeploymentStrategyCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: DeleteDeploymentStrategyRequest;
+      output: {};
+    };
+    sdk: {
+      input: DeleteDeploymentStrategyCommandInput;
+      output: DeleteDeploymentStrategyCommandOutput;
+    };
+  };
+}

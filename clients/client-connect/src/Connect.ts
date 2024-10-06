@@ -808,6 +808,11 @@ import {
   ResumeContactRecordingCommandOutput,
 } from "./commands/ResumeContactRecordingCommand";
 import {
+  SearchAgentStatusesCommand,
+  SearchAgentStatusesCommandInput,
+  SearchAgentStatusesCommandOutput,
+} from "./commands/SearchAgentStatusesCommand";
+import {
   SearchAvailablePhoneNumbersCommand,
   SearchAvailablePhoneNumbersCommandInput,
   SearchAvailablePhoneNumbersCommandOutput,
@@ -867,6 +872,11 @@ import {
   SearchSecurityProfilesCommandInput,
   SearchSecurityProfilesCommandOutput,
 } from "./commands/SearchSecurityProfilesCommand";
+import {
+  SearchUserHierarchyGroupsCommand,
+  SearchUserHierarchyGroupsCommandInput,
+  SearchUserHierarchyGroupsCommandOutput,
+} from "./commands/SearchUserHierarchyGroupsCommand";
 import { SearchUsersCommand, SearchUsersCommandInput, SearchUsersCommandOutput } from "./commands/SearchUsersCommand";
 import {
   SearchVocabulariesCommand,
@@ -903,6 +913,11 @@ import {
   StartContactStreamingCommandInput,
   StartContactStreamingCommandOutput,
 } from "./commands/StartContactStreamingCommand";
+import {
+  StartOutboundChatContactCommand,
+  StartOutboundChatContactCommandInput,
+  StartOutboundChatContactCommandOutput,
+} from "./commands/StartOutboundChatContactCommand";
 import {
   StartOutboundVoiceContactCommand,
   StartOutboundVoiceContactCommandInput,
@@ -1363,6 +1378,7 @@ const commands = {
   ReplicateInstanceCommand,
   ResumeContactCommand,
   ResumeContactRecordingCommand,
+  SearchAgentStatusesCommand,
   SearchAvailablePhoneNumbersCommand,
   SearchContactFlowModulesCommand,
   SearchContactFlowsCommand,
@@ -1375,6 +1391,7 @@ const commands = {
   SearchResourceTagsCommand,
   SearchRoutingProfilesCommand,
   SearchSecurityProfilesCommand,
+  SearchUserHierarchyGroupsCommand,
   SearchUsersCommand,
   SearchVocabulariesCommand,
   SendChatIntegrationEventCommand,
@@ -1383,6 +1400,7 @@ const commands = {
   StartContactEvaluationCommand,
   StartContactRecordingCommand,
   StartContactStreamingCommand,
+  StartOutboundChatContactCommand,
   StartOutboundVoiceContactCommand,
   StartTaskContactCommand,
   StartWebRTCContactCommand,
@@ -4166,6 +4184,23 @@ export interface Connect {
   ): void;
 
   /**
+   * @see {@link SearchAgentStatusesCommand}
+   */
+  searchAgentStatuses(
+    args: SearchAgentStatusesCommandInput,
+    options?: __HttpHandlerOptions
+  ): Promise<SearchAgentStatusesCommandOutput>;
+  searchAgentStatuses(
+    args: SearchAgentStatusesCommandInput,
+    cb: (err: any, data?: SearchAgentStatusesCommandOutput) => void
+  ): void;
+  searchAgentStatuses(
+    args: SearchAgentStatusesCommandInput,
+    options: __HttpHandlerOptions,
+    cb: (err: any, data?: SearchAgentStatusesCommandOutput) => void
+  ): void;
+
+  /**
    * @see {@link SearchAvailablePhoneNumbersCommand}
    */
   searchAvailablePhoneNumbers(
@@ -4355,6 +4390,23 @@ export interface Connect {
   ): void;
 
   /**
+   * @see {@link SearchUserHierarchyGroupsCommand}
+   */
+  searchUserHierarchyGroups(
+    args: SearchUserHierarchyGroupsCommandInput,
+    options?: __HttpHandlerOptions
+  ): Promise<SearchUserHierarchyGroupsCommandOutput>;
+  searchUserHierarchyGroups(
+    args: SearchUserHierarchyGroupsCommandInput,
+    cb: (err: any, data?: SearchUserHierarchyGroupsCommandOutput) => void
+  ): void;
+  searchUserHierarchyGroups(
+    args: SearchUserHierarchyGroupsCommandInput,
+    options: __HttpHandlerOptions,
+    cb: (err: any, data?: SearchUserHierarchyGroupsCommandOutput) => void
+  ): void;
+
+  /**
    * @see {@link SearchUsersCommand}
    */
   searchUsers(args: SearchUsersCommandInput, options?: __HttpHandlerOptions): Promise<SearchUsersCommandOutput>;
@@ -4482,6 +4534,23 @@ export interface Connect {
     args: StartContactStreamingCommandInput,
     options: __HttpHandlerOptions,
     cb: (err: any, data?: StartContactStreamingCommandOutput) => void
+  ): void;
+
+  /**
+   * @see {@link StartOutboundChatContactCommand}
+   */
+  startOutboundChatContact(
+    args: StartOutboundChatContactCommandInput,
+    options?: __HttpHandlerOptions
+  ): Promise<StartOutboundChatContactCommandOutput>;
+  startOutboundChatContact(
+    args: StartOutboundChatContactCommandInput,
+    cb: (err: any, data?: StartOutboundChatContactCommandOutput) => void
+  ): void;
+  startOutboundChatContact(
+    args: StartOutboundChatContactCommandInput,
+    options: __HttpHandlerOptions,
+    cb: (err: any, data?: StartOutboundChatContactCommandOutput) => void
   ): void;
 
   /**
@@ -5455,14 +5524,13 @@ export interface Connect {
  * <ul>
  *             <li>
  *                <p>
- *                   <a href="https://docs.aws.amazon.com/connect/latest/APIReference/API_Operations_Amazon_Connect_Service.html">Amazon Connect
- *        actions</a>
+ *                   <a href="https://docs.aws.amazon.com/connect/latest/APIReference/API_Operations_Amazon_Connect_Service.html">Amazon Connect actions</a>
  *                </p>
  *             </li>
  *             <li>
  *                <p>
  *                   <a href="https://docs.aws.amazon.com/connect/latest/APIReference/API_Types_Amazon_Connect_Service.html">Amazon Connect
- *        data types</a>
+ *       data types</a>
  *                </p>
  *             </li>
  *          </ul>

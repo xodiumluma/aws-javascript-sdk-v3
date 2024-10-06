@@ -1,5 +1,5 @@
 // smithy-typescript generated code
-import { ExceptionOptionType as __ExceptionOptionType } from "@smithy/smithy-client";
+import { ExceptionOptionType as __ExceptionOptionType, SENSITIVE_STRING } from "@smithy/smithy-client";
 
 import { GlueServiceException as __BaseException } from "./GlueServiceException";
 
@@ -455,6 +455,92 @@ export interface AmazonRedshiftTarget {
 }
 
 /**
+ * <p>A failed annotation.</p>
+ * @public
+ */
+export interface AnnotationError {
+  /**
+   * <p>The Profile ID for the failed annotation.</p>
+   * @public
+   */
+  ProfileId?: string;
+
+  /**
+   * <p>The Statistic ID for the failed annotation.</p>
+   * @public
+   */
+  StatisticId?: string;
+
+  /**
+   * <p>The reason why the annotation failed.</p>
+   * @public
+   */
+  FailureReason?: string;
+}
+
+/**
+ * @public
+ * @enum
+ */
+export const InclusionAnnotationValue = {
+  EXCLUDE: "EXCLUDE",
+  INCLUDE: "INCLUDE",
+} as const;
+
+/**
+ * @public
+ */
+export type InclusionAnnotationValue = (typeof InclusionAnnotationValue)[keyof typeof InclusionAnnotationValue];
+
+/**
+ * <p>A timestamped inclusion annotation.</p>
+ * @public
+ */
+export interface TimestampedInclusionAnnotation {
+  /**
+   * <p>The inclusion annotation value.</p>
+   * @public
+   */
+  Value?: InclusionAnnotationValue;
+
+  /**
+   * <p>The timestamp when the inclusion annotation was last modified.</p>
+   * @public
+   */
+  LastModifiedOn?: Date;
+}
+
+/**
+ * <p>A Statistic Annotation.</p>
+ * @public
+ */
+export interface StatisticAnnotation {
+  /**
+   * <p>The Profile ID.</p>
+   * @public
+   */
+  ProfileId?: string;
+
+  /**
+   * <p>The Statistic ID.</p>
+   * @public
+   */
+  StatisticId?: string;
+
+  /**
+   * <p>The timestamp when the annotated statistic was recorded.</p>
+   * @public
+   */
+  StatisticRecordedOn?: Date;
+
+  /**
+   * <p>The inclusion annotation applied to the statistic.</p>
+   * @public
+   */
+  InclusionAnnotation?: TimestampedInclusionAnnotation;
+}
+
+/**
  * <p>Specifies a single column in a Glue schema definition.</p>
  * @public
  */
@@ -724,16 +810,16 @@ export interface AuthenticationConfigurationInput {
   AuthenticationType?: AuthenticationType;
 
   /**
-   * <p>The secret manager ARN to store credentials in the CreateConnection request.</p>
-   * @public
-   */
-  SecretArn?: string;
-
-  /**
    * <p>The properties for OAuth2 authentication in the CreateConnection request.</p>
    * @public
    */
   OAuth2Properties?: OAuth2PropertiesInput;
+
+  /**
+   * <p>The secret manager ARN to store credentials in the CreateConnection request.</p>
+   * @public
+   */
+  SecretArn?: string;
 }
 
 /**
@@ -2606,6 +2692,12 @@ export interface MetricBasedObservation {
   MetricName?: string;
 
   /**
+   * <p>The Statistic ID.</p>
+   * @public
+   */
+  StatisticId?: string;
+
+  /**
    * <p>An object of type <code>DataQualityMetricValues</code> representing the analysis of the data quality metric value.</p>
    * @public
    */
@@ -2686,6 +2778,12 @@ export interface DataQualityRuleResult {
    * @public
    */
   EvaluatedMetrics?: Record<string, number>;
+
+  /**
+   * <p>The evaluated rule.</p>
+   * @public
+   */
+  EvaluatedRule?: string;
 }
 
 /**
@@ -2698,6 +2796,12 @@ export interface DataQualityResult {
    * @public
    */
   ResultId?: string;
+
+  /**
+   * <p>The Profile ID for the data quality result.</p>
+   * @public
+   */
+  ProfileId?: string;
 
   /**
    * <p>An aggregate data quality score. Represents the ratio of rules that passed to the total number of rules.</p>
@@ -3558,6 +3662,12 @@ export interface BasicCatalogTarget {
    * @public
    */
   Inputs: string[] | undefined;
+
+  /**
+   * <p>The partition keys used to distribute data across multiple partitions or shards based on a specific key or set of key.</p>
+   * @public
+   */
+  PartitionKeys?: string[][];
 
   /**
    * <p>The database that contains the table you want to use as the target. This database must already exist in the Data Catalog.</p>
@@ -7356,6 +7466,8 @@ export class InvalidStateException extends __BaseException {
  */
 export const TableOptimizerType = {
   COMPACTION: "compaction",
+  ORPHAN_FILE_DELETION: "orphan_file_deletion",
+  RETENTION: "retention",
 } as const;
 
 /**
@@ -7441,6 +7553,72 @@ export interface BatchGetTableOptimizerError {
 }
 
 /**
+ * <p>The configuration for an Iceberg orphan file deletion optimizer.</p>
+ * @public
+ */
+export interface IcebergOrphanFileDeletionConfiguration {
+  /**
+   * <p>The number of days that orphan files should be retained before file deletion. If an input is not provided, the default value 3 will be used.</p>
+   * @public
+   */
+  orphanFileRetentionPeriodInDays?: number;
+
+  /**
+   * <p>Specifies a directory in which to look for files (defaults to the table's location). You may choose a sub-directory rather than the top-level table location.</p>
+   * @public
+   */
+  location?: string;
+}
+
+/**
+ * <p>The configuration for an orphan file deletion optimizer.</p>
+ * @public
+ */
+export interface OrphanFileDeletionConfiguration {
+  /**
+   * <p>The configuration for an Iceberg orphan file deletion optimizer.</p>
+   * @public
+   */
+  icebergConfiguration?: IcebergOrphanFileDeletionConfiguration;
+}
+
+/**
+ * <p>The configuration for an Iceberg snapshot retention optimizer.</p>
+ * @public
+ */
+export interface IcebergRetentionConfiguration {
+  /**
+   * <p>The number of days to retain the Iceberg snapshots. If an input is not provided, the corresponding Iceberg table configuration field will be used or if not present, the default value 5 will be used.</p>
+   * @public
+   */
+  snapshotRetentionPeriodInDays?: number;
+
+  /**
+   * <p>The number of Iceberg snapshots to retain within the retention period. If an input is not provided, the corresponding Iceberg table configuration field will be used or if not present, the default value 1 will be used.</p>
+   * @public
+   */
+  numberOfSnapshotsToRetain?: number;
+
+  /**
+   * <p>If set to false, snapshots are only deleted from table metadata, and the underlying data and metadata files are not deleted.</p>
+   * @public
+   */
+  cleanExpiredFiles?: boolean;
+}
+
+/**
+ * <p>The configuration for a snapshot retention optimizer.</p>
+ * @public
+ */
+export interface RetentionConfiguration {
+  /**
+   * <p>The configuration for an Iceberg snapshot retention optimizer.</p>
+   * @public
+   */
+  icebergConfiguration?: IcebergRetentionConfiguration;
+}
+
+/**
  * <p>Contains details on the configuration of a table optimizer. You pass this configuration when creating or updating a table optimizer.</p>
  * @public
  */
@@ -7452,10 +7630,64 @@ export interface TableOptimizerConfiguration {
   roleArn?: string;
 
   /**
-   * <p>Whether table optimization is enabled. </p>
+   * <p>Whether table optimization is enabled.</p>
    * @public
    */
   enabled?: boolean;
+
+  /**
+   * <p>The configuration for a snapshot retention optimizer.</p>
+   * @public
+   */
+  retentionConfiguration?: RetentionConfiguration;
+
+  /**
+   * <p>The configuration for an orphan file deletion optimizer.</p>
+   * @public
+   */
+  orphanFileDeletionConfiguration?: OrphanFileDeletionConfiguration;
+}
+
+/**
+ * <p>Compaction metrics for Iceberg for the optimizer run.</p>
+ * @public
+ */
+export interface IcebergCompactionMetrics {
+  /**
+   * <p>The number of bytes removed by the compaction job run.</p>
+   * @public
+   */
+  NumberOfBytesCompacted?: number;
+
+  /**
+   * <p>The number of files removed by the compaction job run.</p>
+   * @public
+   */
+  NumberOfFilesCompacted?: number;
+
+  /**
+   * <p>The number of DPU hours consumed by the job.</p>
+   * @public
+   */
+  NumberOfDpus?: number;
+
+  /**
+   * <p>The duration of the job in hours.</p>
+   * @public
+   */
+  JobDurationInHour?: number;
+}
+
+/**
+ * <p>A structure that contains compaction metrics for the optimizer run.</p>
+ * @public
+ */
+export interface CompactionMetrics {
+  /**
+   * <p>A structure containing the Iceberg compaction metrics for the optimizer run.</p>
+   * @public
+   */
+  IcebergMetrics?: IcebergCompactionMetrics;
 }
 
 /**
@@ -7476,6 +7708,7 @@ export type TableOptimizerEventType = (typeof TableOptimizerEventType)[keyof typ
 
 /**
  * <p>Metrics for the optimizer run.</p>
+ *          <p>This structure is deprecated. See the individual metric members for compaction, retention, and orphan file deletion.</p>
  * @public
  */
 export interface RunMetrics {
@@ -7505,6 +7738,90 @@ export interface RunMetrics {
 }
 
 /**
+ * <p>Orphan file deletion metrics for Iceberg for the optimizer run.</p>
+ * @public
+ */
+export interface IcebergOrphanFileDeletionMetrics {
+  /**
+   * <p>The number of orphan files deleted by the orphan file deletion job run.</p>
+   * @public
+   */
+  NumberOfOrphanFilesDeleted?: number;
+
+  /**
+   * <p>The number of DPU hours consumed by the job.</p>
+   * @public
+   */
+  NumberOfDpus?: number;
+
+  /**
+   * <p>The duration of the job in hours.</p>
+   * @public
+   */
+  JobDurationInHour?: number;
+}
+
+/**
+ * <p>A structure that contains orphan file deletion metrics for the optimizer run.</p>
+ * @public
+ */
+export interface OrphanFileDeletionMetrics {
+  /**
+   * <p>A structure containing the Iceberg orphan file deletion metrics for the optimizer run.</p>
+   * @public
+   */
+  IcebergMetrics?: IcebergOrphanFileDeletionMetrics;
+}
+
+/**
+ * <p>Snapshot retention metrics for Iceberg for the optimizer run.</p>
+ * @public
+ */
+export interface IcebergRetentionMetrics {
+  /**
+   * <p>The number of data files deleted by the retention job run.</p>
+   * @public
+   */
+  NumberOfDataFilesDeleted?: number;
+
+  /**
+   * <p>The number of manifest files deleted by the retention job run.</p>
+   * @public
+   */
+  NumberOfManifestFilesDeleted?: number;
+
+  /**
+   * <p>The number of manifest lists deleted by the retention job run.</p>
+   * @public
+   */
+  NumberOfManifestListsDeleted?: number;
+
+  /**
+   * <p>The number of DPU hours consumed by the job.</p>
+   * @public
+   */
+  NumberOfDpus?: number;
+
+  /**
+   * <p>The duration of the job in hours.</p>
+   * @public
+   */
+  JobDurationInHour?: number;
+}
+
+/**
+ * <p>A structure that contains retention metrics for the optimizer run.</p>
+ * @public
+ */
+export interface RetentionMetrics {
+  /**
+   * <p>A structure containing the Iceberg retention metrics for the optimizer run.</p>
+   * @public
+   */
+  IcebergMetrics?: IcebergRetentionMetrics;
+}
+
+/**
  * <p>Contains details for a table optimizer run.</p>
  * @public
  */
@@ -7528,7 +7845,10 @@ export interface TableOptimizerRun {
   endTimestamp?: Date;
 
   /**
+   * @deprecated
+   *
    * <p>A <code>RunMetrics</code> object containing metrics for the optimizer run.</p>
+   *          <p>This member is deprecated. See the individual metric members for compaction, retention, and orphan file deletion.</p>
    * @public
    */
   metrics?: RunMetrics;
@@ -7538,6 +7858,24 @@ export interface TableOptimizerRun {
    * @public
    */
   error?: string;
+
+  /**
+   * <p>A <code>CompactionMetrics</code> object containing metrics for the optimizer run.</p>
+   * @public
+   */
+  compactionMetrics?: CompactionMetrics;
+
+  /**
+   * <p>A <code>RetentionMetrics</code> object containing metrics for the optimizer run.</p>
+   * @public
+   */
+  retentionMetrics?: RetentionMetrics;
+
+  /**
+   * <p>An <code>OrphanFileDeletionMetrics</code> object containing metrics for the optimizer run.</p>
+   * @public
+   */
+  orphanFileDeletionMetrics?: OrphanFileDeletionMetrics;
 }
 
 /**
@@ -7546,7 +7884,21 @@ export interface TableOptimizerRun {
  */
 export interface TableOptimizer {
   /**
-   * <p>The type of table optimizer. Currently, the only valid value is <code>compaction</code>.</p>
+   * <p>The type of table optimizer. The valid values are:</p>
+   *          <ul>
+   *             <li>
+   *                <p>
+   *                   <code>compaction</code>: for managing compaction with a table optimizer.</p>
+   *             </li>
+   *             <li>
+   *                <p>
+   *                   <code>retention</code>: for managing the retention of snapshot with a table optimizer.</p>
+   *             </li>
+   *             <li>
+   *                <p>
+   *                   <code>orphan_file_deletion</code>: for managing the deletion of orphan files with a table optimizer.</p>
+   *             </li>
+   *          </ul>
    * @public
    */
   type?: TableOptimizerType;
@@ -7588,7 +7940,7 @@ export interface BatchTableOptimizer {
   tableName?: string;
 
   /**
-   * <p>A <code>TableOptimizer</code> object that contains details on the configuration and last run of a table optimzer.</p>
+   * <p>A <code>TableOptimizer</code> object that contains details on the configuration and last run of a table optimizer.</p>
    * @public
    */
   tableOptimizer?: TableOptimizer;
@@ -7609,6 +7961,32 @@ export interface BatchGetTableOptimizerResponse {
    * @public
    */
   Failures?: BatchGetTableOptimizerError[];
+}
+
+/**
+ * <p>The throttling threshhold was exceeded.</p>
+ * @public
+ */
+export class ThrottlingException extends __BaseException {
+  readonly name: "ThrottlingException" = "ThrottlingException";
+  readonly $fault: "client" = "client";
+  /**
+   * <p>A message describing the problem.</p>
+   * @public
+   */
+  Message?: string;
+  /**
+   * @internal
+   */
+  constructor(opts: __ExceptionOptionType<ThrottlingException, __BaseException>) {
+    super({
+      name: "ThrottlingException",
+      $fault: "client",
+      ...opts,
+    });
+    Object.setPrototypeOf(this, ThrottlingException.prototype);
+    this.Message = opts.Message;
+  }
 }
 
 /**
@@ -8072,6 +8450,13 @@ export interface JobRun {
   JobMode?: JobMode;
 
   /**
+   * <p>Specifies whether job run queuing is enabled for the job run.</p>
+   *          <p>A value of true means job run queuing is enabled for the job run. If false or not populated, the job run will not be considered for queueing.</p>
+   * @public
+   */
+  JobRunQueuingEnabled?: boolean;
+
+  /**
    * <p>The date and time at which this job run was started.</p>
    * @public
    */
@@ -8277,6 +8662,13 @@ export interface JobRun {
    * @public
    */
   ProfileName?: string;
+
+  /**
+   * <p>This field holds details that pertain to the state of a job run. The field is nullable.</p>
+   *          <p>For example, when a job run is in a WAITING state as a result of job run queuing, the field has the reason why the job run is in that state.</p>
+   * @public
+   */
+  StateDetail?: string;
 }
 
 /**
@@ -8626,6 +9018,58 @@ export interface BatchGetWorkflowsResponse {
 }
 
 /**
+ * <p>An Inclusion Annotation.</p>
+ * @public
+ */
+export interface DatapointInclusionAnnotation {
+  /**
+   * <p>The ID of the data quality profile the statistic belongs to.</p>
+   * @public
+   */
+  ProfileId?: string;
+
+  /**
+   * <p>The Statistic ID.</p>
+   * @public
+   */
+  StatisticId?: string;
+
+  /**
+   * <p>The inclusion annotation value to apply to the statistic.</p>
+   * @public
+   */
+  InclusionAnnotation?: InclusionAnnotationValue;
+}
+
+/**
+ * @public
+ */
+export interface BatchPutDataQualityStatisticAnnotationRequest {
+  /**
+   * <p>A list of <code>DatapointInclusionAnnotation</code>'s.</p>
+   * @public
+   */
+  InclusionAnnotations: DatapointInclusionAnnotation[] | undefined;
+
+  /**
+   * <p>Client Token.</p>
+   * @public
+   */
+  ClientToken?: string;
+}
+
+/**
+ * @public
+ */
+export interface BatchPutDataQualityStatisticAnnotationResponse {
+  /**
+   * <p>A list of <code>AnnotationError</code>'s.</p>
+   * @public
+   */
+  FailedInclusionAnnotations?: AnnotationError[];
+}
+
+/**
  * @public
  */
 export interface BatchStopJobRunRequest {
@@ -8800,366 +9244,77 @@ export interface CancelDataQualityRuleRecommendationRunRequest {
 export interface CancelDataQualityRuleRecommendationRunResponse {}
 
 /**
- * @public
+ * @internal
  */
-export interface CancelDataQualityRulesetEvaluationRunRequest {
-  /**
-   * <p>The unique run identifier associated with this run.</p>
-   * @public
-   */
-  RunId: string | undefined;
-}
+export const AuthorizationCodePropertiesFilterSensitiveLog = (obj: AuthorizationCodeProperties): any => ({
+  ...obj,
+  ...(obj.AuthorizationCode && { AuthorizationCode: SENSITIVE_STRING }),
+});
 
 /**
- * @public
+ * @internal
  */
-export interface CancelDataQualityRulesetEvaluationRunResponse {}
+export const OAuth2PropertiesInputFilterSensitiveLog = (obj: OAuth2PropertiesInput): any => ({
+  ...obj,
+  ...(obj.AuthorizationCodeProperties && {
+    AuthorizationCodeProperties: AuthorizationCodePropertiesFilterSensitiveLog(obj.AuthorizationCodeProperties),
+  }),
+});
 
 /**
- * @public
+ * @internal
  */
-export interface CancelMLTaskRunRequest {
-  /**
-   * <p>The unique identifier of the machine learning transform.</p>
-   * @public
-   */
-  TransformId: string | undefined;
-
-  /**
-   * <p>A unique identifier for the task run.</p>
-   * @public
-   */
-  TaskRunId: string | undefined;
-}
+export const AuthenticationConfigurationInputFilterSensitiveLog = (obj: AuthenticationConfigurationInput): any => ({
+  ...obj,
+  ...(obj.OAuth2Properties && { OAuth2Properties: OAuth2PropertiesInputFilterSensitiveLog(obj.OAuth2Properties) }),
+});
 
 /**
- * @public
- * @enum
+ * @internal
  */
-export const TaskStatusType = {
-  FAILED: "FAILED",
-  RUNNING: "RUNNING",
-  STARTING: "STARTING",
-  STOPPED: "STOPPED",
-  STOPPING: "STOPPING",
-  SUCCEEDED: "SUCCEEDED",
-  TIMEOUT: "TIMEOUT",
-} as const;
+export const DataQualityAnalyzerResultFilterSensitiveLog = (obj: DataQualityAnalyzerResult): any => ({
+  ...obj,
+  ...(obj.Description && { Description: SENSITIVE_STRING }),
+  ...(obj.EvaluationMessage && { EvaluationMessage: SENSITIVE_STRING }),
+  ...(obj.EvaluatedMetrics && { EvaluatedMetrics: SENSITIVE_STRING }),
+});
 
 /**
- * @public
+ * @internal
  */
-export type TaskStatusType = (typeof TaskStatusType)[keyof typeof TaskStatusType];
+export const DataQualityObservationFilterSensitiveLog = (obj: DataQualityObservation): any => ({
+  ...obj,
+  ...(obj.Description && { Description: SENSITIVE_STRING }),
+});
 
 /**
- * @public
+ * @internal
  */
-export interface CancelMLTaskRunResponse {
-  /**
-   * <p>The unique identifier of the machine learning transform.</p>
-   * @public
-   */
-  TransformId?: string;
-
-  /**
-   * <p>The unique identifier for the task run.</p>
-   * @public
-   */
-  TaskRunId?: string;
-
-  /**
-   * <p>The status for this run.</p>
-   * @public
-   */
-  Status?: TaskStatusType;
-}
+export const DataQualityRuleResultFilterSensitiveLog = (obj: DataQualityRuleResult): any => ({
+  ...obj,
+  ...(obj.Description && { Description: SENSITIVE_STRING }),
+  ...(obj.EvaluationMessage && { EvaluationMessage: SENSITIVE_STRING }),
+  ...(obj.EvaluatedMetrics && { EvaluatedMetrics: SENSITIVE_STRING }),
+  ...(obj.EvaluatedRule && { EvaluatedRule: SENSITIVE_STRING }),
+});
 
 /**
- * @public
+ * @internal
  */
-export interface CancelStatementRequest {
-  /**
-   * <p>The Session ID of the statement to be cancelled.</p>
-   * @public
-   */
-  SessionId: string | undefined;
-
-  /**
-   * <p>The ID of the statement to be cancelled.</p>
-   * @public
-   */
-  Id: number | undefined;
-
-  /**
-   * <p>The origin of the request to cancel the statement.</p>
-   * @public
-   */
-  RequestOrigin?: string;
-}
+export const DataQualityResultFilterSensitiveLog = (obj: DataQualityResult): any => ({
+  ...obj,
+  ...(obj.RuleResults && { RuleResults: obj.RuleResults.map((item) => DataQualityRuleResultFilterSensitiveLog(item)) }),
+  ...(obj.AnalyzerResults && {
+    AnalyzerResults: obj.AnalyzerResults.map((item) => DataQualityAnalyzerResultFilterSensitiveLog(item)),
+  }),
+  ...(obj.Observations && {
+    Observations: obj.Observations.map((item) => DataQualityObservationFilterSensitiveLog(item)),
+  }),
+});
 
 /**
- * @public
+ * @internal
  */
-export interface CancelStatementResponse {}
-
-/**
- * <p>The session is in an invalid state to perform a requested operation.</p>
- * @public
- */
-export class IllegalSessionStateException extends __BaseException {
-  readonly name: "IllegalSessionStateException" = "IllegalSessionStateException";
-  readonly $fault: "client" = "client";
-  /**
-   * <p>A message describing the problem.</p>
-   * @public
-   */
-  Message?: string;
-  /**
-   * @internal
-   */
-  constructor(opts: __ExceptionOptionType<IllegalSessionStateException, __BaseException>) {
-    super({
-      name: "IllegalSessionStateException",
-      $fault: "client",
-      ...opts,
-    });
-    Object.setPrototypeOf(this, IllegalSessionStateException.prototype);
-    this.Message = opts.Message;
-  }
-}
-
-/**
- * @public
- * @enum
- */
-export const DataFormat = {
-  AVRO: "AVRO",
-  JSON: "JSON",
-  PROTOBUF: "PROTOBUF",
-} as const;
-
-/**
- * @public
- */
-export type DataFormat = (typeof DataFormat)[keyof typeof DataFormat];
-
-/**
- * @public
- */
-export interface CheckSchemaVersionValidityInput {
-  /**
-   * <p>The data format of the schema definition. Currently <code>AVRO</code>, <code>JSON</code> and <code>PROTOBUF</code> are supported.</p>
-   * @public
-   */
-  DataFormat: DataFormat | undefined;
-
-  /**
-   * <p>The definition of the schema that has to be validated.</p>
-   * @public
-   */
-  SchemaDefinition: string | undefined;
-}
-
-/**
- * @public
- */
-export interface CheckSchemaVersionValidityResponse {
-  /**
-   * <p>Return true, if the schema is valid and false otherwise.</p>
-   * @public
-   */
-  Valid?: boolean;
-
-  /**
-   * <p>A validation failure error message.</p>
-   * @public
-   */
-  Error?: string;
-}
-
-/**
- * @public
- */
-export interface CreateBlueprintRequest {
-  /**
-   * <p>The name of the blueprint.</p>
-   * @public
-   */
-  Name: string | undefined;
-
-  /**
-   * <p>A description of the blueprint.</p>
-   * @public
-   */
-  Description?: string;
-
-  /**
-   * <p>Specifies a path in Amazon S3 where the blueprint is published.</p>
-   * @public
-   */
-  BlueprintLocation: string | undefined;
-
-  /**
-   * <p>The tags to be applied to this blueprint.</p>
-   * @public
-   */
-  Tags?: Record<string, string>;
-}
-
-/**
- * @public
- */
-export interface CreateBlueprintResponse {
-  /**
-   * <p>Returns the name of the blueprint that was registered.</p>
-   * @public
-   */
-  Name?: string;
-}
-
-/**
- * @public
- * @enum
- */
-export const CsvHeaderOption = {
-  ABSENT: "ABSENT",
-  PRESENT: "PRESENT",
-  UNKNOWN: "UNKNOWN",
-} as const;
-
-/**
- * @public
- */
-export type CsvHeaderOption = (typeof CsvHeaderOption)[keyof typeof CsvHeaderOption];
-
-/**
- * @public
- * @enum
- */
-export const CsvSerdeOption = {
-  LazySimpleSerDe: "LazySimpleSerDe",
-  None: "None",
-  OpenCSVSerDe: "OpenCSVSerDe",
-} as const;
-
-/**
- * @public
- */
-export type CsvSerdeOption = (typeof CsvSerdeOption)[keyof typeof CsvSerdeOption];
-
-/**
- * <p>Specifies a custom CSV classifier for <code>CreateClassifier</code> to create.</p>
- * @public
- */
-export interface CreateCsvClassifierRequest {
-  /**
-   * <p>The name of the classifier.</p>
-   * @public
-   */
-  Name: string | undefined;
-
-  /**
-   * <p>A custom symbol to denote what separates each column entry in the row.</p>
-   * @public
-   */
-  Delimiter?: string;
-
-  /**
-   * <p>A custom symbol to denote what combines content into a single column value. Must be different from the column delimiter.</p>
-   * @public
-   */
-  QuoteSymbol?: string;
-
-  /**
-   * <p>Indicates whether the CSV file contains a header.</p>
-   * @public
-   */
-  ContainsHeader?: CsvHeaderOption;
-
-  /**
-   * <p>A list of strings representing column names.</p>
-   * @public
-   */
-  Header?: string[];
-
-  /**
-   * <p>Specifies not to trim values before identifying the type of column values. The default value is true.</p>
-   * @public
-   */
-  DisableValueTrimming?: boolean;
-
-  /**
-   * <p>Enables the processing of files that contain only one column.</p>
-   * @public
-   */
-  AllowSingleColumn?: boolean;
-
-  /**
-   * <p>Enables the configuration of custom datatypes.</p>
-   * @public
-   */
-  CustomDatatypeConfigured?: boolean;
-
-  /**
-   * <p>Creates a list of supported custom datatypes.</p>
-   * @public
-   */
-  CustomDatatypes?: string[];
-
-  /**
-   * <p>Sets the SerDe for processing CSV in the classifier, which will be applied in the Data Catalog. Valid values are <code>OpenCSVSerDe</code>, <code>LazySimpleSerDe</code>, and <code>None</code>. You can specify the <code>None</code> value when you want the crawler to do the detection.</p>
-   * @public
-   */
-  Serde?: CsvSerdeOption;
-}
-
-/**
- * <p>Specifies a <code>grok</code> classifier for <code>CreateClassifier</code>
- *       to create.</p>
- * @public
- */
-export interface CreateGrokClassifierRequest {
-  /**
-   * <p>An identifier of the data format that the classifier matches,
-   *       such as Twitter, JSON, Omniture logs, Amazon CloudWatch Logs, and so on.</p>
-   * @public
-   */
-  Classification: string | undefined;
-
-  /**
-   * <p>The name of the new classifier.</p>
-   * @public
-   */
-  Name: string | undefined;
-
-  /**
-   * <p>The grok pattern used by this classifier.</p>
-   * @public
-   */
-  GrokPattern: string | undefined;
-
-  /**
-   * <p>Optional custom grok patterns used by this classifier.</p>
-   * @public
-   */
-  CustomPatterns?: string;
-}
-
-/**
- * <p>Specifies a JSON classifier for <code>CreateClassifier</code> to create.</p>
- * @public
- */
-export interface CreateJsonClassifierRequest {
-  /**
-   * <p>The name of the classifier.</p>
-   * @public
-   */
-  Name: string | undefined;
-
-  /**
-   * <p>A <code>JsonPath</code> string defining the JSON data for the classifier to classify.
-   *       Glue supports a subset of JsonPath, as described in <a href="https://docs.aws.amazon.com/glue/latest/dg/custom-classifier.html#custom-classifier-json">Writing JsonPath Custom Classifiers</a>.</p>
-   * @public
-   */
-  JsonPath: string | undefined;
-}
+export const BatchGetDataQualityResultResponseFilterSensitiveLog = (obj: BatchGetDataQualityResultResponse): any => ({
+  ...obj,
+});

@@ -82,6 +82,33 @@ export interface UpdateSubscriptionRequestCommandOutput extends UpdateSubscripti
  * //               shortDescription: "STRING_VALUE",
  * //             },
  * //           ],
+ * //           assetScope: { // AssetScope
+ * //             assetId: "STRING_VALUE", // required
+ * //             filterIds: [ // FilterIds // required
+ * //               "STRING_VALUE",
+ * //             ],
+ * //             status: "STRING_VALUE", // required
+ * //             errorMessage: "STRING_VALUE",
+ * //           },
+ * //         },
+ * //         productListing: { // SubscribedProductListing
+ * //           entityId: "STRING_VALUE",
+ * //           entityRevision: "STRING_VALUE",
+ * //           glossaryTerms: [
+ * //             {
+ * //               name: "STRING_VALUE",
+ * //               shortDescription: "STRING_VALUE",
+ * //             },
+ * //           ],
+ * //           name: "STRING_VALUE",
+ * //           description: "STRING_VALUE",
+ * //           assetListings: [ // AssetInDataProductListingItems
+ * //             { // AssetInDataProductListingItem
+ * //               entityId: "STRING_VALUE",
+ * //               entityRevision: "STRING_VALUE",
+ * //               entityType: "STRING_VALUE",
+ * //             },
+ * //           ],
  * //         },
  * //       },
  * //       ownerProjectId: "STRING_VALUE", // required
@@ -134,9 +161,7 @@ export class UpdateSubscriptionRequestCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: DataZoneClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -148,4 +173,16 @@ export class UpdateSubscriptionRequestCommand extends $Command
   .f(UpdateSubscriptionRequestInputFilterSensitiveLog, UpdateSubscriptionRequestOutputFilterSensitiveLog)
   .ser(se_UpdateSubscriptionRequestCommand)
   .de(de_UpdateSubscriptionRequestCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: UpdateSubscriptionRequestInput;
+      output: UpdateSubscriptionRequestOutput;
+    };
+    sdk: {
+      input: UpdateSubscriptionRequestCommandInput;
+      output: UpdateSubscriptionRequestCommandOutput;
+    };
+  };
+}

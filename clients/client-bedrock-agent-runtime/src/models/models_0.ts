@@ -142,6 +142,21 @@ export interface ActionGroupInvocationOutput {
 }
 
 /**
+ * @public
+ * @enum
+ */
+export const ActionInvocationType = {
+  RESULT: "RESULT",
+  USER_CONFIRMATION: "USER_CONFIRMATION",
+  USER_CONFIRMATION_AND_RESULT: "USER_CONFIRMATION_AND_RESULT",
+} as const;
+
+/**
+ * @public
+ */
+export type ActionInvocationType = (typeof ActionInvocationType)[keyof typeof ActionInvocationType];
+
+/**
  * <p>There was an issue with a dependency due to a server issue. Retry your request.</p>
  * @public
  */
@@ -254,7 +269,7 @@ export type FlowInputContent = FlowInputContent.DocumentMember | FlowInputConten
  */
 export namespace FlowInputContent {
   /**
-   * <p>The input for the flow input node.</p>
+   * <p>The input to send to the prompt flow input node.</p>
    * @public
    */
   export interface DocumentMember {
@@ -282,7 +297,7 @@ export namespace FlowInputContent {
 }
 
 /**
- * <p>Contains information about an input into the flow and what to do with it.</p>
+ * <p>Contains information about an input into the prompt flow and where to send it.</p>
  *          <p>This data type is used in the following API operations:</p>
  *          <ul>
  *             <li>
@@ -295,19 +310,19 @@ export namespace FlowInputContent {
  */
 export interface FlowInput {
   /**
-   * <p>A name for the input of the flow input node.</p>
+   * <p>The name of the flow input node that begins the prompt flow.</p>
    * @public
    */
   nodeName: string | undefined;
 
   /**
-   * <p>A name for the output of the flow input node.</p>
+   * <p>The name of the output from the flow input node that begins the prompt flow.</p>
    * @public
    */
   nodeOutputName: string | undefined;
 
   /**
-   * <p>Contains information about an input into the flow.</p>
+   * <p>Contains information about an input into the prompt flow.</p>
    * @public
    */
   content: FlowInputContent | undefined;
@@ -370,7 +385,7 @@ export interface FlowCompletionEvent {
 }
 
 /**
- * <p>Contains information about the output node.</p>
+ * <p>Contains information about the content in an output from prompt flow invocation.</p>
  *          <p>This data type is used in the following API operations:</p>
  *          <ul>
  *             <li>
@@ -388,7 +403,7 @@ export type FlowOutputContent = FlowOutputContent.DocumentMember | FlowOutputCon
  */
 export namespace FlowOutputContent {
   /**
-   * <p>A name for the output of the flow.</p>
+   * <p>The content in the output.</p>
    * @public
    */
   export interface DocumentMember {
@@ -435,7 +450,7 @@ export const NodeType = {
 export type NodeType = (typeof NodeType)[keyof typeof NodeType];
 
 /**
- * <p>Contains information about an output from flow invoction.</p>
+ * <p>Contains information about an output from prompt flow invoction.</p>
  *          <p>This data type is used in the following API operations:</p>
  *          <ul>
  *             <li>
@@ -448,19 +463,19 @@ export type NodeType = (typeof NodeType)[keyof typeof NodeType];
  */
 export interface FlowOutputEvent {
   /**
-   * <p>The name of the node to which input was provided.</p>
+   * <p>The name of the flow output node that the output is from.</p>
    * @public
    */
   nodeName: string | undefined;
 
   /**
-   * <p>The type of node to which input was provided.</p>
+   * <p>The type of the node that the output is from.</p>
    * @public
    */
   nodeType: NodeType | undefined;
 
   /**
-   * <p>The output of the node.</p>
+   * <p>The content in the output.</p>
    * @public
    */
   content: FlowOutputContent | undefined;
@@ -861,7 +876,7 @@ export interface ByteContentFile {
   mediaType: string | undefined;
 
   /**
-   * <p>The byte value of the file to attach, encoded as Base-64 string. The maximum size of all files that is attached is 10MB. You can attach a maximum of 5 files. </p>
+   * <p>The raw bytes of the file to attach. The maximum size of all files that is attached is 10MB. You can attach a maximum of 5 files. </p>
    * @public
    */
   data: Uint8Array | undefined;
@@ -996,6 +1011,20 @@ export const SearchType = {
 export type SearchType = (typeof SearchType)[keyof typeof SearchType];
 
 /**
+ * @public
+ * @enum
+ */
+export const ConfirmationState = {
+  CONFIRM: "CONFIRM",
+  DENY: "DENY",
+} as const;
+
+/**
+ * @public
+ */
+export type ConfirmationState = (typeof ConfirmationState)[keyof typeof ConfirmationState];
+
+/**
  * <p>Contains the body of the API response.</p>
  *          <p>This data type is used in the following API operations:</p>
  *          <ul>
@@ -1059,6 +1088,12 @@ export interface ApiResult {
   apiPath?: string;
 
   /**
+   * <p>Controls the API operations or functions to invoke based on the user confirmation.</p>
+   * @public
+   */
+  confirmationState?: ConfirmationState;
+
+  /**
    * <p>The response body from the API operation. The key of the object is the content type (currently, only <code>TEXT</code> is supported). The response may be returned directly or from the Lambda function.</p>
    * @public
    */
@@ -1094,6 +1129,12 @@ export interface FunctionResult {
    * @public
    */
   actionGroup: string | undefined;
+
+  /**
+   * <p>Contains the user confirmation information about the function that was called.</p>
+   * @public
+   */
+  confirmationState?: ConfirmationState;
 
   /**
    * <p>The name of the function that was called.</p>
@@ -1670,6 +1711,12 @@ export interface ApiInvocationInput {
    * @public
    */
   requestBody?: ApiRequestBody;
+
+  /**
+   * <p>Contains information about the API operation to invoke.</p>
+   * @public
+   */
+  actionInvocationType?: ActionInvocationType;
 }
 
 /**
@@ -1732,6 +1779,12 @@ export interface FunctionInvocationInput {
    * @public
    */
   function?: string;
+
+  /**
+   * <p>Contains information about the function to invoke,</p>
+   * @public
+   */
+  actionInvocationType?: ActionInvocationType;
 }
 
 /**
@@ -2378,7 +2431,7 @@ export interface InferenceConfiguration {
   temperature?: number;
 
   /**
-   * <p>While generating a response, the model determines the probability of the following token at each point of generation. The value that you set for <code>Top P</code> determines the number of most-likely candidates from which the model chooses the next token in the sequence. For example, if you set <code>topP</code> to 80, the model only selects the next token from the top 80% of the probability distribution of next tokens.</p>
+   * <p>While generating a response, the model determines the probability of the following token at each point of generation. The value that you set for <code>Top P</code> determines the number of most-likely candidates from which the model chooses the next token in the sequence. For example, if you set <code>topP</code> to 0.8, the model only selects the next token from the top 80% of the probability distribution of next tokens.</p>
    * @public
    */
   topP?: number;
@@ -2489,6 +2542,72 @@ export interface ModelInvocationInput {
    * @public
    */
   parserMode?: CreationMode;
+}
+
+/**
+ * <p>Contains information of the usage of the foundation model.</p>
+ * @public
+ */
+export interface Usage {
+  /**
+   * <p>Contains information about the input tokens from the foundation model usage.</p>
+   * @public
+   */
+  inputTokens?: number;
+
+  /**
+   * <p>Contains information about the output tokens from the foundation model usage.</p>
+   * @public
+   */
+  outputTokens?: number;
+}
+
+/**
+ * <p>Provides details of the foundation model.</p>
+ * @public
+ */
+export interface Metadata {
+  /**
+   * <p>Contains details of the foundation model usage.</p>
+   * @public
+   */
+  usage?: Usage;
+}
+
+/**
+ * <p>Contains the raw output from the foundation model.</p>
+ * @public
+ */
+export interface RawResponse {
+  /**
+   * <p>The foundation model's raw output content.</p>
+   * @public
+   */
+  content?: string;
+}
+
+/**
+ * <p>The foundation model output from the orchestration step.</p>
+ * @public
+ */
+export interface OrchestrationModelInvocationOutput {
+  /**
+   * <p>The unique identifier of the trace.</p>
+   * @public
+   */
+  traceId?: string;
+
+  /**
+   * <p>Contains details of the raw response from the foundation model output.</p>
+   * @public
+   */
+  rawResponse?: RawResponse;
+
+  /**
+   * <p>Contains information about the foundation model output.</p>
+   * @public
+   */
+  metadata?: Metadata;
 }
 
 /**
@@ -2690,6 +2809,7 @@ export interface Rationale {
 export type OrchestrationTrace =
   | OrchestrationTrace.InvocationInputMember
   | OrchestrationTrace.ModelInvocationInputMember
+  | OrchestrationTrace.ModelInvocationOutputMember
   | OrchestrationTrace.ObservationMember
   | OrchestrationTrace.RationaleMember
   | OrchestrationTrace.$UnknownMember;
@@ -2707,6 +2827,7 @@ export namespace OrchestrationTrace {
     invocationInput?: never;
     observation?: never;
     modelInvocationInput?: never;
+    modelInvocationOutput?: never;
     $unknown?: never;
   }
 
@@ -2719,6 +2840,7 @@ export namespace OrchestrationTrace {
     invocationInput: InvocationInput;
     observation?: never;
     modelInvocationInput?: never;
+    modelInvocationOutput?: never;
     $unknown?: never;
   }
 
@@ -2731,6 +2853,7 @@ export namespace OrchestrationTrace {
     invocationInput?: never;
     observation: Observation;
     modelInvocationInput?: never;
+    modelInvocationOutput?: never;
     $unknown?: never;
   }
 
@@ -2754,6 +2877,20 @@ export namespace OrchestrationTrace {
     invocationInput?: never;
     observation?: never;
     modelInvocationInput: ModelInvocationInput;
+    modelInvocationOutput?: never;
+    $unknown?: never;
+  }
+
+  /**
+   * <p>Contains information pertaining to the output from the foundation model that is being invoked.</p>
+   * @public
+   */
+  export interface ModelInvocationOutputMember {
+    rationale?: never;
+    invocationInput?: never;
+    observation?: never;
+    modelInvocationInput?: never;
+    modelInvocationOutput: OrchestrationModelInvocationOutput;
     $unknown?: never;
   }
 
@@ -2765,6 +2902,7 @@ export namespace OrchestrationTrace {
     invocationInput?: never;
     observation?: never;
     modelInvocationInput?: never;
+    modelInvocationOutput?: never;
     $unknown: [string, any];
   }
 
@@ -2773,6 +2911,7 @@ export namespace OrchestrationTrace {
     invocationInput: (value: InvocationInput) => T;
     observation: (value: Observation) => T;
     modelInvocationInput: (value: ModelInvocationInput) => T;
+    modelInvocationOutput: (value: OrchestrationModelInvocationOutput) => T;
     _: (name: string, value: any) => T;
   }
 
@@ -2781,6 +2920,7 @@ export namespace OrchestrationTrace {
     if (value.invocationInput !== undefined) return visitor.invocationInput(value.invocationInput);
     if (value.observation !== undefined) return visitor.observation(value.observation);
     if (value.modelInvocationInput !== undefined) return visitor.modelInvocationInput(value.modelInvocationInput);
+    if (value.modelInvocationOutput !== undefined) return visitor.modelInvocationOutput(value.modelInvocationOutput);
     return visitor._(value.$unknown[0], value.$unknown[1]);
   };
 }
@@ -2813,6 +2953,18 @@ export interface PostProcessingModelInvocationOutput {
    * @public
    */
   parsedResponse?: PostProcessingParsedResponse;
+
+  /**
+   * <p>Contains the raw output from the foundation model.</p>
+   * @public
+   */
+  rawResponse?: RawResponse;
+
+  /**
+   * <p>Provides details of the foundation model.</p>
+   * @public
+   */
+  metadata?: Metadata;
 }
 
 /**
@@ -2915,6 +3067,18 @@ export interface PreProcessingModelInvocationOutput {
    * @public
    */
   parsedResponse?: PreProcessingParsedResponse;
+
+  /**
+   * <p>Contains the raw output from the foundation model.</p>
+   * @public
+   */
+  rawResponse?: RawResponse;
+
+  /**
+   * <p>Provides details of the foundation model.</p>
+   * @public
+   */
+  metadata?: Metadata;
 }
 
 /**
@@ -3922,24 +4086,24 @@ export interface ExternalSource {
 }
 
 /**
- * <p>The configurations of the external source wrapper object in the retrieveAndGenerate function.</p>
+ * <p>The configurations of the external source wrapper object in the <code>retrieveAndGenerate</code> function.</p>
  * @public
  */
 export interface ExternalSourcesRetrieveAndGenerateConfiguration {
   /**
-   * <p>The modelArn used with the external source wrapper object in the retrieveAndGenerate function.</p>
+   * <p>The model Amazon Resource Name (ARN) for the external source wrapper object in the <code>retrieveAndGenerate</code> function.</p>
    * @public
    */
   modelArn: string | undefined;
 
   /**
-   * <p>The document used with the external source wrapper object in the retrieveAndGenerate function.</p>
+   * <p>The document for the external source wrapper object in the <code>retrieveAndGenerate</code> function.</p>
    * @public
    */
   sources: ExternalSource[] | undefined;
 
   /**
-   * <p>The prompt used with the external source wrapper object with the retrieveAndGenerate function.</p>
+   * <p>The prompt used with the external source wrapper object with the <code>retrieveAndGenerate</code> function.</p>
    * @public
    */
   generationConfiguration?: ExternalSourcesGenerationConfiguration;
@@ -4700,13 +4864,13 @@ export interface KnowledgeBaseConfiguration {
  */
 export interface KnowledgeBaseRetrieveAndGenerateConfiguration {
   /**
-   * <p>The unique identifier of the knowledge base that is queried and the foundation model used for generation.</p>
+   * <p>The unique identifier of the knowledge base that is queried.</p>
    * @public
    */
   knowledgeBaseId: string | undefined;
 
   /**
-   * <p>The ARN of the foundation model used to generate a response.</p>
+   * <p>The ARN of the foundation model or <a href="https://docs.aws.amazon.com/bedrock/latest/userguide/cross-region-inference.html">inference profile</a> used to generate a response.</p>
    * @public
    */
   modelArn: string | undefined;
@@ -4772,19 +4936,20 @@ export interface RetrieveRequest {
  */
 export interface RetrieveAndGenerateConfiguration {
   /**
-   * <p>The type of resource that is queried by the request.</p>
+   * <p>The type of resource that contains your data for retrieving information and generating responses.</p>
+   *          <p>If you choose ot use <code>EXTERNAL_SOURCES</code>, then currently only Claude 3 Sonnet models for knowledge bases are supported.</p>
    * @public
    */
   type: RetrieveAndGenerateType | undefined;
 
   /**
-   * <p>Contains details about the resource being queried.</p>
+   * <p>Contains details about the knowledge base for retrieving information and generating responses.</p>
    * @public
    */
   knowledgeBaseConfiguration?: KnowledgeBaseRetrieveAndGenerateConfiguration;
 
   /**
-   * <p>The configuration used with the external source wrapper object in the retrieveAndGenerate function.</p>
+   * <p>The configuration for the external source wrapper object in the <code>retrieveAndGenerate</code> function.</p>
    * @public
    */
   externalSourcesConfiguration?: ExternalSourcesRetrieveAndGenerateConfiguration;
@@ -5301,6 +5466,37 @@ export const ModelInvocationInputFilterSensitiveLog = (obj: ModelInvocationInput
 /**
  * @internal
  */
+export const UsageFilterSensitiveLog = (obj: Usage): any => ({
+  ...obj,
+});
+
+/**
+ * @internal
+ */
+export const MetadataFilterSensitiveLog = (obj: Metadata): any => ({
+  ...obj,
+  ...(obj.usage && { usage: SENSITIVE_STRING }),
+});
+
+/**
+ * @internal
+ */
+export const RawResponseFilterSensitiveLog = (obj: RawResponse): any => ({
+  ...obj,
+});
+
+/**
+ * @internal
+ */
+export const OrchestrationModelInvocationOutputFilterSensitiveLog = (obj: OrchestrationModelInvocationOutput): any => ({
+  ...obj,
+  ...(obj.rawResponse && { rawResponse: SENSITIVE_STRING }),
+  ...(obj.metadata && { metadata: SENSITIVE_STRING }),
+});
+
+/**
+ * @internal
+ */
 export const FinalResponseFilterSensitiveLog = (obj: FinalResponse): any => ({
   ...obj,
   ...(obj.text && { text: SENSITIVE_STRING }),
@@ -5355,6 +5551,7 @@ export const OrchestrationTraceFilterSensitiveLog = (obj: OrchestrationTrace): a
   if (obj.invocationInput !== undefined) return { invocationInput: SENSITIVE_STRING };
   if (obj.observation !== undefined) return { observation: SENSITIVE_STRING };
   if (obj.modelInvocationInput !== undefined) return { modelInvocationInput: SENSITIVE_STRING };
+  if (obj.modelInvocationOutput !== undefined) return { modelInvocationOutput: SENSITIVE_STRING };
   if (obj.$unknown !== undefined) return { [obj.$unknown[0]]: "UNKNOWN" };
 };
 
@@ -5374,6 +5571,8 @@ export const PostProcessingModelInvocationOutputFilterSensitiveLog = (
 ): any => ({
   ...obj,
   ...(obj.parsedResponse && { parsedResponse: SENSITIVE_STRING }),
+  ...(obj.rawResponse && { rawResponse: SENSITIVE_STRING }),
+  ...(obj.metadata && { metadata: SENSITIVE_STRING }),
 });
 
 /**
@@ -5399,6 +5598,8 @@ export const PreProcessingParsedResponseFilterSensitiveLog = (obj: PreProcessing
 export const PreProcessingModelInvocationOutputFilterSensitiveLog = (obj: PreProcessingModelInvocationOutput): any => ({
   ...obj,
   ...(obj.parsedResponse && { parsedResponse: SENSITIVE_STRING }),
+  ...(obj.rawResponse && { rawResponse: SENSITIVE_STRING }),
+  ...(obj.metadata && { metadata: SENSITIVE_STRING }),
 });
 
 /**

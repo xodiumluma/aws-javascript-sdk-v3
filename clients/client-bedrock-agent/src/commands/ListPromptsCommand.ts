@@ -28,7 +28,7 @@ export interface ListPromptsCommandInput extends ListPromptsRequest {}
 export interface ListPromptsCommandOutput extends ListPromptsResponse, __MetadataBearer {}
 
 /**
- * <p>Returns a list of prompts from the Prompt management tool and information about each prompt. For more information, see <a href="https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-management-manage.html#prompt-management-view.html">View information about prompts using Prompt management</a> in the Amazon Bedrock User Guide.</p>
+ * <p>Returns either information about the working draft (<code>DRAFT</code> version) of each prompt in an account, or information about of all versions of a prompt, depending on whether you include the <code>promptIdentifier</code> field or not. For more information, see <a href="https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-management-manage.html#prompt-management-view.html">View information about prompts using Prompt management</a> in the Amazon Bedrock User Guide.</p>
  * @example
  * Use a bare-bones client and the command you need to make an API call.
  * ```javascript
@@ -93,9 +93,7 @@ export class ListPromptsCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: BedrockAgentClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -107,4 +105,16 @@ export class ListPromptsCommand extends $Command
   .f(void 0, void 0)
   .ser(se_ListPromptsCommand)
   .de(de_ListPromptsCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: ListPromptsRequest;
+      output: ListPromptsResponse;
+    };
+    sdk: {
+      input: ListPromptsCommandInput;
+      output: ListPromptsCommandOutput;
+    };
+  };
+}

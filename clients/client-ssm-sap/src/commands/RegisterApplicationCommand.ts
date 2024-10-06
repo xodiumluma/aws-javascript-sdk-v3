@@ -81,6 +81,9 @@ export interface RegisterApplicationCommandOutput extends RegisterApplicationOut
  * //     ],
  * //     LastUpdated: new Date("TIMESTAMP"),
  * //     StatusMessage: "STRING_VALUE",
+ * //     AssociatedApplicationArns: [ // ApplicationArnList
+ * //       "STRING_VALUE",
+ * //     ],
  * //   },
  * //   OperationId: "STRING_VALUE",
  * // };
@@ -118,9 +121,7 @@ export class RegisterApplicationCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: SsmSapClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -132,4 +133,16 @@ export class RegisterApplicationCommand extends $Command
   .f(RegisterApplicationInputFilterSensitiveLog, void 0)
   .ser(se_RegisterApplicationCommand)
   .de(de_RegisterApplicationCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: RegisterApplicationInput;
+      output: RegisterApplicationOutput;
+    };
+    sdk: {
+      input: RegisterApplicationCommandInput;
+      output: RegisterApplicationCommandOutput;
+    };
+  };
+}

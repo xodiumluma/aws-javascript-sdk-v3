@@ -102,6 +102,129 @@ export interface GetPipelineStateCommandOutput extends GetPipelineStateOutput, _
  * //         status: "Cancelled" || "InProgress" || "Failed" || "Stopped" || "Stopping" || "Succeeded", // required
  * //         type: "STANDARD" || "ROLLBACK",
  * //       },
+ * //       beforeEntryConditionState: { // StageConditionState
+ * //         latestExecution: { // StageConditionsExecution
+ * //           status: "InProgress" || "Failed" || "Errored" || "Succeeded" || "Cancelled" || "Abandoned" || "Overridden",
+ * //           summary: "STRING_VALUE",
+ * //         },
+ * //         conditionStates: [ // ConditionStateList
+ * //           { // ConditionState
+ * //             latestExecution: { // ConditionExecution
+ * //               status: "InProgress" || "Failed" || "Errored" || "Succeeded" || "Cancelled" || "Abandoned" || "Overridden",
+ * //               summary: "STRING_VALUE",
+ * //               lastStatusChange: new Date("TIMESTAMP"),
+ * //             },
+ * //             ruleStates: [ // RuleStateList
+ * //               { // RuleState
+ * //                 ruleName: "STRING_VALUE",
+ * //                 currentRevision: { // RuleRevision
+ * //                   revisionId: "STRING_VALUE", // required
+ * //                   revisionChangeId: "STRING_VALUE", // required
+ * //                   created: new Date("TIMESTAMP"), // required
+ * //                 },
+ * //                 latestExecution: { // RuleExecution
+ * //                   ruleExecutionId: "STRING_VALUE",
+ * //                   status: "InProgress" || "Abandoned" || "Succeeded" || "Failed",
+ * //                   summary: "STRING_VALUE",
+ * //                   lastStatusChange: new Date("TIMESTAMP"),
+ * //                   token: "STRING_VALUE",
+ * //                   lastUpdatedBy: "STRING_VALUE",
+ * //                   externalExecutionId: "STRING_VALUE",
+ * //                   externalExecutionUrl: "STRING_VALUE",
+ * //                   errorDetails: {
+ * //                     code: "STRING_VALUE",
+ * //                     message: "STRING_VALUE",
+ * //                   },
+ * //                 },
+ * //                 entityUrl: "STRING_VALUE",
+ * //                 revisionUrl: "STRING_VALUE",
+ * //               },
+ * //             ],
+ * //           },
+ * //         ],
+ * //       },
+ * //       onSuccessConditionState: {
+ * //         latestExecution: {
+ * //           status: "InProgress" || "Failed" || "Errored" || "Succeeded" || "Cancelled" || "Abandoned" || "Overridden",
+ * //           summary: "STRING_VALUE",
+ * //         },
+ * //         conditionStates: [
+ * //           {
+ * //             latestExecution: {
+ * //               status: "InProgress" || "Failed" || "Errored" || "Succeeded" || "Cancelled" || "Abandoned" || "Overridden",
+ * //               summary: "STRING_VALUE",
+ * //               lastStatusChange: new Date("TIMESTAMP"),
+ * //             },
+ * //             ruleStates: [
+ * //               {
+ * //                 ruleName: "STRING_VALUE",
+ * //                 currentRevision: {
+ * //                   revisionId: "STRING_VALUE", // required
+ * //                   revisionChangeId: "STRING_VALUE", // required
+ * //                   created: new Date("TIMESTAMP"), // required
+ * //                 },
+ * //                 latestExecution: {
+ * //                   ruleExecutionId: "STRING_VALUE",
+ * //                   status: "InProgress" || "Abandoned" || "Succeeded" || "Failed",
+ * //                   summary: "STRING_VALUE",
+ * //                   lastStatusChange: new Date("TIMESTAMP"),
+ * //                   token: "STRING_VALUE",
+ * //                   lastUpdatedBy: "STRING_VALUE",
+ * //                   externalExecutionId: "STRING_VALUE",
+ * //                   externalExecutionUrl: "STRING_VALUE",
+ * //                   errorDetails: {
+ * //                     code: "STRING_VALUE",
+ * //                     message: "STRING_VALUE",
+ * //                   },
+ * //                 },
+ * //                 entityUrl: "STRING_VALUE",
+ * //                 revisionUrl: "STRING_VALUE",
+ * //               },
+ * //             ],
+ * //           },
+ * //         ],
+ * //       },
+ * //       onFailureConditionState: {
+ * //         latestExecution: {
+ * //           status: "InProgress" || "Failed" || "Errored" || "Succeeded" || "Cancelled" || "Abandoned" || "Overridden",
+ * //           summary: "STRING_VALUE",
+ * //         },
+ * //         conditionStates: [
+ * //           {
+ * //             latestExecution: {
+ * //               status: "InProgress" || "Failed" || "Errored" || "Succeeded" || "Cancelled" || "Abandoned" || "Overridden",
+ * //               summary: "STRING_VALUE",
+ * //               lastStatusChange: new Date("TIMESTAMP"),
+ * //             },
+ * //             ruleStates: [
+ * //               {
+ * //                 ruleName: "STRING_VALUE",
+ * //                 currentRevision: {
+ * //                   revisionId: "STRING_VALUE", // required
+ * //                   revisionChangeId: "STRING_VALUE", // required
+ * //                   created: new Date("TIMESTAMP"), // required
+ * //                 },
+ * //                 latestExecution: {
+ * //                   ruleExecutionId: "STRING_VALUE",
+ * //                   status: "InProgress" || "Abandoned" || "Succeeded" || "Failed",
+ * //                   summary: "STRING_VALUE",
+ * //                   lastStatusChange: new Date("TIMESTAMP"),
+ * //                   token: "STRING_VALUE",
+ * //                   lastUpdatedBy: "STRING_VALUE",
+ * //                   externalExecutionId: "STRING_VALUE",
+ * //                   externalExecutionUrl: "STRING_VALUE",
+ * //                   errorDetails: {
+ * //                     code: "STRING_VALUE",
+ * //                     message: "STRING_VALUE",
+ * //                   },
+ * //                 },
+ * //                 entityUrl: "STRING_VALUE",
+ * //                 revisionUrl: "STRING_VALUE",
+ * //               },
+ * //             ],
+ * //           },
+ * //         ],
+ * //       },
  * //     },
  * //   ],
  * //   created: new Date("TIMESTAMP"),
@@ -135,9 +258,7 @@ export class GetPipelineStateCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: CodePipelineClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -149,4 +270,16 @@ export class GetPipelineStateCommand extends $Command
   .f(void 0, void 0)
   .ser(se_GetPipelineStateCommand)
   .de(de_GetPipelineStateCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: GetPipelineStateInput;
+      output: GetPipelineStateOutput;
+    };
+    sdk: {
+      input: GetPipelineStateCommandInput;
+      output: GetPipelineStateCommandOutput;
+    };
+  };
+}

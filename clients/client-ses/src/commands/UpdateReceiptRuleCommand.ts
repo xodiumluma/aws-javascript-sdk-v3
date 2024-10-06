@@ -54,6 +54,7 @@ export interface UpdateReceiptRuleCommandOutput extends UpdateReceiptRuleRespons
  *           BucketName: "STRING_VALUE", // required
  *           ObjectKeyPrefix: "STRING_VALUE",
  *           KmsKeyArn: "STRING_VALUE",
+ *           IamRoleArn: "STRING_VALUE",
  *         },
  *         BounceAction: { // BounceAction
  *           TopicArn: "STRING_VALUE",
@@ -167,9 +168,7 @@ export class UpdateReceiptRuleCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: SESClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -181,4 +180,16 @@ export class UpdateReceiptRuleCommand extends $Command
   .f(void 0, void 0)
   .ser(se_UpdateReceiptRuleCommand)
   .de(de_UpdateReceiptRuleCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: UpdateReceiptRuleRequest;
+      output: {};
+    };
+    sdk: {
+      input: UpdateReceiptRuleCommandInput;
+      output: UpdateReceiptRuleCommandOutput;
+    };
+  };
+}

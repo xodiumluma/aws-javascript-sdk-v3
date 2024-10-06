@@ -1,4 +1,5 @@
 // smithy-typescript generated code
+import { getThrow200ExceptionsPlugin } from "@aws-sdk/middleware-sdk-s3";
 import { getSsecPlugin } from "@aws-sdk/middleware-ssec";
 import { getEndpointPlugin } from "@smithy/middleware-endpoint";
 import { getSerdePlugin } from "@smithy/middleware-serde";
@@ -77,17 +78,20 @@ export interface CreateMultipartUploadCommandOutput extends CreateMultipartUploa
  *                <ul>
  *                   <li>
  *                      <p>
- *                         <b>General purpose bucket permissions</b> - For information about the permissions required to use the multipart upload API, see
- *                         <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/mpuAndPermissions.html">Multipart
- *                            upload and permissions</a> in the <i>Amazon S3 User Guide</i>. </p>
- *                      <p>To perform a multipart upload with encryption by using an Amazon Web Services KMS key, the requester
- *                         must have permission to the <code>kms:Decrypt</code> and <code>kms:GenerateDataKey*</code>
- *                         actions on the key. These permissions are required because Amazon S3 must decrypt and read data
- *                         from the encrypted file parts before it completes the multipart upload. For more
- *                         information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/mpuoverview.html#mpuAndPermissions">Multipart upload API
- *                            and permissions</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/UsingKMSEncryption.html">Protecting data using
- *                               server-side encryption with Amazon Web Services KMS</a> in the
- *                         <i>Amazon S3 User Guide</i>.</p>
+ *                         <b>General purpose bucket permissions</b> - To
+ *                         perform a multipart upload with encryption using an Key Management Service (KMS)
+ *                         KMS key, the requester must have permission to the
+ *                            <code>kms:Decrypt</code> and <code>kms:GenerateDataKey</code> actions on
+ *                         the key. The requester must also have permissions for the
+ *                            <code>kms:GenerateDataKey</code> action for the
+ *                            <code>CreateMultipartUpload</code> API. Then, the requester needs
+ *                         permissions for the <code>kms:Decrypt</code> action on the
+ *                            <code>UploadPart</code> and <code>UploadPartCopy</code> APIs. These
+ *                         permissions are required because Amazon S3 must decrypt and read data from the
+ *                         encrypted file parts before it completes the multipart upload. For more
+ *                         information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/mpuoverview.html#mpuAndPermissions">Multipart upload API and permissions</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/UsingKMSEncryption.html">Protecting data
+ *                            using server-side encryption with Amazon Web Services KMS</a> in the
+ *                            <i>Amazon S3 User Guide</i>.</p>
  *                   </li>
  *                   <li>
  *                      <p>
@@ -212,7 +216,27 @@ export interface CreateMultipartUploadCommandOutput extends CreateMultipartUploa
  *                   </li>
  *                   <li>
  *                      <p>
- *                         <b>Directory buckets</b> -For directory buckets, only server-side encryption with Amazon S3 managed keys (SSE-S3) (<code>AES256</code>) is supported.</p>
+ *                         <b>Directory buckets</b> - For directory buckets, there are only two supported options for server-side encryption: server-side encryption with Amazon S3 managed keys (SSE-S3) (<code>AES256</code>) and server-side encryption with KMS keys (SSE-KMS) (<code>aws:kms</code>). We recommend that the bucket's default encryption uses the desired encryption configuration and you don't override the bucket default encryption in your
+ *             <code>CreateSession</code> requests or <code>PUT</code> object requests. Then, new objects
+ *  are automatically encrypted with the desired encryption settings. For more
+ *          information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-express-serv-side-encryption.html">Protecting data with server-side encryption</a> in the <i>Amazon S3 User Guide</i>. For more information about the encryption overriding behaviors in directory buckets, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-express-specifying-kms-encryption.html">Specifying server-side encryption with KMS for new object uploads</a>.</p>
+ *                      <p>In the Zonal endpoint API calls (except <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_CopyObject.html">CopyObject</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_UploadPartCopy.html">UploadPartCopy</a>) using the REST API, the encryption request headers must match the encryption settings that are specified in the <code>CreateSession</code> request.
+ *                             You can't override the values of the encryption settings (<code>x-amz-server-side-encryption</code>, <code>x-amz-server-side-encryption-aws-kms-key-id</code>, <code>x-amz-server-side-encryption-context</code>, and <code>x-amz-server-side-encryption-bucket-key-enabled</code>) that are specified in the <code>CreateSession</code> request.
+ *                             You don't need to explicitly specify these encryption settings values in Zonal endpoint API calls, and
+ *                             Amazon S3 will use the encryption settings values from the <code>CreateSession</code> request to protect new objects in the directory bucket.
+ *                            </p>
+ *                      <note>
+ *                         <p>When you use the CLI or the Amazon Web Services SDKs, for <code>CreateSession</code>, the session token refreshes automatically to avoid service interruptions when a session expires. The CLI or the Amazon Web Services SDKs use the bucket's default encryption configuration for the
+ *                             <code>CreateSession</code> request. It's not supported to override the encryption settings values in the <code>CreateSession</code> request.
+ *                             So in the Zonal endpoint API calls (except <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_CopyObject.html">CopyObject</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_UploadPartCopy.html">UploadPartCopy</a>),
+ *           the encryption request headers must match the default encryption configuration of the directory bucket.
+ *
+ * </p>
+ *                      </note>
+ *                      <note>
+ *                         <p>For directory buckets, when you perform a <code>CreateMultipartUpload</code> operation and an <code>UploadPartCopy</code> operation,
+ *                         the request headers you provide in the <code>CreateMultipartUpload</code> request must match the default encryption configuration of the destination bucket. </p>
+ *                      </note>
  *                   </li>
  *                </ul>
  *             </dd>
@@ -358,6 +382,7 @@ export class CreateMultipartUploadCommand extends $Command
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
       getEndpointPlugin(config, Command.getEndpointParameterInstructions()),
+      getThrow200ExceptionsPlugin(config),
       getSsecPlugin(config),
     ];
   })
@@ -366,4 +391,16 @@ export class CreateMultipartUploadCommand extends $Command
   .f(CreateMultipartUploadRequestFilterSensitiveLog, CreateMultipartUploadOutputFilterSensitiveLog)
   .ser(se_CreateMultipartUploadCommand)
   .de(de_CreateMultipartUploadCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: CreateMultipartUploadRequest;
+      output: CreateMultipartUploadOutput;
+    };
+    sdk: {
+      input: CreateMultipartUploadCommandInput;
+      output: CreateMultipartUploadCommandOutput;
+    };
+  };
+}

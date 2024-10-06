@@ -51,6 +51,15 @@ export interface UpdateWebExperienceCommandOutput extends UpdateWebExperienceRes
  *   subtitle: "STRING_VALUE",
  *   welcomeMessage: "STRING_VALUE",
  *   samplePromptsControlMode: "ENABLED" || "DISABLED",
+ *   identityProviderConfiguration: { // IdentityProviderConfiguration Union: only one key present
+ *     samlConfiguration: { // SamlProviderConfiguration
+ *       authenticationUrl: "STRING_VALUE", // required
+ *     },
+ *     openIDConnectConfiguration: { // OpenIDConnectProviderConfiguration
+ *       secretsArn: "STRING_VALUE", // required
+ *       secretsRole: "STRING_VALUE", // required
+ *     },
+ *   },
  * };
  * const command = new UpdateWebExperienceCommand(input);
  * const response = await client.send(command);
@@ -101,9 +110,7 @@ export class UpdateWebExperienceCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: QBusinessClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -115,4 +122,16 @@ export class UpdateWebExperienceCommand extends $Command
   .f(void 0, void 0)
   .ser(se_UpdateWebExperienceCommand)
   .de(de_UpdateWebExperienceCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: UpdateWebExperienceRequest;
+      output: {};
+    };
+    sdk: {
+      input: UpdateWebExperienceCommandInput;
+      output: UpdateWebExperienceCommandOutput;
+    };
+  };
+}

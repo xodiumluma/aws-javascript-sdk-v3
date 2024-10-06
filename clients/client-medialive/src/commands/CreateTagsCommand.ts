@@ -6,7 +6,7 @@ import { MetadataBearer as __MetadataBearer } from "@smithy/types";
 
 import { commonParams } from "../endpoint/EndpointParameters";
 import { MediaLiveClientResolvedConfig, ServiceInputTypes, ServiceOutputTypes } from "../MediaLiveClient";
-import { CreateTagsRequest } from "../models/models_1";
+import { CreateTagsRequest } from "../models/models_2";
 import { de_CreateTagsCommand, se_CreateTagsCommand } from "../protocols/Aws_restJson1";
 
 /**
@@ -78,9 +78,7 @@ export class CreateTagsCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: MediaLiveClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -92,4 +90,16 @@ export class CreateTagsCommand extends $Command
   .f(void 0, void 0)
   .ser(se_CreateTagsCommand)
   .de(de_CreateTagsCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: CreateTagsRequest;
+      output: {};
+    };
+    sdk: {
+      input: CreateTagsCommandInput;
+      output: CreateTagsCommandOutput;
+    };
+  };
+}

@@ -86,7 +86,7 @@ export class GetAccessPointPolicyCommand extends $Command
   .ep({
     ...commonParams,
     RequiresAccountId: { type: "staticContextParams", value: true },
-    AccessPointName: { type: "contextParams", name: "AccessPointName" },
+    AccessPointName: { type: "contextParams", name: "Name" },
     AccountId: { type: "contextParams", name: "AccountId" },
   })
   .m(function (this: any, Command: any, cs: any, config: S3ControlClientResolvedConfig, o: any) {
@@ -101,4 +101,16 @@ export class GetAccessPointPolicyCommand extends $Command
   .f(void 0, void 0)
   .ser(se_GetAccessPointPolicyCommand)
   .de(de_GetAccessPointPolicyCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: GetAccessPointPolicyRequest;
+      output: GetAccessPointPolicyResult;
+    };
+    sdk: {
+      input: GetAccessPointPolicyCommandInput;
+      output: GetAccessPointPolicyCommandOutput;
+    };
+  };
+}

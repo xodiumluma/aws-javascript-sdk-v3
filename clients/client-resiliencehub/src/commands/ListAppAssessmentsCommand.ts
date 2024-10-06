@@ -28,8 +28,8 @@ export interface ListAppAssessmentsCommandInput extends ListAppAssessmentsReques
 export interface ListAppAssessmentsCommandOutput extends ListAppAssessmentsResponse, __MetadataBearer {}
 
 /**
- * <p>Lists the assessments for an Resilience Hub application. You can use request parameters to
- *       refine the results for the response object.</p>
+ * <p>Lists the assessments for an Resilience Hub application. You can use request
+ *       parameters to refine the results for the response object.</p>
  * @example
  * Use a bare-bones client and the command you need to make an API call.
  * ```javascript
@@ -115,9 +115,7 @@ export class ListAppAssessmentsCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: ResiliencehubClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -129,4 +127,16 @@ export class ListAppAssessmentsCommand extends $Command
   .f(void 0, void 0)
   .ser(se_ListAppAssessmentsCommand)
   .de(de_ListAppAssessmentsCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: ListAppAssessmentsRequest;
+      output: ListAppAssessmentsResponse;
+    };
+    sdk: {
+      input: ListAppAssessmentsCommandInput;
+      output: ListAppAssessmentsCommandOutput;
+    };
+  };
+}

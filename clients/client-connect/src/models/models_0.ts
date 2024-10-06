@@ -615,14 +615,14 @@ export interface AgentQualityMetrics {
 }
 
 /**
- * <p>Can be used to define a list of preferred agents to target the contact within the queue.
- *     Note that agents must have the queue in their routing profile in order to be offered the
- *     contact.</p>
+ * <p>Can be used to define a list of preferred agents to target the contact to within the queue.
+ *    Note that agents must have the queue in their routing profile in order to be offered the
+ *    contact.</p>
  * @public
  */
 export interface AgentsCriteria {
   /**
-   * <p>An object to specify a list of agents, by Agent ID.</p>
+   * <p>An object to specify a list of agents, by user ID.</p>
    * @public
    */
   AgentIds?: string[];
@@ -745,6 +745,138 @@ export interface AgentStatusReference {
    * @public
    */
   StatusName?: string;
+}
+
+/**
+ * @public
+ * @enum
+ */
+export const StringComparisonType = {
+  CONTAINS: "CONTAINS",
+  EXACT: "EXACT",
+  STARTS_WITH: "STARTS_WITH",
+} as const;
+
+/**
+ * @public
+ */
+export type StringComparisonType = (typeof StringComparisonType)[keyof typeof StringComparisonType];
+
+/**
+ * <p>A leaf node condition which can be used to specify a string condition.</p>
+ * @public
+ */
+export interface StringCondition {
+  /**
+   * <p>The name of the field in the string condition.</p>
+   * @public
+   */
+  FieldName?: string;
+
+  /**
+   * <p>The value of the string.</p>
+   * @public
+   */
+  Value?: string;
+
+  /**
+   * <p>The type of comparison to be made when evaluating the string condition.</p>
+   * @public
+   */
+  ComparisonType?: StringComparisonType;
+}
+
+/**
+ * <p>A leaf node condition which can be used to specify a tag condition, for example, <code>HAVE
+ *     BPO = 123</code>. </p>
+ * @public
+ */
+export interface TagCondition {
+  /**
+   * <p>The tag key in the tag condition.</p>
+   * @public
+   */
+  TagKey?: string;
+
+  /**
+   * <p>The tag value in the tag condition.</p>
+   * @public
+   */
+  TagValue?: string;
+}
+
+/**
+ * <p>A list of conditions which would be applied together with an <code>AND</code>
+ *    condition.</p>
+ * @public
+ */
+export interface CommonAttributeAndCondition {
+  /**
+   * <p>A leaf node condition which can be used to specify a tag condition.</p>
+   * @public
+   */
+  TagConditions?: TagCondition[];
+}
+
+/**
+ * <p>An object that can be used to specify Tag conditions inside the <code>SearchFilter</code>.
+ *    This accepts an <code>OR</code> or <code>AND</code> (List of List) input where: </p>
+ *          <ul>
+ *             <li>
+ *                <p>The top level list specifies conditions that need to be applied with <code>OR</code>
+ *      operator.</p>
+ *             </li>
+ *             <li>
+ *                <p>The inner list specifies conditions that need to be applied with <code>AND</code>
+ *      operator.</p>
+ *             </li>
+ *          </ul>
+ * @public
+ */
+export interface ControlPlaneAttributeFilter {
+  /**
+   * <p>A list of conditions which would be applied together with an <code>OR</code>
+   *    condition.</p>
+   * @public
+   */
+  OrConditions?: CommonAttributeAndCondition[];
+
+  /**
+   * <p>A list of conditions which would be applied together with an <code>AND</code>
+   *    condition.</p>
+   * @public
+   */
+  AndCondition?: CommonAttributeAndCondition;
+
+  /**
+   * <p>A leaf node condition which can be used to specify a tag condition, for example, <code>HAVE
+   *     BPO = 123</code>. </p>
+   * @public
+   */
+  TagCondition?: TagCondition;
+}
+
+/**
+ * <p>Filters to be applied to search results.</p>
+ * @public
+ */
+export interface AgentStatusSearchFilter {
+  /**
+   * <p>An object that can be used to specify Tag conditions inside the <code>SearchFilter</code>.
+   *    This accepts an <code>OR</code> of <code>AND</code> (List of List) input where: </p>
+   *          <ul>
+   *             <li>
+   *                <p>The top level list specifies conditions that need to be applied with <code>OR</code>
+   *      operator.</p>
+   *             </li>
+   *             <li>
+   *                <p>The inner list specifies conditions that need to be applied with <code>AND</code>
+   *      operator.</p>
+   *             </li>
+   *          </ul>
+   * @public
+   */
+  AttributeFilter?: ControlPlaneAttributeFilter;
 }
 
 /**
@@ -1088,6 +1220,8 @@ export class LimitExceededException extends __BaseException {
  */
 export const VocabularyLanguageCode = {
   AR_AE: "ar-AE",
+  CA_ES: "ca-ES",
+  DA_DK: "da-DK",
   DE_CH: "de-CH",
   DE_DE: "de-DE",
   EN_AB: "en-AB",
@@ -1101,14 +1235,22 @@ export const VocabularyLanguageCode = {
   EN_ZA: "en-ZA",
   ES_ES: "es-ES",
   ES_US: "es-US",
+  FI_FI: "fi-FI",
   FR_CA: "fr-CA",
   FR_FR: "fr-FR",
   HI_IN: "hi-IN",
+  ID_ID: "id-ID",
   IT_IT: "it-IT",
   JA_JP: "ja-JP",
   KO_KR: "ko-KR",
+  MS_MY: "ms-MY",
+  NL_NL: "nl-NL",
+  NO_NO: "no-NO",
+  PL_PL: "pl-PL",
   PT_BR: "pt-BR",
   PT_PT: "pt-PT",
+  SV_SE: "sv-SE",
+  TL_PH: "tl-PH",
   ZH_CN: "zh-CN",
 } as const;
 
@@ -1607,7 +1749,7 @@ export interface AssociateSecurityKeyRequest {
   InstanceId: string | undefined;
 
   /**
-   * <p>A valid security key in PEM format.</p>
+   * <p>A valid security key in PEM format as a String.</p>
    * @public
    */
   Key: string | undefined;
@@ -2157,6 +2299,7 @@ export interface Campaign {
  * @enum
  */
 export const EndpointType = {
+  CONNECT_PHONENUMBER_ARN: "CONNECT_PHONENUMBER_ARN",
   CONTACT_FLOW: "CONTACT_FLOW",
   TELEPHONE_NUMBER: "TELEPHONE_NUMBER",
   VOIP: "VOIP",
@@ -2813,7 +2956,7 @@ export type NumericQuestionPropertyAutomationLabel =
  *             <li>
  *                <p> Duration labels, such as <code>NON_TALK_TIME</code>, <code>CONTACT_DURATION</code>,
  *       <code>AGENT_INTERACTION_DURATION</code>, <code>CUSTOMER_HOLD_TIME</code> have a minimum value
- *      of 0 and maximum value of 28800.</p>
+ *      of 0 and maximum value of 63072000.</p>
  *             </li>
  *             <li>
  *                <p>Percentages have a minimum value of 0 and maximum value of 100. </p>
@@ -6660,8 +6803,8 @@ export interface DescribeAuthenticationProfileRequest {
  *          <p>Information about an authentication profile. An authentication profile is a resource that
  *    stores the authentication settings for users in your contact center. You use authentication
  *    profiles to set up IP address range restrictions and session timeouts. For more information, see
- *    <a href="https://docs.aws.amazon.com/connect/latest/adminguide/authentication-profiles.html">Set IP address restrictions or session timeouts</a>.
- *   </p>
+ *     <a href="https://docs.aws.amazon.com/connect/latest/adminguide/authentication-profiles.html">Set IP
+ *     address restrictions or session timeouts</a>. </p>
  * @public
  */
 export interface AuthenticationProfile {
@@ -6691,8 +6834,8 @@ export interface AuthenticationProfile {
 
   /**
    * <p>A list of IP address range strings that are allowed to access the Amazon Connect
-   *    instance. For more information about how to configure IP addresses, see <a href="https://docs.aws.amazon.com/connect/latest/adminguide/authentication-profiles.html#configure-ip-based-ac">Configure
-   *     IP address based access control</a> in the <i>Amazon Connect Administrator
+   *    instance. For more information about how to configure IP addresses, see <a href="https://docs.aws.amazon.com/connect/latest/adminguide/authentication-profiles.html#configure-ip-based-ac">Configure IP
+   *     address based access control</a> in the <i>Amazon Connect Administrator
    *     Guide</i>.</p>
    * @public
    */
@@ -6700,8 +6843,8 @@ export interface AuthenticationProfile {
 
   /**
    * <p>A list of IP address range strings that are blocked from accessing the Amazon Connect
-   *    instance. For more information about how to configure IP addresses, see <a href="https://docs.aws.amazon.com/connect/latest/adminguide/authentication-profiles.html#configure-ip-based-ac">Configure
-   *     IP address based access control</a> in the <i>Amazon Connect Administrator
+   *    instance. For more information about how to configure IP addresses, see <a href="https://docs.aws.amazon.com/connect/latest/adminguide/authentication-profiles.html#configure-ip-based-ac">Configure IP
+   *     address based access control</a> in the <i>Amazon Connect Administrator
    *     Guide</i>.</p>
    * @public
    */
@@ -6924,12 +7067,12 @@ export interface Expiry {
 }
 
 /**
- * <p>An object to define <code>AgentsCriteria</code>.</p>
+ * <p>An object to define AgentsCriteria.</p>
  * @public
  */
 export interface MatchCriteria {
   /**
-   * <p>An object to define <code>AgentIds</code>.</p>
+   * <p>An object to define agentIds.</p>
    * @public
    */
   AgentsCriteria?: AgentsCriteria;
@@ -6969,155 +7112,6 @@ export interface AttributeCondition {
    * @public
    */
   ComparisonOperator?: string;
-}
-
-/**
- * @public
- * @enum
- */
-export const RoutingCriteriaStepStatus = {
-  ACTIVE: "ACTIVE",
-  EXPIRED: "EXPIRED",
-  INACTIVE: "INACTIVE",
-  JOINED: "JOINED",
-} as const;
-
-/**
- * @public
- */
-export type RoutingCriteriaStepStatus = (typeof RoutingCriteriaStepStatus)[keyof typeof RoutingCriteriaStepStatus];
-
-/**
- * <p>A value for a segment attribute. This is structured as a map where the key is
- *     <code>valueString</code> and the value is a string.</p>
- * @public
- */
-export interface SegmentAttributeValue {
-  /**
-   * <p>The value of a segment attribute.</p>
-   * @public
-   */
-  ValueString?: string;
-}
-
-/**
- * <p>Information about Amazon Connect Wisdom.</p>
- * @public
- */
-export interface WisdomInfo {
-  /**
-   * <p>The Amazon Resource Name (ARN) of the Wisdom session.</p>
-   * @public
-   */
-  SessionArn?: string;
-}
-
-/**
- * @public
- */
-export interface DescribeContactEvaluationRequest {
-  /**
-   * <p>The identifier of the Amazon Connect instance. You can <a href="https://docs.aws.amazon.com/connect/latest/adminguide/find-instance-arn.html">find the instance ID</a> in the Amazon Resource Name (ARN) of the instance.</p>
-   * @public
-   */
-  InstanceId: string | undefined;
-
-  /**
-   * <p>A unique identifier for the contact evaluation.</p>
-   * @public
-   */
-  EvaluationId: string | undefined;
-}
-
-/**
- * <p>Information about answer data for a contact evaluation. Answer data must be either string,
- *    numeric, or not applicable.</p>
- * @public
- */
-export type EvaluationAnswerData =
-  | EvaluationAnswerData.NotApplicableMember
-  | EvaluationAnswerData.NumericValueMember
-  | EvaluationAnswerData.StringValueMember
-  | EvaluationAnswerData.$UnknownMember;
-
-/**
- * @public
- */
-export namespace EvaluationAnswerData {
-  /**
-   * <p>The string value for an answer in a contact evaluation.</p>
-   * @public
-   */
-  export interface StringValueMember {
-    StringValue: string;
-    NumericValue?: never;
-    NotApplicable?: never;
-    $unknown?: never;
-  }
-
-  /**
-   * <p>The numeric value for an answer in a contact evaluation.</p>
-   * @public
-   */
-  export interface NumericValueMember {
-    StringValue?: never;
-    NumericValue: number;
-    NotApplicable?: never;
-    $unknown?: never;
-  }
-
-  /**
-   * <p>The flag to mark the question as not applicable.</p>
-   * @public
-   */
-  export interface NotApplicableMember {
-    StringValue?: never;
-    NumericValue?: never;
-    NotApplicable: boolean;
-    $unknown?: never;
-  }
-
-  /**
-   * @public
-   */
-  export interface $UnknownMember {
-    StringValue?: never;
-    NumericValue?: never;
-    NotApplicable?: never;
-    $unknown: [string, any];
-  }
-
-  export interface Visitor<T> {
-    StringValue: (value: string) => T;
-    NumericValue: (value: number) => T;
-    NotApplicable: (value: boolean) => T;
-    _: (name: string, value: any) => T;
-  }
-
-  export const visit = <T>(value: EvaluationAnswerData, visitor: Visitor<T>): T => {
-    if (value.StringValue !== undefined) return visitor.StringValue(value.StringValue);
-    if (value.NumericValue !== undefined) return visitor.NumericValue(value.NumericValue);
-    if (value.NotApplicable !== undefined) return visitor.NotApplicable(value.NotApplicable);
-    return visitor._(value.$unknown[0], value.$unknown[1]);
-  };
-}
-
-/**
- * <p>Information about output answers for a contact evaluation.</p>
- * @public
- */
-export interface EvaluationAnswerOutput {
-  /**
-   * <p>The value for an answer in a contact evaluation.</p>
-   * @public
-   */
-  Value?: EvaluationAnswerData;
-
-  /**
-   * <p>The system suggested value for an answer in a contact evaluation.</p>
-   * @public
-   */
-  SystemSuggestedValue?: EvaluationAnswerData;
 }
 
 /**

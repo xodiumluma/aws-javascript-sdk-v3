@@ -99,6 +99,9 @@ export interface ListAppsCommandOutput extends ListAppsResult, __MetadataBearer 
  * //         pullRequestEnvironmentName: "STRING_VALUE",
  * //       },
  * //       repositoryCloneMethod: "SSH" || "TOKEN" || "SIGV4",
+ * //       cacheConfig: { // CacheConfig
+ * //         type: "AMPLIFY_MANAGED" || "AMPLIFY_MANAGED_NO_COOKIES", // required
+ * //       },
  * //     },
  * //   ],
  * //   nextToken: "STRING_VALUE",
@@ -134,9 +137,7 @@ export class ListAppsCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: AmplifyClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -148,4 +149,16 @@ export class ListAppsCommand extends $Command
   .f(void 0, ListAppsResultFilterSensitiveLog)
   .ser(se_ListAppsCommand)
   .de(de_ListAppsCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: ListAppsRequest;
+      output: ListAppsResult;
+    };
+    sdk: {
+      input: ListAppsCommandInput;
+      output: ListAppsCommandOutput;
+    };
+  };
+}

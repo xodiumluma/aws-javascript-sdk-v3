@@ -48,10 +48,6 @@ export interface CreateDefaultVpcCommandOutput extends CreateDefaultVpcResult, _
  * const response = await client.send(command);
  * // { // CreateDefaultVpcResult
  * //   Vpc: { // Vpc
- * //     CidrBlock: "STRING_VALUE",
- * //     DhcpOptionsId: "STRING_VALUE",
- * //     State: "pending" || "available",
- * //     VpcId: "STRING_VALUE",
  * //     OwnerId: "STRING_VALUE",
  * //     InstanceTenancy: "default" || "dedicated" || "host",
  * //     Ipv6CidrBlockAssociationSet: [ // VpcIpv6CidrBlockAssociationSet
@@ -64,6 +60,8 @@ export interface CreateDefaultVpcCommandOutput extends CreateDefaultVpcResult, _
  * //         },
  * //         NetworkBorderGroup: "STRING_VALUE",
  * //         Ipv6Pool: "STRING_VALUE",
+ * //         Ipv6AddressAttribute: "public" || "private",
+ * //         IpSource: "amazon" || "byoip" || "none",
  * //       },
  * //     ],
  * //     CidrBlockAssociationSet: [ // VpcCidrBlockAssociationSet
@@ -83,6 +81,10 @@ export interface CreateDefaultVpcCommandOutput extends CreateDefaultVpcResult, _
  * //         Value: "STRING_VALUE",
  * //       },
  * //     ],
+ * //     VpcId: "STRING_VALUE",
+ * //     State: "pending" || "available",
+ * //     CidrBlock: "STRING_VALUE",
+ * //     DhcpOptionsId: "STRING_VALUE",
  * //   },
  * // };
  *
@@ -107,9 +109,7 @@ export class CreateDefaultVpcCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: EC2ClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -121,4 +121,16 @@ export class CreateDefaultVpcCommand extends $Command
   .f(void 0, void 0)
   .ser(se_CreateDefaultVpcCommand)
   .de(de_CreateDefaultVpcCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: CreateDefaultVpcRequest;
+      output: CreateDefaultVpcResult;
+    };
+    sdk: {
+      input: CreateDefaultVpcCommandInput;
+      output: CreateDefaultVpcCommandOutput;
+    };
+  };
+}

@@ -33,7 +33,8 @@ export interface ListAppAssessmentResourceDriftsCommandOutput
     __MetadataBearer {}
 
 /**
- * <p>Indicates the list of resource drifts that were detected while running an assessment.</p>
+ * <p>Indicates the list of resource drifts that were detected while running an
+ *       assessment.</p>
  * @example
  * Use a bare-bones client and the command you need to make an API call.
  * ```javascript
@@ -105,9 +106,7 @@ export class ListAppAssessmentResourceDriftsCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: ResiliencehubClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -119,4 +118,16 @@ export class ListAppAssessmentResourceDriftsCommand extends $Command
   .f(void 0, void 0)
   .ser(se_ListAppAssessmentResourceDriftsCommand)
   .de(de_ListAppAssessmentResourceDriftsCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: ListAppAssessmentResourceDriftsRequest;
+      output: ListAppAssessmentResourceDriftsResponse;
+    };
+    sdk: {
+      input: ListAppAssessmentResourceDriftsCommandInput;
+      output: ListAppAssessmentResourceDriftsCommandOutput;
+    };
+  };
+}

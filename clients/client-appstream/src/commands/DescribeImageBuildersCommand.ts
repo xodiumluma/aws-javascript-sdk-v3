@@ -61,7 +61,7 @@ export interface DescribeImageBuildersCommandOutput extends DescribeImageBuilder
  * //         ],
  * //       },
  * //       InstanceType: "STRING_VALUE",
- * //       Platform: "WINDOWS" || "WINDOWS_SERVER_2016" || "WINDOWS_SERVER_2019" || "WINDOWS_SERVER_2022" || "AMAZON_LINUX2",
+ * //       Platform: "WINDOWS" || "WINDOWS_SERVER_2016" || "WINDOWS_SERVER_2019" || "WINDOWS_SERVER_2022" || "AMAZON_LINUX2" || "RHEL8",
  * //       IamRoleArn: "STRING_VALUE",
  * //       State: "PENDING" || "UPDATING_AGENT" || "RUNNING" || "STOPPING" || "STOPPED" || "REBOOTING" || "SNAPSHOTTING" || "DELETING" || "FAILED" || "UPDATING" || "PENDING_QUALIFICATION",
  * //       StateChangeReason: { // ImageBuilderStateChangeReason
@@ -92,6 +92,7 @@ export interface DescribeImageBuildersCommandOutput extends DescribeImageBuilder
  * //           VpceId: "STRING_VALUE",
  * //         },
  * //       ],
+ * //       LatestAppstreamAgentVersion: "TRUE" || "FALSE",
  * //     },
  * //   ],
  * //   NextToken: "STRING_VALUE",
@@ -121,9 +122,7 @@ export class DescribeImageBuildersCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: AppStreamClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -135,4 +134,16 @@ export class DescribeImageBuildersCommand extends $Command
   .f(void 0, void 0)
   .ser(se_DescribeImageBuildersCommand)
   .de(de_DescribeImageBuildersCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: DescribeImageBuildersRequest;
+      output: DescribeImageBuildersResult;
+    };
+    sdk: {
+      input: DescribeImageBuildersCommandInput;
+      output: DescribeImageBuildersCommandOutput;
+    };
+  };
+}

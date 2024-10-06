@@ -48,6 +48,8 @@ export interface DisassociateSubnetCidrBlockCommandOutput extends DisassociateSu
  * //       State: "associating" || "associated" || "disassociating" || "disassociated" || "failing" || "failed",
  * //       StatusMessage: "STRING_VALUE",
  * //     },
+ * //     Ipv6AddressAttribute: "public" || "private",
+ * //     IpSource: "amazon" || "byoip" || "none",
  * //   },
  * //   SubnetId: "STRING_VALUE",
  * // };
@@ -73,9 +75,7 @@ export class DisassociateSubnetCidrBlockCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: EC2ClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -87,4 +87,16 @@ export class DisassociateSubnetCidrBlockCommand extends $Command
   .f(void 0, void 0)
   .ser(se_DisassociateSubnetCidrBlockCommand)
   .de(de_DisassociateSubnetCidrBlockCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: DisassociateSubnetCidrBlockRequest;
+      output: DisassociateSubnetCidrBlockResult;
+    };
+    sdk: {
+      input: DisassociateSubnetCidrBlockCommandInput;
+      output: DisassociateSubnetCidrBlockCommandOutput;
+    };
+  };
+}

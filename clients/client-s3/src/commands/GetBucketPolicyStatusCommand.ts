@@ -1,4 +1,5 @@
 // smithy-typescript generated code
+import { getThrow200ExceptionsPlugin } from "@aws-sdk/middleware-sdk-s3";
 import { getEndpointPlugin } from "@smithy/middleware-endpoint";
 import { getSerdePlugin } from "@smithy/middleware-serde";
 import { Command as $Command } from "@smithy/smithy-client";
@@ -108,6 +109,7 @@ export class GetBucketPolicyStatusCommand extends $Command
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
       getEndpointPlugin(config, Command.getEndpointParameterInstructions()),
+      getThrow200ExceptionsPlugin(config),
     ];
   })
   .s("AmazonS3", "GetBucketPolicyStatus", {})
@@ -115,4 +117,16 @@ export class GetBucketPolicyStatusCommand extends $Command
   .f(void 0, void 0)
   .ser(se_GetBucketPolicyStatusCommand)
   .de(de_GetBucketPolicyStatusCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: GetBucketPolicyStatusRequest;
+      output: GetBucketPolicyStatusOutput;
+    };
+    sdk: {
+      input: GetBucketPolicyStatusCommandInput;
+      output: GetBucketPolicyStatusCommandOutput;
+    };
+  };
+}

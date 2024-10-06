@@ -92,6 +92,7 @@ export interface GetReadSetMetadataCommandOutput extends GetReadSetMetadataRespo
  * //     source1: "STRING_VALUE",
  * //     source2: "STRING_VALUE",
  * //   },
+ * //   creationJobId: "STRING_VALUE",
  * // };
  *
  * ```
@@ -133,9 +134,7 @@ export class GetReadSetMetadataCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: OmicsClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -147,4 +146,16 @@ export class GetReadSetMetadataCommand extends $Command
   .f(void 0, void 0)
   .ser(se_GetReadSetMetadataCommand)
   .de(de_GetReadSetMetadataCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: GetReadSetMetadataRequest;
+      output: GetReadSetMetadataResponse;
+    };
+    sdk: {
+      input: GetReadSetMetadataCommandInput;
+      output: GetReadSetMetadataCommandOutput;
+    };
+  };
+}

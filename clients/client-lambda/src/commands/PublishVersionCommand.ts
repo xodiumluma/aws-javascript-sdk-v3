@@ -172,8 +172,17 @@ export interface PublishVersionCommandOutput extends FunctionConfiguration, __Me
  *  <p>One of the parameters in the request is not valid.</p>
  *
  * @throws {@link PreconditionFailedException} (client fault)
- *  <p>The RevisionId provided does not match the latest RevisionId for the Lambda function or alias. Call the <code>GetFunction</code> or the <code>GetAlias</code>
- *       API operation to retrieve the latest RevisionId for your resource.</p>
+ *  <p>The RevisionId provided does not match the latest RevisionId for the Lambda function or alias.</p>
+ *          <ul>
+ *             <li>
+ *                <p>
+ *                   <b>For AddPermission and RemovePermission API operations:</b> Call <code>GetPolicy</code> to retrieve the latest RevisionId for your resource.</p>
+ *             </li>
+ *             <li>
+ *                <p>
+ *                   <b>For all other API operations:</b> Call <code>GetFunction</code> or <code>GetAlias</code> to retrieve the latest RevisionId for your resource.</p>
+ *             </li>
+ *          </ul>
  *
  * @throws {@link ResourceConflictException} (client fault)
  *  <p>The resource already exists, or another operation is in progress.</p>
@@ -191,6 +200,48 @@ export interface PublishVersionCommandOutput extends FunctionConfiguration, __Me
  * <p>Base exception class for all service exceptions from Lambda service.</p>
  *
  * @public
+ * @example To publish a version of a Lambda function
+ * ```javascript
+ * // This operation publishes a version of a Lambda function
+ * const input = {
+ *   "CodeSha256": "",
+ *   "Description": "",
+ *   "FunctionName": "myFunction"
+ * };
+ * const command = new PublishVersionCommand(input);
+ * const response = await client.send(command);
+ * /* response ==
+ * {
+ *   "CodeSha256": "YFgDgEKG3ugvF1+pX64gV6tu9qNuIYNUdgJm8nCxsm4=",
+ *   "CodeSize": 5797206,
+ *   "Description": "Process image objects from Amazon S3.",
+ *   "Environment": {
+ *     "Variables": {
+ *       "BUCKET": "my-bucket-1xpuxmplzrlbh",
+ *       "PREFIX": "inbound"
+ *     }
+ *   },
+ *   "FunctionArn": "arn:aws:lambda:us-west-2:123456789012:function:my-function",
+ *   "FunctionName": "my-function",
+ *   "Handler": "index.handler",
+ *   "KMSKeyArn": "arn:aws:kms:us-west-2:123456789012:key/b0844d6c-xmpl-4463-97a4-d49f50839966",
+ *   "LastModified": "2020-04-10T19:06:32.563+0000",
+ *   "LastUpdateStatus": "Successful",
+ *   "MemorySize": 256,
+ *   "RevisionId": "b75dcd81-xmpl-48a8-a75a-93ba8b5b9727",
+ *   "Role": "arn:aws:iam::123456789012:role/lambda-role",
+ *   "Runtime": "nodejs12.x",
+ *   "State": "Active",
+ *   "Timeout": 5,
+ *   "TracingConfig": {
+ *     "Mode": "Active"
+ *   },
+ *   "Version": "1"
+ * }
+ * *\/
+ * // example id: to-publish-a-version-of-a-lambda-function-1481650704986
+ * ```
+ *
  */
 export class PublishVersionCommand extends $Command
   .classBuilder<
@@ -200,9 +251,7 @@ export class PublishVersionCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: LambdaClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -214,4 +263,16 @@ export class PublishVersionCommand extends $Command
   .f(void 0, FunctionConfigurationFilterSensitiveLog)
   .ser(se_PublishVersionCommand)
   .de(de_PublishVersionCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: PublishVersionRequest;
+      output: FunctionConfiguration;
+    };
+    sdk: {
+      input: PublishVersionCommandInput;
+      output: PublishVersionCommandOutput;
+    };
+  };
+}

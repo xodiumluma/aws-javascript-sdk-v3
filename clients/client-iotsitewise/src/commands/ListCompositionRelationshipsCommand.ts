@@ -33,7 +33,8 @@ export interface ListCompositionRelationshipsCommandOutput
     __MetadataBearer {}
 
 /**
- * <p>Retrieves a paginated list of composition relationships for an asset model of type <code>COMPONENT_MODEL</code>.</p>
+ * <p>Retrieves a paginated list of composition relationships for an asset model of type
+ *         <code>COMPONENT_MODEL</code>.</p>
  * @example
  * Use a bare-bones client and the command you need to make an API call.
  * ```javascript
@@ -95,9 +96,7 @@ export class ListCompositionRelationshipsCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: IoTSiteWiseClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -109,4 +108,16 @@ export class ListCompositionRelationshipsCommand extends $Command
   .f(void 0, void 0)
   .ser(se_ListCompositionRelationshipsCommand)
   .de(de_ListCompositionRelationshipsCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: ListCompositionRelationshipsRequest;
+      output: ListCompositionRelationshipsResponse;
+    };
+    sdk: {
+      input: ListCompositionRelationshipsCommandInput;
+      output: ListCompositionRelationshipsCommandOutput;
+    };
+  };
+}

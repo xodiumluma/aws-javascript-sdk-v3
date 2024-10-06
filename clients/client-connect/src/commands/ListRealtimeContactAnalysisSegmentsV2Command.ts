@@ -51,7 +51,7 @@ export interface ListRealtimeContactAnalysisSegmentsV2CommandOutput
  *   NextToken: "STRING_VALUE",
  *   OutputType: "Raw" || "Redacted", // required
  *   SegmentTypes: [ // RealTimeContactAnalysisSegmentTypes // required
- *     "Transcript" || "Categories" || "Issues" || "Event" || "Attachments",
+ *     "Transcript" || "Categories" || "Issues" || "Event" || "Attachments" || "PostContactSummary",
  *   ],
  * };
  * const command = new ListRealtimeContactAnalysisSegmentsV2Command(input);
@@ -140,6 +140,11 @@ export interface ListRealtimeContactAnalysisSegmentsV2CommandOutput
  * //           AbsoluteTime: new Date("TIMESTAMP"),
  * //         },
  * //       },
+ * //       PostContactSummary: { // RealTimeContactAnalysisSegmentPostContactSummary
+ * //         Content: "STRING_VALUE",
+ * //         Status: "FAILED" || "COMPLETED", // required
+ * //         FailureCode: "QUOTA_EXCEEDED" || "INSUFFICIENT_CONVERSATION_CONTENT" || "FAILED_SAFETY_GUIDELINES" || "INVALID_ANALYSIS_CONFIGURATION" || "INTERNAL_ERROR",
+ * //       },
  * //     },
  * //   ],
  * //   NextToken: "STRING_VALUE",
@@ -186,9 +191,7 @@ export class ListRealtimeContactAnalysisSegmentsV2Command extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: ConnectClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -200,4 +203,16 @@ export class ListRealtimeContactAnalysisSegmentsV2Command extends $Command
   .f(void 0, void 0)
   .ser(se_ListRealtimeContactAnalysisSegmentsV2Command)
   .de(de_ListRealtimeContactAnalysisSegmentsV2Command)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: ListRealtimeContactAnalysisSegmentsV2Request;
+      output: ListRealtimeContactAnalysisSegmentsV2Response;
+    };
+    sdk: {
+      input: ListRealtimeContactAnalysisSegmentsV2CommandInput;
+      output: ListRealtimeContactAnalysisSegmentsV2CommandOutput;
+    };
+  };
+}

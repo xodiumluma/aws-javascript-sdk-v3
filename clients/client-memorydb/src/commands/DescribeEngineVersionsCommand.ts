@@ -28,7 +28,7 @@ export interface DescribeEngineVersionsCommandInput extends DescribeEngineVersio
 export interface DescribeEngineVersionsCommandOutput extends DescribeEngineVersionsResponse, __MetadataBearer {}
 
 /**
- * <p>Returns a list of the available Redis engine versions.</p>
+ * <p>Returns a list of the available Redis OSS engine versions.</p>
  * @example
  * Use a bare-bones client and the command you need to make an API call.
  * ```javascript
@@ -85,9 +85,7 @@ export class DescribeEngineVersionsCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: MemoryDBClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -99,4 +97,16 @@ export class DescribeEngineVersionsCommand extends $Command
   .f(void 0, void 0)
   .ser(se_DescribeEngineVersionsCommand)
   .de(de_DescribeEngineVersionsCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: DescribeEngineVersionsRequest;
+      output: DescribeEngineVersionsResponse;
+    };
+    sdk: {
+      input: DescribeEngineVersionsCommandInput;
+      output: DescribeEngineVersionsCommandOutput;
+    };
+  };
+}

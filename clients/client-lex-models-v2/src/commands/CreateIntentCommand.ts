@@ -523,10 +523,20 @@ export interface CreateIntentCommandOutput extends CreateIntentResponse, __Metad
  *       },
  *       bedrockKnowledgeStoreConfiguration: { // BedrockKnowledgeStoreConfiguration
  *         bedrockKnowledgeBaseArn: "STRING_VALUE", // required
+ *         exactResponse: true || false,
+ *         exactResponseFields: { // BedrockKnowledgeStoreExactResponseFields
+ *           answerField: "STRING_VALUE",
+ *         },
  *       },
  *     },
  *     bedrockModelConfiguration: { // BedrockModelSpecification
  *       modelArn: "STRING_VALUE", // required
+ *       guardrail: { // BedrockGuardrailConfiguration
+ *         identifier: "STRING_VALUE", // required
+ *         version: "STRING_VALUE", // required
+ *       },
+ *       traceStatus: "ENABLED" || "DISABLED",
+ *       customPrompt: "STRING_VALUE",
  *     },
  *   },
  * };
@@ -985,10 +995,20 @@ export interface CreateIntentCommandOutput extends CreateIntentResponse, __Metad
  * //       },
  * //       bedrockKnowledgeStoreConfiguration: { // BedrockKnowledgeStoreConfiguration
  * //         bedrockKnowledgeBaseArn: "STRING_VALUE", // required
+ * //         exactResponse: true || false,
+ * //         exactResponseFields: { // BedrockKnowledgeStoreExactResponseFields
+ * //           answerField: "STRING_VALUE",
+ * //         },
  * //       },
  * //     },
  * //     bedrockModelConfiguration: { // BedrockModelSpecification
  * //       modelArn: "STRING_VALUE", // required
+ * //       guardrail: { // BedrockGuardrailConfiguration
+ * //         identifier: "STRING_VALUE", // required
+ * //         version: "STRING_VALUE", // required
+ * //       },
+ * //       traceStatus: "ENABLED" || "DISABLED",
+ * //       customPrompt: "STRING_VALUE",
  * //     },
  * //   },
  * // };
@@ -1039,9 +1059,7 @@ export class CreateIntentCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: LexModelsV2ClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -1053,4 +1071,16 @@ export class CreateIntentCommand extends $Command
   .f(void 0, void 0)
   .ser(se_CreateIntentCommand)
   .de(de_CreateIntentCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: CreateIntentRequest;
+      output: CreateIntentResponse;
+    };
+    sdk: {
+      input: CreateIntentCommandInput;
+      output: CreateIntentCommandOutput;
+    };
+  };
+}

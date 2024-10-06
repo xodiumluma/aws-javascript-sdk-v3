@@ -28,7 +28,7 @@ export interface ListFoundationModelsCommandInput extends ListFoundationModelsRe
 export interface ListFoundationModelsCommandOutput extends ListFoundationModelsResponse, __MetadataBearer {}
 
 /**
- * <p>Lists Amazon Bedrock foundation models that you can use. You can filter the results with the request parameters. For more information, see <a href="https://docs.aws.amazon.com/bedrock/latest/userguide/foundation-models.html">Foundation models</a> in the Amazon Bedrock User Guide.</p>
+ * <p>Lists Amazon Bedrock foundation models that you can use. You can filter the results with the request parameters. For more information, see <a href="https://docs.aws.amazon.com/bedrock/latest/userguide/foundation-models.html">Foundation models</a> in the <a href="https://docs.aws.amazon.com/bedrock/latest/userguide/what-is-service.html">Amazon Bedrock User Guide</a>.</p>
  * @example
  * Use a bare-bones client and the command you need to make an API call.
  * ```javascript
@@ -103,9 +103,7 @@ export class ListFoundationModelsCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: BedrockClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -117,4 +115,16 @@ export class ListFoundationModelsCommand extends $Command
   .f(void 0, void 0)
   .ser(se_ListFoundationModelsCommand)
   .de(de_ListFoundationModelsCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: ListFoundationModelsRequest;
+      output: ListFoundationModelsResponse;
+    };
+    sdk: {
+      input: ListFoundationModelsCommandInput;
+      output: ListFoundationModelsCommandOutput;
+    };
+  };
+}

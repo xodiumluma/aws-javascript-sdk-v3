@@ -89,6 +89,10 @@ import { StopQAppSessionCommandInput, StopQAppSessionCommandOutput } from "./com
 import { TagResourceCommandInput, TagResourceCommandOutput } from "./commands/TagResourceCommand";
 import { UntagResourceCommandInput, UntagResourceCommandOutput } from "./commands/UntagResourceCommand";
 import { UpdateLibraryItemCommandInput, UpdateLibraryItemCommandOutput } from "./commands/UpdateLibraryItemCommand";
+import {
+  UpdateLibraryItemMetadataCommandInput,
+  UpdateLibraryItemMetadataCommandOutput,
+} from "./commands/UpdateLibraryItemMetadataCommand";
 import { UpdateQAppCommandInput, UpdateQAppCommandOutput } from "./commands/UpdateQAppCommand";
 import { UpdateQAppSessionCommandInput, UpdateQAppSessionCommandOutput } from "./commands/UpdateQAppSessionCommand";
 import {
@@ -127,6 +131,7 @@ export type ServiceInputTypes =
   | TagResourceCommandInput
   | UntagResourceCommandInput
   | UpdateLibraryItemCommandInput
+  | UpdateLibraryItemMetadataCommandInput
   | UpdateQAppCommandInput
   | UpdateQAppSessionCommandInput;
 
@@ -155,6 +160,7 @@ export type ServiceOutputTypes =
   | TagResourceCommandOutput
   | UntagResourceCommandOutput
   | UpdateLibraryItemCommandOutput
+  | UpdateLibraryItemMetadataCommandOutput
   | UpdateQAppCommandOutput
   | UpdateQAppSessionCommandOutput;
 
@@ -295,11 +301,11 @@ export interface ClientDefaults extends Partial<__SmithyConfiguration<__HttpHand
  */
 export type QAppsClientConfigType = Partial<__SmithyConfiguration<__HttpHandlerOptions>> &
   ClientDefaults &
-  RegionInputConfig &
-  EndpointInputConfig<EndpointParameters> &
-  HostHeaderInputConfig &
   UserAgentInputConfig &
   RetryInputConfig &
+  RegionInputConfig &
+  HostHeaderInputConfig &
+  EndpointInputConfig<EndpointParameters> &
   HttpAuthSchemeInputConfig &
   ClientInputEndpointParameters;
 /**
@@ -315,11 +321,11 @@ export interface QAppsClientConfig extends QAppsClientConfigType {}
 export type QAppsClientResolvedConfigType = __SmithyResolvedConfiguration<__HttpHandlerOptions> &
   Required<ClientDefaults> &
   RuntimeExtensionsConfig &
-  RegionResolvedConfig &
-  EndpointResolvedConfig<EndpointParameters> &
-  HostHeaderResolvedConfig &
   UserAgentResolvedConfig &
   RetryResolvedConfig &
+  RegionResolvedConfig &
+  HostHeaderResolvedConfig &
+  EndpointResolvedConfig<EndpointParameters> &
   HttpAuthSchemeResolvedConfig &
   ClientResolvedEndpointParameters;
 /**
@@ -332,13 +338,18 @@ export interface QAppsClientResolvedConfig extends QAppsClientResolvedConfigType
 /**
  * <p>The Amazon Q Apps feature capability within Amazon Q Business allows web experience
  *       users to create lightweight, purpose-built AI apps to fulfill specific tasks from
- *       within their web experience. For example, users can create an Q Appthat exclusively
+ *       within their web experience. For example, users can create a Q App that exclusively
  *       generates marketing-related content to improve your marketing team's productivity or a
- *       Q App for marketing content-generation like writing customer emails and creating
- *       promotional content using a certain style of voice, tone, and branding.
- *       For more information, see <a href="https://docs.aws.amazon.com/amazonq/latest/qbusiness-ug/purpose-built-qapps.html">Amazon Q App</a> in the
- *       <i>Amazon Q Business User Guide</i>.
+ *       Q App for writing customer emails and creating promotional content using a certain
+ *       style of voice, tone, and branding. For more information on the capabilities, see
+ *       <a href="https://docs.aws.amazon.com/amazonq/latest/qbusiness-ug/deploy-experience-iam-role.html#q-apps-actions">Amazon Q Apps capabilities</a> in the <i>Amazon Q Business User Guide</i>.
  *       </p>
+ *          <p>For an overview of the Amazon Q App APIs, see <a href="https://docs.aws.amazon.com/amazonq/latest/api-reference/API_Operations_QApps.html">Overview of
+ *       Amazon Q Apps API operations</a>.</p>
+ *          <p>For information about the IAM access control permissions you need to
+ *       use the Amazon Q Apps API, see <a href="https://docs.aws.amazon.com/amazonq/latest/qbusiness-ug/deploy-experience-iam-role.html">
+ *         IAM role for the Amazon Q Business web experience including Amazon Q Apps</a> in the
+ *       <i>Amazon Q Business User Guide</i>.</p>
  * @public
  */
 export class QAppsClient extends __Client<
@@ -355,25 +366,28 @@ export class QAppsClient extends __Client<
   constructor(...[configuration]: __CheckOptionalClientConfig<QAppsClientConfig>) {
     const _config_0 = __getRuntimeConfig(configuration || {});
     const _config_1 = resolveClientEndpointParameters(_config_0);
-    const _config_2 = resolveRegionConfig(_config_1);
-    const _config_3 = resolveEndpointConfig(_config_2);
-    const _config_4 = resolveHostHeaderConfig(_config_3);
-    const _config_5 = resolveUserAgentConfig(_config_4);
-    const _config_6 = resolveRetryConfig(_config_5);
+    const _config_2 = resolveUserAgentConfig(_config_1);
+    const _config_3 = resolveRetryConfig(_config_2);
+    const _config_4 = resolveRegionConfig(_config_3);
+    const _config_5 = resolveHostHeaderConfig(_config_4);
+    const _config_6 = resolveEndpointConfig(_config_5);
     const _config_7 = resolveHttpAuthSchemeConfig(_config_6);
     const _config_8 = resolveRuntimeExtensions(_config_7, configuration?.extensions || []);
     super(_config_8);
     this.config = _config_8;
-    this.middlewareStack.use(getHostHeaderPlugin(this.config));
-    this.middlewareStack.use(getLoggerPlugin(this.config));
-    this.middlewareStack.use(getRecursionDetectionPlugin(this.config));
     this.middlewareStack.use(getUserAgentPlugin(this.config));
     this.middlewareStack.use(getRetryPlugin(this.config));
     this.middlewareStack.use(getContentLengthPlugin(this.config));
+    this.middlewareStack.use(getHostHeaderPlugin(this.config));
+    this.middlewareStack.use(getLoggerPlugin(this.config));
+    this.middlewareStack.use(getRecursionDetectionPlugin(this.config));
     this.middlewareStack.use(
       getHttpAuthSchemeEndpointRuleSetPlugin(this.config, {
-        httpAuthSchemeParametersProvider: this.getDefaultHttpAuthSchemeParametersProvider(),
-        identityProviderConfigProvider: this.getIdentityProviderConfigProvider(),
+        httpAuthSchemeParametersProvider: defaultQAppsHttpAuthSchemeParametersProvider,
+        identityProviderConfigProvider: async (config: QAppsClientResolvedConfig) =>
+          new DefaultIdentityProviderConfig({
+            "aws.auth#sigv4": config.credentials,
+          }),
       })
     );
     this.middlewareStack.use(getHttpSigningPlugin(this.config));
@@ -386,14 +400,5 @@ export class QAppsClient extends __Client<
    */
   destroy(): void {
     super.destroy();
-  }
-  private getDefaultHttpAuthSchemeParametersProvider() {
-    return defaultQAppsHttpAuthSchemeParametersProvider;
-  }
-  private getIdentityProviderConfigProvider() {
-    return async (config: QAppsClientResolvedConfig) =>
-      new DefaultIdentityProviderConfig({
-        "aws.auth#sigv4": config.credentials,
-      });
   }
 }

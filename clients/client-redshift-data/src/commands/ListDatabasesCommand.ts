@@ -103,6 +103,9 @@ export interface ListDatabasesCommandOutput extends ListDatabasesResponse, __Met
  * @throws {@link InternalServerException} (server fault)
  *  <p>The Amazon Redshift Data API operation failed due to invalid input. </p>
  *
+ * @throws {@link QueryTimeoutException} (client fault)
+ *  <p>The Amazon Redshift Data API operation failed due to timeout.</p>
+ *
  * @throws {@link ValidationException} (client fault)
  *  <p>The Amazon Redshift Data API operation failed due to invalid input. </p>
  *
@@ -119,9 +122,7 @@ export class ListDatabasesCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: RedshiftDataClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -133,4 +134,16 @@ export class ListDatabasesCommand extends $Command
   .f(void 0, void 0)
   .ser(se_ListDatabasesCommand)
   .de(de_ListDatabasesCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: ListDatabasesRequest;
+      output: ListDatabasesResponse;
+    };
+    sdk: {
+      input: ListDatabasesCommandInput;
+      output: ListDatabasesCommandOutput;
+    };
+  };
+}

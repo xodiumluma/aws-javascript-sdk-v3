@@ -3758,9 +3758,11 @@ export interface DBSnapshotTenantDatabase {
   NcharCharacterSetName?: string;
 
   /**
-   * <p>A list of tags.
-   *           For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.html">Tagging Amazon RDS Resources</a> in the <i>Amazon RDS User Guide.</i>
-   *          </p>
+   * <p>A list of tags.</p>
+   *          <p>For more information, see
+   *             <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.html">Tagging Amazon RDS resources</a> in the <i>Amazon RDS User Guide</i> or
+   *             <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/USER_Tagging.html">Tagging Amazon Aurora and Amazon RDS resources</a> in the <i>Amazon Aurora User Guide</i>.
+   *             </p>
    * @public
    */
   TagList?: Tag[];
@@ -8916,12 +8918,10 @@ export interface ModifyDBInstanceMessage {
 
   /**
    * <p>Specifies whether the DB instance is publicly accessible.</p>
-   *          <p>When the DB cluster is publicly accessible, its Domain Name System (DNS) endpoint
-   *           resolves to the private IP address from within the DB cluster's virtual private cloud
-   *           (VPC). It resolves to the public IP address from outside of the DB cluster's VPC. Access
-   *           to the DB cluster is ultimately controlled by the security group it uses. That public
-   *           access isn't permitted if the security group assigned to the DB cluster doesn't permit
-   *           it.</p>
+   *          <p>When the DB instance is publicly accessible and you connect from outside of the DB instance's virtual private cloud (VPC),
+   *               its Domain Name System (DNS) endpoint resolves to the public IP address. When you connect from within the same VPC as the DB instance,
+   *               the endpoint resolves to the private IP address. Access to the DB instance is ultimately controlled by the security group it uses. That public
+   *               access isn't permitted if the security group assigned to the DB instance doesn't permit it.</p>
    *          <p>When the DB instance isn't publicly accessible, it is an internal DB instance with a DNS name that resolves to a private IP address.</p>
    *          <p>
    *             <code>PubliclyAccessible</code> only applies to DB instances in a VPC. The DB instance must be part of a
@@ -9543,7 +9543,7 @@ export interface ConnectionPoolConfiguration {
 
   /**
    * <p>The number of seconds for a proxy to wait for a connection to become available in the connection pool. This setting only applies when the
-   *         proxy has opened its maximum number of connections and all connections are busy with client sessions. For an unlimited wait time, specify <code>0</code>.</p>
+   *         proxy has opened its maximum number of connections and all connections are busy with client sessions.</p>
    *          <p>Default: <code>120</code>
    *          </p>
    *          <p>Constraints:</p>
@@ -9711,6 +9711,29 @@ export interface ModifyDBShardGroupMessage {
    * @public
    */
   MaxACU?: number;
+
+  /**
+   * <p>The minimum capacity of the DB shard group in Aurora capacity units (ACUs).</p>
+   * @public
+   */
+  MinACU?: number;
+
+  /**
+   * <p>Specifies whether to create standby DB shard groups for the DB shard group. Valid values are the following:</p>
+   *          <ul>
+   *             <li>
+   *                <p>0 - Creates a DB shard group without a standby DB shard group. This is the default value.</p>
+   *             </li>
+   *             <li>
+   *                <p>1 - Creates a DB shard group with a standby DB shard group in a different Availability Zone (AZ).</p>
+   *             </li>
+   *             <li>
+   *                <p>2 - Creates a DB shard group with two standby DB shard groups in two different AZs.</p>
+   *             </li>
+   *          </ul>
+   * @public
+   */
+  ComputeRedundancy?: number;
 }
 
 /**
@@ -10085,7 +10108,7 @@ export interface ModifyIntegrationMessage {
 }
 
 /**
- * <p>A list of all available options</p>
+ * <p>A list of all available options for an option group.</p>
  * @public
  */
 export interface OptionConfiguration {
@@ -10108,13 +10131,13 @@ export interface OptionConfiguration {
   OptionVersion?: string;
 
   /**
-   * <p>A list of DBSecurityGroupMembership name strings used for this option.</p>
+   * <p>A list of DB security groups used for this option.</p>
    * @public
    */
   DBSecurityGroupMemberships?: string[];
 
   /**
-   * <p>A list of VpcSecurityGroupMembership name strings used for this option.</p>
+   * <p>A list of VPC security group names used for this option.</p>
    * @public
    */
   VpcSecurityGroupMemberships?: string[];
@@ -10411,9 +10434,11 @@ export interface PurchaseReservedDBInstancesOfferingMessage {
   DBInstanceCount?: number;
 
   /**
-   * <p>A list of tags.
-   *           For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.html">Tagging Amazon RDS Resources</a> in the <i>Amazon RDS User Guide.</i>
-   *          </p>
+   * <p>A list of tags.</p>
+   *          <p>For more information, see
+   *             <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.html">Tagging Amazon RDS resources</a> in the <i>Amazon RDS User Guide</i> or
+   *             <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/USER_Tagging.html">Tagging Amazon Aurora and Amazon RDS resources</a> in the <i>Amazon Aurora User Guide</i>.
+   *             </p>
    * @public
    */
   Tags?: Tag[];
@@ -11124,9 +11149,11 @@ export interface RestoreDBClusterFromS3Message {
   PreferredMaintenanceWindow?: string;
 
   /**
-   * <p>A list of tags.
-   *           For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.html">Tagging Amazon RDS Resources</a> in the <i>Amazon RDS User Guide.</i>
-   *          </p>
+   * <p>A list of tags.</p>
+   *          <p>For more information, see
+   *             <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.html">Tagging Amazon RDS resources</a> in the <i>Amazon RDS User Guide</i> or
+   *             <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/USER_Tagging.html">Tagging Amazon Aurora and Amazon RDS resources</a> in the <i>Amazon Aurora User Guide</i>.
+   *             </p>
    * @public
    */
   Tags?: Tag[];
@@ -12033,9 +12060,11 @@ export interface RestoreDBClusterToPointInTimeMessage {
   VpcSecurityGroupIds?: string[];
 
   /**
-   * <p>A list of tags.
-   *           For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.html">Tagging Amazon RDS Resources</a> in the <i>Amazon RDS User Guide.</i>
-   *          </p>
+   * <p>A list of tags.</p>
+   *          <p>For more information, see
+   *             <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.html">Tagging Amazon RDS resources</a> in the <i>Amazon RDS User Guide</i> or
+   *             <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/USER_Tagging.html">Tagging Amazon Aurora and Amazon RDS resources</a> in the <i>Amazon Aurora User Guide</i>.
+   *             </p>
    * @public
    */
   Tags?: Tag[];
@@ -12486,9 +12515,9 @@ export interface RestoreDBInstanceFromDBSnapshotMessage {
    * <p>License model information for the restored DB instance.</p>
    *          <note>
    *             <p>License models for RDS for Db2 require additional configuration. The Bring Your
-   *                 Own License (BYOL) model requires a custom parameter group. The Db2 license through
+   *                 Own License (BYOL) model requires a custom parameter group and an Amazon Web Services License Manager self-managed license. The Db2 license through
    *                 Amazon Web Services Marketplace model requires an Amazon Web Services Marketplace subscription. For more
-   *                 information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/db2-licensing.html">RDS for Db2 licensing
+   *                 information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/db2-licensing.html">Amazon RDS for Db2 licensing
    *                     options</a> in the <i>Amazon RDS User Guide</i>.</p>
    *          </note>
    *          <p>This setting doesn't apply to Amazon Aurora or RDS Custom DB instances.</p>
@@ -12634,9 +12663,11 @@ export interface RestoreDBInstanceFromDBSnapshotMessage {
   OptionGroupName?: string;
 
   /**
-   * <p>A list of tags.
-   *           For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.html">Tagging Amazon RDS Resources</a> in the <i>Amazon RDS User Guide.</i>
-   *          </p>
+   * <p>A list of tags.</p>
+   *          <p>For more information, see
+   *             <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.html">Tagging Amazon RDS resources</a> in the <i>Amazon RDS User Guide</i> or
+   *             <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/USER_Tagging.html">Tagging Amazon Aurora and Amazon RDS resources</a> in the <i>Amazon Aurora User Guide</i>.
+   *             </p>
    * @public
    */
   Tags?: Tag[];
@@ -13818,9 +13849,9 @@ export interface RestoreDBInstanceToPointInTimeMessage {
    * <p>The license model information for the restored DB instance.</p>
    *          <note>
    *             <p>License models for RDS for Db2 require additional configuration. The Bring Your
-   *                 Own License (BYOL) model requires a custom parameter group. The Db2 license through
+   *                 Own License (BYOL) model requires a custom parameter group and an Amazon Web Services License Manager self-managed license. The Db2 license through
    *                 Amazon Web Services Marketplace model requires an Amazon Web Services Marketplace subscription. For more
-   *                 information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/db2-licensing.html">RDS for Db2 licensing
+   *                 information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/db2-licensing.html">Amazon RDS for Db2 licensing
    *                     options</a> in the <i>Amazon RDS User Guide</i>.</p>
    *          </note>
    *          <p>This setting doesn't apply to Amazon Aurora or RDS Custom DB instances.</p>
@@ -13988,9 +14019,11 @@ export interface RestoreDBInstanceToPointInTimeMessage {
   CopyTagsToSnapshot?: boolean;
 
   /**
-   * <p>A list of tags.
-   *           For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.html">Tagging Amazon RDS Resources</a> in the <i>Amazon RDS User Guide.</i>
-   *          </p>
+   * <p>A list of tags.</p>
+   *          <p>For more information, see
+   *             <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.html">Tagging Amazon RDS resources</a> in the <i>Amazon RDS User Guide</i> or
+   *             <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/USER_Tagging.html">Tagging Amazon Aurora and Amazon RDS resources</a> in the <i>Amazon Aurora User Guide</i>.
+   *             </p>
    * @public
    */
   Tags?: Tag[];

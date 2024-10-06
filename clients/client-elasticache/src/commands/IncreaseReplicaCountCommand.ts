@@ -28,9 +28,9 @@ export interface IncreaseReplicaCountCommandInput extends IncreaseReplicaCountMe
 export interface IncreaseReplicaCountCommandOutput extends IncreaseReplicaCountResult, __MetadataBearer {}
 
 /**
- * <p>Dynamically increases the number of replicas in a Redis (cluster mode disabled)
+ * <p>Dynamically increases the number of replicas in a Redis OSS (cluster mode disabled)
  *             replication group or the number of replica nodes in one or more node groups (shards) of
- *             a Redis (cluster mode enabled) replication group. This operation is performed with no
+ *             a Redis OSS (cluster mode enabled) replication group. This operation is performed with no
  *             cluster down time.</p>
  * @example
  * Use a bare-bones client and the command you need to make an API call.
@@ -241,9 +241,7 @@ export class IncreaseReplicaCountCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: ElastiCacheClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -255,4 +253,16 @@ export class IncreaseReplicaCountCommand extends $Command
   .f(void 0, void 0)
   .ser(se_IncreaseReplicaCountCommand)
   .de(de_IncreaseReplicaCountCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: IncreaseReplicaCountMessage;
+      output: IncreaseReplicaCountResult;
+    };
+    sdk: {
+      input: IncreaseReplicaCountCommandInput;
+      output: IncreaseReplicaCountCommandOutput;
+    };
+  };
+}

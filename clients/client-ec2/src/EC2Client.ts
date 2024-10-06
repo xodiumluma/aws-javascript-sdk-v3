@@ -235,6 +235,10 @@ import { CopyFpgaImageCommandInput, CopyFpgaImageCommandOutput } from "./command
 import { CopyImageCommandInput, CopyImageCommandOutput } from "./commands/CopyImageCommand";
 import { CopySnapshotCommandInput, CopySnapshotCommandOutput } from "./commands/CopySnapshotCommand";
 import {
+  CreateCapacityReservationBySplittingCommandInput,
+  CreateCapacityReservationBySplittingCommandOutput,
+} from "./commands/CreateCapacityReservationBySplittingCommand";
+import {
   CreateCapacityReservationCommandInput,
   CreateCapacityReservationCommandOutput,
 } from "./commands/CreateCapacityReservationCommand";
@@ -291,6 +295,10 @@ import {
   CreateInternetGatewayCommandOutput,
 } from "./commands/CreateInternetGatewayCommand";
 import { CreateIpamCommandInput, CreateIpamCommandOutput } from "./commands/CreateIpamCommand";
+import {
+  CreateIpamExternalResourceVerificationTokenCommandInput,
+  CreateIpamExternalResourceVerificationTokenCommandOutput,
+} from "./commands/CreateIpamExternalResourceVerificationTokenCommand";
 import { CreateIpamPoolCommandInput, CreateIpamPoolCommandOutput } from "./commands/CreateIpamPoolCommand";
 import {
   CreateIpamResourceDiscoveryCommandInput,
@@ -529,6 +537,10 @@ import {
   DeleteInternetGatewayCommandOutput,
 } from "./commands/DeleteInternetGatewayCommand";
 import { DeleteIpamCommandInput, DeleteIpamCommandOutput } from "./commands/DeleteIpamCommand";
+import {
+  DeleteIpamExternalResourceVerificationTokenCommandInput,
+  DeleteIpamExternalResourceVerificationTokenCommandOutput,
+} from "./commands/DeleteIpamExternalResourceVerificationTokenCommand";
 import { DeleteIpamPoolCommandInput, DeleteIpamPoolCommandOutput } from "./commands/DeleteIpamPoolCommand";
 import {
   DeleteIpamResourceDiscoveryCommandInput,
@@ -947,6 +959,10 @@ import {
   DescribeInternetGatewaysCommandOutput,
 } from "./commands/DescribeInternetGatewaysCommand";
 import { DescribeIpamByoasnCommandInput, DescribeIpamByoasnCommandOutput } from "./commands/DescribeIpamByoasnCommand";
+import {
+  DescribeIpamExternalResourceVerificationTokensCommandInput,
+  DescribeIpamExternalResourceVerificationTokensCommandOutput,
+} from "./commands/DescribeIpamExternalResourceVerificationTokensCommand";
 import { DescribeIpamPoolsCommandInput, DescribeIpamPoolsCommandOutput } from "./commands/DescribeIpamPoolsCommand";
 import {
   DescribeIpamResourceDiscoveriesCommandInput,
@@ -1753,6 +1769,10 @@ import {
   ModifyInstanceCapacityReservationAttributesCommandOutput,
 } from "./commands/ModifyInstanceCapacityReservationAttributesCommand";
 import {
+  ModifyInstanceCpuOptionsCommandInput,
+  ModifyInstanceCpuOptionsCommandOutput,
+} from "./commands/ModifyInstanceCpuOptionsCommand";
+import {
   ModifyInstanceCreditSpecificationCommandInput,
   ModifyInstanceCreditSpecificationCommandOutput,
 } from "./commands/ModifyInstanceCreditSpecificationCommand";
@@ -1934,6 +1954,10 @@ import {
   MoveByoipCidrToIpamCommandInput,
   MoveByoipCidrToIpamCommandOutput,
 } from "./commands/MoveByoipCidrToIpamCommand";
+import {
+  MoveCapacityReservationInstancesCommandInput,
+  MoveCapacityReservationInstancesCommandOutput,
+} from "./commands/MoveCapacityReservationInstancesCommand";
 import { ProvisionByoipCidrCommandInput, ProvisionByoipCidrCommandOutput } from "./commands/ProvisionByoipCidrCommand";
 import {
   ProvisionIpamByoasnCommandInput,
@@ -2227,6 +2251,7 @@ export type ServiceInputTypes =
   | CopyFpgaImageCommandInput
   | CopyImageCommandInput
   | CopySnapshotCommandInput
+  | CreateCapacityReservationBySplittingCommandInput
   | CreateCapacityReservationCommandInput
   | CreateCapacityReservationFleetCommandInput
   | CreateCarrierGatewayCommandInput
@@ -2248,6 +2273,7 @@ export type ServiceInputTypes =
   | CreateInstanceExportTaskCommandInput
   | CreateInternetGatewayCommandInput
   | CreateIpamCommandInput
+  | CreateIpamExternalResourceVerificationTokenCommandInput
   | CreateIpamPoolCommandInput
   | CreateIpamResourceDiscoveryCommandInput
   | CreateIpamScopeCommandInput
@@ -2324,6 +2350,7 @@ export type ServiceInputTypes =
   | DeleteInstanceEventWindowCommandInput
   | DeleteInternetGatewayCommandInput
   | DeleteIpamCommandInput
+  | DeleteIpamExternalResourceVerificationTokenCommandInput
   | DeleteIpamPoolCommandInput
   | DeleteIpamResourceDiscoveryCommandInput
   | DeleteIpamScopeCommandInput
@@ -2448,6 +2475,7 @@ export type ServiceInputTypes =
   | DescribeInstancesCommandInput
   | DescribeInternetGatewaysCommandInput
   | DescribeIpamByoasnCommandInput
+  | DescribeIpamExternalResourceVerificationTokensCommandInput
   | DescribeIpamPoolsCommandInput
   | DescribeIpamResourceDiscoveriesCommandInput
   | DescribeIpamResourceDiscoveryAssociationsCommandInput
@@ -2674,6 +2702,7 @@ export type ServiceInputTypes =
   | ModifyImageAttributeCommandInput
   | ModifyInstanceAttributeCommandInput
   | ModifyInstanceCapacityReservationAttributesCommandInput
+  | ModifyInstanceCpuOptionsCommandInput
   | ModifyInstanceCreditSpecificationCommandInput
   | ModifyInstanceEventStartTimeCommandInput
   | ModifyInstanceEventWindowCommandInput
@@ -2727,6 +2756,7 @@ export type ServiceInputTypes =
   | MonitorInstancesCommandInput
   | MoveAddressToVpcCommandInput
   | MoveByoipCidrToIpamCommandInput
+  | MoveCapacityReservationInstancesCommandInput
   | ProvisionByoipCidrCommandInput
   | ProvisionIpamByoasnCommandInput
   | ProvisionIpamPoolCidrCommandInput
@@ -2854,6 +2884,7 @@ export type ServiceOutputTypes =
   | CopyFpgaImageCommandOutput
   | CopyImageCommandOutput
   | CopySnapshotCommandOutput
+  | CreateCapacityReservationBySplittingCommandOutput
   | CreateCapacityReservationCommandOutput
   | CreateCapacityReservationFleetCommandOutput
   | CreateCarrierGatewayCommandOutput
@@ -2875,6 +2906,7 @@ export type ServiceOutputTypes =
   | CreateInstanceExportTaskCommandOutput
   | CreateInternetGatewayCommandOutput
   | CreateIpamCommandOutput
+  | CreateIpamExternalResourceVerificationTokenCommandOutput
   | CreateIpamPoolCommandOutput
   | CreateIpamResourceDiscoveryCommandOutput
   | CreateIpamScopeCommandOutput
@@ -2951,6 +2983,7 @@ export type ServiceOutputTypes =
   | DeleteInstanceEventWindowCommandOutput
   | DeleteInternetGatewayCommandOutput
   | DeleteIpamCommandOutput
+  | DeleteIpamExternalResourceVerificationTokenCommandOutput
   | DeleteIpamPoolCommandOutput
   | DeleteIpamResourceDiscoveryCommandOutput
   | DeleteIpamScopeCommandOutput
@@ -3075,6 +3108,7 @@ export type ServiceOutputTypes =
   | DescribeInstancesCommandOutput
   | DescribeInternetGatewaysCommandOutput
   | DescribeIpamByoasnCommandOutput
+  | DescribeIpamExternalResourceVerificationTokensCommandOutput
   | DescribeIpamPoolsCommandOutput
   | DescribeIpamResourceDiscoveriesCommandOutput
   | DescribeIpamResourceDiscoveryAssociationsCommandOutput
@@ -3301,6 +3335,7 @@ export type ServiceOutputTypes =
   | ModifyImageAttributeCommandOutput
   | ModifyInstanceAttributeCommandOutput
   | ModifyInstanceCapacityReservationAttributesCommandOutput
+  | ModifyInstanceCpuOptionsCommandOutput
   | ModifyInstanceCreditSpecificationCommandOutput
   | ModifyInstanceEventStartTimeCommandOutput
   | ModifyInstanceEventWindowCommandOutput
@@ -3354,6 +3389,7 @@ export type ServiceOutputTypes =
   | MonitorInstancesCommandOutput
   | MoveAddressToVpcCommandOutput
   | MoveByoipCidrToIpamCommandOutput
+  | MoveCapacityReservationInstancesCommandOutput
   | ProvisionByoipCidrCommandOutput
   | ProvisionIpamByoasnCommandOutput
   | ProvisionIpamPoolCidrCommandOutput
@@ -3559,11 +3595,11 @@ export interface ClientDefaults extends Partial<__SmithyConfiguration<__HttpHand
  */
 export type EC2ClientConfigType = Partial<__SmithyConfiguration<__HttpHandlerOptions>> &
   ClientDefaults &
-  RegionInputConfig &
-  EndpointInputConfig<EndpointParameters> &
-  HostHeaderInputConfig &
   UserAgentInputConfig &
   RetryInputConfig &
+  RegionInputConfig &
+  HostHeaderInputConfig &
+  EndpointInputConfig<EndpointParameters> &
   HttpAuthSchemeInputConfig &
   ClientInputEndpointParameters;
 /**
@@ -3579,11 +3615,11 @@ export interface EC2ClientConfig extends EC2ClientConfigType {}
 export type EC2ClientResolvedConfigType = __SmithyResolvedConfiguration<__HttpHandlerOptions> &
   Required<ClientDefaults> &
   RuntimeExtensionsConfig &
-  RegionResolvedConfig &
-  EndpointResolvedConfig<EndpointParameters> &
-  HostHeaderResolvedConfig &
   UserAgentResolvedConfig &
   RetryResolvedConfig &
+  RegionResolvedConfig &
+  HostHeaderResolvedConfig &
+  EndpointResolvedConfig<EndpointParameters> &
   HttpAuthSchemeResolvedConfig &
   ClientResolvedEndpointParameters;
 /**
@@ -3613,25 +3649,28 @@ export class EC2Client extends __Client<
   constructor(...[configuration]: __CheckOptionalClientConfig<EC2ClientConfig>) {
     const _config_0 = __getRuntimeConfig(configuration || {});
     const _config_1 = resolveClientEndpointParameters(_config_0);
-    const _config_2 = resolveRegionConfig(_config_1);
-    const _config_3 = resolveEndpointConfig(_config_2);
-    const _config_4 = resolveHostHeaderConfig(_config_3);
-    const _config_5 = resolveUserAgentConfig(_config_4);
-    const _config_6 = resolveRetryConfig(_config_5);
+    const _config_2 = resolveUserAgentConfig(_config_1);
+    const _config_3 = resolveRetryConfig(_config_2);
+    const _config_4 = resolveRegionConfig(_config_3);
+    const _config_5 = resolveHostHeaderConfig(_config_4);
+    const _config_6 = resolveEndpointConfig(_config_5);
     const _config_7 = resolveHttpAuthSchemeConfig(_config_6);
     const _config_8 = resolveRuntimeExtensions(_config_7, configuration?.extensions || []);
     super(_config_8);
     this.config = _config_8;
-    this.middlewareStack.use(getHostHeaderPlugin(this.config));
-    this.middlewareStack.use(getLoggerPlugin(this.config));
-    this.middlewareStack.use(getRecursionDetectionPlugin(this.config));
     this.middlewareStack.use(getUserAgentPlugin(this.config));
     this.middlewareStack.use(getRetryPlugin(this.config));
     this.middlewareStack.use(getContentLengthPlugin(this.config));
+    this.middlewareStack.use(getHostHeaderPlugin(this.config));
+    this.middlewareStack.use(getLoggerPlugin(this.config));
+    this.middlewareStack.use(getRecursionDetectionPlugin(this.config));
     this.middlewareStack.use(
       getHttpAuthSchemeEndpointRuleSetPlugin(this.config, {
-        httpAuthSchemeParametersProvider: this.getDefaultHttpAuthSchemeParametersProvider(),
-        identityProviderConfigProvider: this.getIdentityProviderConfigProvider(),
+        httpAuthSchemeParametersProvider: defaultEC2HttpAuthSchemeParametersProvider,
+        identityProviderConfigProvider: async (config: EC2ClientResolvedConfig) =>
+          new DefaultIdentityProviderConfig({
+            "aws.auth#sigv4": config.credentials,
+          }),
       })
     );
     this.middlewareStack.use(getHttpSigningPlugin(this.config));
@@ -3644,14 +3683,5 @@ export class EC2Client extends __Client<
    */
   destroy(): void {
     super.destroy();
-  }
-  private getDefaultHttpAuthSchemeParametersProvider() {
-    return defaultEC2HttpAuthSchemeParametersProvider;
-  }
-  private getIdentityProviderConfigProvider() {
-    return async (config: EC2ClientResolvedConfig) =>
-      new DefaultIdentityProviderConfig({
-        "aws.auth#sigv4": config.credentials,
-      });
   }
 }

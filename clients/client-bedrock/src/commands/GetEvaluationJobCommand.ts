@@ -34,7 +34,7 @@ export interface GetEvaluationJobCommandOutput extends GetEvaluationJobResponse,
 
 /**
  * <p>Retrieves the properties associated with a model evaluation job, including the
- *          status of the job. For more information, see <a href="https://docs.aws.amazon.com/bedrock/latest/userguide/latest/userguide/model-evaluation.html">Model evaluations</a>.</p>
+ *          status of the job. For more information, see <a href="https://docs.aws.amazon.com/bedrock/latest/userguide/model-evaluation.html">Model evaluation</a>.</p>
  * @example
  * Use a bare-bones client and the command you need to make an API call.
  * ```javascript
@@ -48,7 +48,7 @@ export interface GetEvaluationJobCommandOutput extends GetEvaluationJobResponse,
  * const response = await client.send(command);
  * // { // GetEvaluationJobResponse
  * //   jobName: "STRING_VALUE", // required
- * //   status: "InProgress" || "Completed" || "Failed" || "Stopping" || "Stopped", // required
+ * //   status: "InProgress" || "Completed" || "Failed" || "Stopping" || "Stopped" || "Deleting", // required
  * //   jobArn: "STRING_VALUE", // required
  * //   jobDescription: "STRING_VALUE",
  * //   roleArn: "STRING_VALUE", // required
@@ -155,9 +155,7 @@ export class GetEvaluationJobCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: BedrockClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -169,4 +167,16 @@ export class GetEvaluationJobCommand extends $Command
   .f(GetEvaluationJobRequestFilterSensitiveLog, GetEvaluationJobResponseFilterSensitiveLog)
   .ser(se_GetEvaluationJobCommand)
   .de(de_GetEvaluationJobCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: GetEvaluationJobRequest;
+      output: GetEvaluationJobResponse;
+    };
+    sdk: {
+      input: GetEvaluationJobCommandInput;
+      output: GetEvaluationJobCommandOutput;
+    };
+  };
+}

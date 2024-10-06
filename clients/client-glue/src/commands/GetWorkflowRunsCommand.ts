@@ -122,6 +122,7 @@ export interface GetWorkflowRunsCommandOutput extends GetWorkflowRunsResponse, _
  * //                   TriggerName: "STRING_VALUE",
  * //                   JobName: "STRING_VALUE",
  * //                   JobMode: "SCRIPT" || "VISUAL" || "NOTEBOOK",
+ * //                   JobRunQueuingEnabled: true || false,
  * //                   StartedOn: new Date("TIMESTAMP"),
  * //                   LastModifiedOn: new Date("TIMESTAMP"),
  * //                   CompletedOn: new Date("TIMESTAMP"),
@@ -152,6 +153,7 @@ export interface GetWorkflowRunsCommandOutput extends GetWorkflowRunsResponse, _
  * //                   ExecutionClass: "FLEX" || "STANDARD",
  * //                   MaintenanceWindow: "STRING_VALUE",
  * //                   ProfileName: "STRING_VALUE",
+ * //                   StateDetail: "STRING_VALUE",
  * //                 },
  * //               ],
  * //             },
@@ -218,9 +220,7 @@ export class GetWorkflowRunsCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: GlueClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -232,4 +232,16 @@ export class GetWorkflowRunsCommand extends $Command
   .f(void 0, void 0)
   .ser(se_GetWorkflowRunsCommand)
   .de(de_GetWorkflowRunsCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: GetWorkflowRunsRequest;
+      output: GetWorkflowRunsResponse;
+    };
+    sdk: {
+      input: GetWorkflowRunsCommandInput;
+      output: GetWorkflowRunsCommandOutput;
+    };
+  };
+}

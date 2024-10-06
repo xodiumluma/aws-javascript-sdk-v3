@@ -5,8 +5,7 @@ import { Command as $Command } from "@smithy/smithy-client";
 import { MetadataBearer as __MetadataBearer } from "@smithy/types";
 
 import { commonParams } from "../endpoint/EndpointParameters";
-import { CreateClusterRequest } from "../models/models_0";
-import { CreateClusterResponse } from "../models/models_1";
+import { CreateClusterRequest, CreateClusterResponse } from "../models/models_1";
 import { de_CreateClusterCommand, se_CreateClusterCommand } from "../protocols/Aws_json1_1";
 import { SageMakerClientResolvedConfig, ServiceInputTypes, ServiceOutputTypes } from "../SageMakerClient";
 
@@ -59,6 +58,9 @@ export interface CreateClusterCommandOutput extends CreateClusterResponse, __Met
  *           },
  *         },
  *       ],
+ *       OnStartDeepHealthChecks: [ // OnStartDeepHealthChecks
+ *         "InstanceStress" || "InstanceConnectivity",
+ *       ],
  *     },
  *   ],
  *   VpcConfig: { // VpcConfig
@@ -75,6 +77,12 @@ export interface CreateClusterCommandOutput extends CreateClusterResponse, __Met
  *       Value: "STRING_VALUE", // required
  *     },
  *   ],
+ *   Orchestrator: { // ClusterOrchestrator
+ *     Eks: { // ClusterOrchestratorEksConfig
+ *       ClusterArn: "STRING_VALUE", // required
+ *     },
+ *   },
+ *   NodeRecovery: "Automatic" || "None",
  * };
  * const command = new CreateClusterCommand(input);
  * const response = await client.send(command);
@@ -110,9 +118,7 @@ export class CreateClusterCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: SageMakerClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -124,4 +130,16 @@ export class CreateClusterCommand extends $Command
   .f(void 0, void 0)
   .ser(se_CreateClusterCommand)
   .de(de_CreateClusterCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: CreateClusterRequest;
+      output: CreateClusterResponse;
+    };
+    sdk: {
+      input: CreateClusterCommandInput;
+      output: CreateClusterCommandOutput;
+    };
+  };
+}

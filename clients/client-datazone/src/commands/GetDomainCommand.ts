@@ -42,6 +42,7 @@ export interface GetDomainCommandOutput extends GetDomainOutput, __MetadataBeare
  * const response = await client.send(command);
  * // { // GetDomainOutput
  * //   id: "STRING_VALUE", // required
+ * //   rootDomainUnitId: "STRING_VALUE",
  * //   name: "STRING_VALUE",
  * //   description: "STRING_VALUE",
  * //   singleSignOn: { // SingleSignOn
@@ -102,9 +103,7 @@ export class GetDomainCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: DataZoneClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -116,4 +115,16 @@ export class GetDomainCommand extends $Command
   .f(void 0, void 0)
   .ser(se_GetDomainCommand)
   .de(de_GetDomainCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: GetDomainInput;
+      output: GetDomainOutput;
+    };
+    sdk: {
+      input: GetDomainCommandInput;
+      output: GetDomainCommandOutput;
+    };
+  };
+}

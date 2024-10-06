@@ -83,6 +83,9 @@ export interface ListRecommendationSummariesCommandOutput
  *   },
  *   groupBy: "STRING_VALUE", // required
  *   maxResults: Number("int"),
+ *   metrics: [ // SummaryMetricsList
+ *     "SavingsPercentage",
+ *   ],
  *   nextToken: "STRING_VALUE",
  * };
  * const command = new ListRecommendationSummariesCommand(input);
@@ -98,6 +101,9 @@ export interface ListRecommendationSummariesCommandOutput
  * //   ],
  * //   groupBy: "STRING_VALUE",
  * //   currencyCode: "STRING_VALUE",
+ * //   metrics: { // SummaryMetricsResult
+ * //     savingsPercentage: "STRING_VALUE",
+ * //   },
  * //   nextToken: "STRING_VALUE",
  * // };
  *
@@ -136,9 +142,7 @@ export class ListRecommendationSummariesCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: CostOptimizationHubClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -150,4 +154,16 @@ export class ListRecommendationSummariesCommand extends $Command
   .f(void 0, void 0)
   .ser(se_ListRecommendationSummariesCommand)
   .de(de_ListRecommendationSummariesCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: ListRecommendationSummariesRequest;
+      output: ListRecommendationSummariesResponse;
+    };
+    sdk: {
+      input: ListRecommendationSummariesCommandInput;
+      output: ListRecommendationSummariesCommandOutput;
+    };
+  };
+}

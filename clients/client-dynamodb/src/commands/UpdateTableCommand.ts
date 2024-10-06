@@ -31,8 +31,8 @@ export interface UpdateTableCommandOutput extends UpdateTableOutput, __MetadataB
  * <p>Modifies the provisioned throughput settings, global secondary indexes, or DynamoDB
  *             Streams settings for a given table.</p>
  *          <important>
- *             <p>For global tables, this operation only applies to global tables using Version 2019.11.21 (Current version).
- *             </p>
+ *             <p>For global tables, this operation only applies to global tables using Version
+ *                 2019.11.21 (Current version). </p>
  *          </important>
  *          <p>You can only perform one of the following operations at once:</p>
  *          <ul>
@@ -365,9 +365,19 @@ export interface UpdateTableCommandOutput extends UpdateTableOutput, __MetadataB
  *             this limit may result in request throttling.</p>
  *
  * @throws {@link ResourceInUseException} (client fault)
- *  <p>The operation conflicts with the resource's availability. For example, you
- *             attempted to recreate an existing table, or tried to delete a table currently in the
- *                 <code>CREATING</code> state.</p>
+ *  <p>The operation conflicts with the resource's availability. For example:</p>
+ *          <ul>
+ *             <li>
+ *                <p>You attempted to recreate an existing table.</p>
+ *             </li>
+ *             <li>
+ *                <p>You tried to delete a table currently in the <code>CREATING</code> state.</p>
+ *             </li>
+ *             <li>
+ *                <p>You tried to update a resource that was already being updated.</p>
+ *             </li>
+ *          </ul>
+ *          <p>When appropriate, wait for the ongoing update to complete and attempt the request again.</p>
  *
  * @throws {@link ResourceNotFoundException} (client fault)
  *  <p>The operation tried to access a nonexistent table or index. The resource might not
@@ -438,9 +448,7 @@ export class UpdateTableCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: DynamoDBClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -452,4 +460,16 @@ export class UpdateTableCommand extends $Command
   .f(void 0, void 0)
   .ser(se_UpdateTableCommand)
   .de(de_UpdateTableCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: UpdateTableInput;
+      output: UpdateTableOutput;
+    };
+    sdk: {
+      input: UpdateTableCommandInput;
+      output: UpdateTableCommandOutput;
+    };
+  };
+}

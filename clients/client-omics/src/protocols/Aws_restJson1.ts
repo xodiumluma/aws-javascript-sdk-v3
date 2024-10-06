@@ -22,6 +22,7 @@ import {
   expectObject as __expectObject,
   expectString as __expectString,
   extendedEncodeURIComponent as __extendedEncodeURIComponent,
+  isSerializableHeaderValue,
   map,
   parseRfc3339DateTimeWithOffset as __parseRfc3339DateTimeWithOffset,
   resolvedPath as __resolvedPath,
@@ -1394,7 +1395,7 @@ export const se_GetRunCommand = async (input: GetRunCommandInput, context: __Ser
   b.bp("/run/{id}");
   b.p("id", () => input.id!, "{id}", false);
   const query: any = map({
-    [_e]: [() => input.export !== void 0, () => (input[_e]! || []).map((_entry) => _entry as any)],
+    [_e]: [() => input.export !== void 0, () => input[_e]! || []],
   });
   let body: any;
   let { hostname: resolvedHostname } = await context.endpoint();
@@ -1567,7 +1568,7 @@ export const se_GetWorkflowCommand = async (
   b.p("id", () => input.id!, "{id}", false);
   const query: any = map({
     [_t]: [, input[_t]!],
-    [_e]: [() => input.export !== void 0, () => (input[_e]! || []).map((_entry) => _entry as any)],
+    [_e]: [() => input.export !== void 0, () => input[_e]! || []],
     [_wOI]: [, input[_wOI]!],
   });
   let body: any;
@@ -2566,10 +2567,7 @@ export const se_UntagResourceCommand = async (
   b.bp("/tags/{resourceArn}");
   b.p("resourceArn", () => input.resourceArn!, "{resourceArn}", false);
   const query: any = map({
-    [_tK]: [
-      __expectNonNull(input.tagKeys, `tagKeys`) != null,
-      () => (input[_tK]! || []).map((_entry) => _entry as any),
-    ],
+    [_tK]: [__expectNonNull(input.tagKeys, `tagKeys`) != null, () => input[_tK]! || []],
   });
   let body: any;
   let { hostname: resolvedHostname } = await context.endpoint();
@@ -3551,6 +3549,7 @@ export const de_GetReadSetMetadataCommand = async (
   const data: Record<string, any> = __expectNonNull(__expectObject(await parseBody(output.body, context)), "body");
   const doc = take(data, {
     arn: __expectString,
+    creationJobId: __expectString,
     creationTime: (_) => __expectNonNull(__parseRfc3339DateTimeWithOffset(_)),
     creationType: __expectString,
     description: __expectString,
@@ -3634,7 +3633,9 @@ export const de_GetReferenceMetadataCommand = async (
   const data: Record<string, any> = __expectNonNull(__expectObject(await parseBody(output.body, context)), "body");
   const doc = take(data, {
     arn: __expectString,
+    creationJobId: __expectString,
     creationTime: (_) => __expectNonNull(__parseRfc3339DateTimeWithOffset(_)),
+    creationType: __expectString,
     description: __expectString,
     files: _json,
     id: __expectString,
@@ -5864,13 +5865,6 @@ const deserializeMetadata = (output: __HttpResponse): __ResponseMetadata => ({
 // Encode Uint8Array data into string with utf-8.
 const collectBodyString = (streamBody: any, context: __SerdeContext): Promise<string> =>
   collectBody(streamBody, context).then((body) => context.utf8Encoder(body));
-
-const isSerializableHeaderValue = (value: any): boolean =>
-  value !== undefined &&
-  value !== null &&
-  value !== "" &&
-  (!Object.getOwnPropertyNames(value).includes("length") || value.length != 0) &&
-  (!Object.getOwnPropertyNames(value).includes("size") || value.size != 0);
 
 const _e = "export";
 const _f = "force";

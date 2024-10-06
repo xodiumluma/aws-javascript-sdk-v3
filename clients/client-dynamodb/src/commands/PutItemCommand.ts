@@ -34,8 +34,7 @@ export interface PutItemCommandOutput extends PutItemOutput, __MetadataBearer {}
  *             a new item if one with the specified primary key doesn't exist), or replace an existing
  *             item if it has certain attribute values. You can return the item's attribute values in
  *             the same operation, using the <code>ReturnValues</code> parameter.</p>
- *          <p>When you add an item, the primary key attributes are the only required attributes.
- *             </p>
+ *          <p>When you add an item, the primary key attributes are the only required attributes. </p>
  *          <p>Empty String and Binary attribute values are allowed. Attribute values of type String
  *             and Binary must have a length greater than zero if the attribute is used as a key
  *             attribute for a table or index. Set type attributes cannot be empty. </p>
@@ -292,9 +291,7 @@ export class PutItemCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: DynamoDBClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -306,4 +303,16 @@ export class PutItemCommand extends $Command
   .f(void 0, void 0)
   .ser(se_PutItemCommand)
   .de(de_PutItemCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: PutItemInput;
+      output: PutItemOutput;
+    };
+    sdk: {
+      input: PutItemCommandInput;
+      output: PutItemCommandOutput;
+    };
+  };
+}

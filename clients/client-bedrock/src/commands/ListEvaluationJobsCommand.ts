@@ -38,7 +38,7 @@ export interface ListEvaluationJobsCommandOutput extends ListEvaluationJobsRespo
  * const input = { // ListEvaluationJobsRequest
  *   creationTimeAfter: new Date("TIMESTAMP"),
  *   creationTimeBefore: new Date("TIMESTAMP"),
- *   statusEquals: "InProgress" || "Completed" || "Failed" || "Stopping" || "Stopped",
+ *   statusEquals: "InProgress" || "Completed" || "Failed" || "Stopping" || "Stopped" || "Deleting",
  *   nameContains: "STRING_VALUE",
  *   maxResults: Number("int"),
  *   nextToken: "STRING_VALUE",
@@ -53,7 +53,7 @@ export interface ListEvaluationJobsCommandOutput extends ListEvaluationJobsRespo
  * //     { // EvaluationSummary
  * //       jobArn: "STRING_VALUE", // required
  * //       jobName: "STRING_VALUE", // required
- * //       status: "InProgress" || "Completed" || "Failed" || "Stopping" || "Stopped", // required
+ * //       status: "InProgress" || "Completed" || "Failed" || "Stopping" || "Stopped" || "Deleting", // required
  * //       creationTime: new Date("TIMESTAMP"), // required
  * //       jobType: "Human" || "Automated", // required
  * //       evaluationTaskTypes: [ // EvaluationTaskTypes // required
@@ -99,9 +99,7 @@ export class ListEvaluationJobsCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: BedrockClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -113,4 +111,16 @@ export class ListEvaluationJobsCommand extends $Command
   .f(void 0, void 0)
   .ser(se_ListEvaluationJobsCommand)
   .de(de_ListEvaluationJobsCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: ListEvaluationJobsRequest;
+      output: ListEvaluationJobsResponse;
+    };
+    sdk: {
+      input: ListEvaluationJobsCommandInput;
+      output: ListEvaluationJobsCommandOutput;
+    };
+  };
+}

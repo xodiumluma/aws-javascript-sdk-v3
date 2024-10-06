@@ -17,6 +17,7 @@ import {
   expectObject as __expectObject,
   expectString as __expectString,
   extendedEncodeURIComponent as __extendedEncodeURIComponent,
+  isSerializableHeaderValue,
   limitedParseDouble as __limitedParseDouble,
   map,
   parseEpochTimestamp as __parseEpochTimestamp,
@@ -292,6 +293,7 @@ import {
   Parquet,
   PortalResource,
   PortalSummary,
+  PreconditionFailedException,
   ProjectResource,
   ProjectSummary,
   PropertyType,
@@ -303,10 +305,10 @@ import {
   ResourceNotFoundException,
   RetentionPeriod,
   ServiceUnavailableException,
+  SiemensIE,
   TargetResource,
   ThrottlingException,
   TimeInNanos,
-  TimeSeriesSummary,
   Transform,
   TransformProcessingConfig,
   TumblingWindow,
@@ -317,7 +319,7 @@ import {
   Variant,
   WarmTierRetentionPeriod,
 } from "../models/models_0";
-import { Datum, Image, Row, TooManyTagsException } from "../models/models_1";
+import { Datum, Image, Row, TimeSeriesSummary, TooManyTagsException } from "../models/models_1";
 
 /**
  * serializeAws_restJson1AssociateAssetsCommand
@@ -693,9 +695,12 @@ export const se_CreateAssetModelCompositeModelCommand = async (
   context: __SerdeContext
 ): Promise<__HttpRequest> => {
   const b = rb(input, context);
-  const headers: any = {
+  const headers: any = map({}, isSerializableHeaderValue, {
     "content-type": "application/json",
-  };
+    [_im]: input[_iM]!,
+    [_inm]: input[_iNM]!,
+    [_mfvt]: input[_mFVT]!,
+  });
   b.bp("/asset-models/{assetModelId}/composite-models");
   b.p("assetModelId", () => input.assetModelId!, "{assetModelId}", false);
   let body: any;
@@ -962,7 +967,11 @@ export const se_DeleteAssetModelCommand = async (
   context: __SerdeContext
 ): Promise<__HttpRequest> => {
   const b = rb(input, context);
-  const headers: any = {};
+  const headers: any = map({}, isSerializableHeaderValue, {
+    [_im]: input[_iM]!,
+    [_inm]: input[_iNM]!,
+    [_mfvt]: input[_mFVT]!,
+  });
   b.bp("/asset-models/{assetModelId}");
   b.p("assetModelId", () => input.assetModelId!, "{assetModelId}", false);
   const query: any = map({
@@ -989,7 +998,11 @@ export const se_DeleteAssetModelCompositeModelCommand = async (
   context: __SerdeContext
 ): Promise<__HttpRequest> => {
   const b = rb(input, context);
-  const headers: any = {};
+  const headers: any = map({}, isSerializableHeaderValue, {
+    [_im]: input[_iM]!,
+    [_inm]: input[_iNM]!,
+    [_mfvt]: input[_mFVT]!,
+  });
   b.bp("/asset-models/{assetModelId}/composite-models/{assetModelCompositeModelId}");
   b.p("assetModelId", () => input.assetModelId!, "{assetModelId}", false);
   b.p("assetModelCompositeModelId", () => input.assetModelCompositeModelId!, "{assetModelCompositeModelId}", false);
@@ -1262,6 +1275,7 @@ export const se_DescribeAssetModelCommand = async (
   b.p("assetModelId", () => input.assetModelId!, "{assetModelId}", false);
   const query: any = map({
     [_eP]: [() => input.excludeProperties !== void 0, () => input[_eP]!.toString()],
+    [_aMV]: [, input[_aMV]!],
   });
   let body: any;
   let { hostname: resolvedHostname } = await context.endpoint();
@@ -1288,6 +1302,9 @@ export const se_DescribeAssetModelCompositeModelCommand = async (
   b.bp("/asset-models/{assetModelId}/composite-models/{assetModelCompositeModelId}");
   b.p("assetModelId", () => input.assetModelId!, "{assetModelId}", false);
   b.p("assetModelCompositeModelId", () => input.assetModelCompositeModelId!, "{assetModelCompositeModelId}", false);
+  const query: any = map({
+    [_aMV]: [, input[_aMV]!],
+  });
   let body: any;
   let { hostname: resolvedHostname } = await context.endpoint();
   if (context.disableHostPrefix !== true) {
@@ -1297,7 +1314,7 @@ export const se_DescribeAssetModelCompositeModelCommand = async (
     }
   }
   b.hn(resolvedHostname);
-  b.m("GET").h(headers).b(body);
+  b.m("GET").h(headers).q(query).b(body);
   return b.build();
 };
 
@@ -1715,12 +1732,9 @@ export const se_GetAssetPropertyAggregatesCommand = async (
     [_aI]: [, input[_aI]!],
     [_pI]: [, input[_pI]!],
     [_pA]: [, input[_pA]!],
-    [_aT]: [
-      __expectNonNull(input.aggregateTypes, `aggregateTypes`) != null,
-      () => (input[_aT]! || []).map((_entry) => _entry as any),
-    ],
+    [_aT]: [__expectNonNull(input.aggregateTypes, `aggregateTypes`) != null, () => input[_aT]! || []],
     [_r]: [, __expectNonNull(input[_r]!, `resolution`)],
-    [_q]: [() => input.qualities !== void 0, () => (input[_q]! || []).map((_entry) => _entry as any)],
+    [_q]: [() => input.qualities !== void 0, () => input[_q]! || []],
     [_sD]: [__expectNonNull(input.startDate, `startDate`) != null, () => __serializeDateTime(input[_sD]!).toString()],
     [_eD]: [__expectNonNull(input.endDate, `endDate`) != null, () => __serializeDateTime(input[_eD]!).toString()],
     [_tO]: [, input[_tO]!],
@@ -1784,7 +1798,7 @@ export const se_GetAssetPropertyValueHistoryCommand = async (
     [_pA]: [, input[_pA]!],
     [_sD]: [() => input.startDate !== void 0, () => __serializeDateTime(input[_sD]!).toString()],
     [_eD]: [() => input.endDate !== void 0, () => __serializeDateTime(input[_eD]!).toString()],
-    [_q]: [() => input.qualities !== void 0, () => (input[_q]! || []).map((_entry) => _entry as any)],
+    [_q]: [() => input.qualities !== void 0, () => input[_q]! || []],
     [_tO]: [, input[_tO]!],
     [_nT]: [, input[_nT]!],
     [_mR]: [() => input.maxResults !== void 0, () => input[_mR]!.toString()],
@@ -1915,6 +1929,7 @@ export const se_ListAssetModelCompositeModelsCommand = async (
   const query: any = map({
     [_nT]: [, input[_nT]!],
     [_mR]: [() => input.maxResults !== void 0, () => input[_mR]!.toString()],
+    [_aMV]: [, input[_aMV]!],
   });
   let body: any;
   let { hostname: resolvedHostname } = await context.endpoint();
@@ -1944,6 +1959,7 @@ export const se_ListAssetModelPropertiesCommand = async (
     [_nT]: [, input[_nT]!],
     [_mR]: [() => input.maxResults !== void 0, () => input[_mR]!.toString()],
     [_f]: [, input[_f]!],
+    [_aMV]: [, input[_aMV]!],
   });
   let body: any;
   let { hostname: resolvedHostname } = await context.endpoint();
@@ -1969,9 +1985,10 @@ export const se_ListAssetModelsCommand = async (
   const headers: any = {};
   b.bp("/asset-models");
   const query: any = map({
+    [_aMT]: [() => input.assetModelTypes !== void 0, () => input[_aMT]! || []],
     [_nT]: [, input[_nT]!],
     [_mR]: [() => input.maxResults !== void 0, () => input[_mR]!.toString()],
-    [_aMT]: [() => input.assetModelTypes !== void 0, () => (input[_aMT]! || []).map((_entry) => _entry as any)],
+    [_aMV]: [, input[_aMV]!],
   });
   let body: any;
   let { hostname: resolvedHostname } = await context.endpoint();
@@ -2494,10 +2511,7 @@ export const se_UntagResourceCommand = async (
   b.bp("/tags");
   const query: any = map({
     [_rA]: [, __expectNonNull(input[_rA]!, `resourceArn`)],
-    [_tK]: [
-      __expectNonNull(input.tagKeys, `tagKeys`) != null,
-      () => (input[_tK]! || []).map((_entry) => _entry as any),
-    ],
+    [_tK]: [__expectNonNull(input.tagKeys, `tagKeys`) != null, () => input[_tK]! || []],
   });
   let body: any;
   let { hostname: resolvedHostname } = await context.endpoint();
@@ -2588,9 +2602,12 @@ export const se_UpdateAssetModelCommand = async (
   context: __SerdeContext
 ): Promise<__HttpRequest> => {
   const b = rb(input, context);
-  const headers: any = {
+  const headers: any = map({}, isSerializableHeaderValue, {
     "content-type": "application/json",
-  };
+    [_im]: input[_iM]!,
+    [_inm]: input[_iNM]!,
+    [_mfvt]: input[_mFVT]!,
+  });
   b.bp("/asset-models/{assetModelId}");
   b.p("assetModelId", () => input.assetModelId!, "{assetModelId}", false);
   let body: any;
@@ -2625,9 +2642,12 @@ export const se_UpdateAssetModelCompositeModelCommand = async (
   context: __SerdeContext
 ): Promise<__HttpRequest> => {
   const b = rb(input, context);
-  const headers: any = {
+  const headers: any = map({}, isSerializableHeaderValue, {
     "content-type": "application/json",
-  };
+    [_im]: input[_iM]!,
+    [_inm]: input[_iNM]!,
+    [_mfvt]: input[_mFVT]!,
+  });
   b.bp("/asset-models/{assetModelId}/composite-models/{assetModelCompositeModelId}");
   b.p("assetModelId", () => input.assetModelId!, "{assetModelId}", false);
   b.p("assetModelCompositeModelId", () => input.assetModelCompositeModelId!, "{assetModelCompositeModelId}", false);
@@ -3526,6 +3546,7 @@ export const de_DescribeAssetModelCommand = async (
   }
   const contents: any = map({
     $metadata: deserializeMetadata(output),
+    [_eT]: [, output.headers[_e]],
   });
   const data: Record<string, any> = __expectNonNull(__expectObject(await parseBody(output.body, context)), "body");
   const doc = take(data, {
@@ -3542,6 +3563,7 @@ export const de_DescribeAssetModelCommand = async (
     assetModelProperties: _json,
     assetModelStatus: _json,
     assetModelType: __expectString,
+    assetModelVersion: __expectString,
   });
   Object.assign(contents, doc);
   return contents;
@@ -4764,6 +4786,9 @@ const de_CommandError = async (output: __HttpResponse, context: __SerdeContext):
     case "ServiceUnavailableException":
     case "com.amazonaws.iotsitewise#ServiceUnavailableException":
       throw await de_ServiceUnavailableExceptionRes(parsedOutput, context);
+    case "PreconditionFailedException":
+    case "com.amazonaws.iotsitewise#PreconditionFailedException":
+      throw await de_PreconditionFailedExceptionRes(parsedOutput, context);
     case "AccessDeniedException":
     case "com.amazonaws.iotsitewise#AccessDeniedException":
       throw await de_AccessDeniedExceptionRes(parsedOutput, context);
@@ -4886,6 +4911,28 @@ const de_LimitExceededExceptionRes = async (
   });
   Object.assign(contents, doc);
   const exception = new LimitExceededException({
+    $metadata: deserializeMetadata(parsedOutput),
+    ...contents,
+  });
+  return __decorateServiceException(exception, parsedOutput.body);
+};
+
+/**
+ * deserializeAws_restJson1PreconditionFailedExceptionRes
+ */
+const de_PreconditionFailedExceptionRes = async (
+  parsedOutput: any,
+  context: __SerdeContext
+): Promise<PreconditionFailedException> => {
+  const contents: any = map({});
+  const data: any = parsedOutput.body;
+  const doc = take(data, {
+    message: __expectString,
+    resourceArn: __expectString,
+    resourceId: __expectString,
+  });
+  Object.assign(contents, doc);
+  const exception = new PreconditionFailedException({
     $metadata: deserializeMetadata(parsedOutput),
     ...contents,
   });
@@ -5310,6 +5357,8 @@ const se_PutAssetPropertyValueEntry = (input: PutAssetPropertyValueEntry, contex
 
 // se_RetentionPeriod omitted.
 
+// se_SiemensIE omitted.
+
 // se_TagMap omitted.
 
 // se_TargetResource omitted.
@@ -5503,6 +5552,7 @@ const de_AssetModelSummary = (output: any, context: __SerdeContext): AssetModelS
     lastUpdateDate: (_: any) => __expectNonNull(__parseEpochTimestamp(__expectNumber(_))),
     name: __expectString,
     status: _json,
+    version: __expectString,
   }) as any;
 };
 
@@ -6122,6 +6172,8 @@ const de_Rows = (output: any, context: __SerdeContext): Row[] => {
   return retVal;
 };
 
+// de_SiemensIE omitted.
+
 // de_TagMap omitted.
 
 // de_TargetResource omitted.
@@ -6195,22 +6247,18 @@ const deserializeMetadata = (output: __HttpResponse): __ResponseMetadata => ({
 const collectBodyString = (streamBody: any, context: __SerdeContext): Promise<string> =>
   collectBody(streamBody, context).then((body) => context.utf8Encoder(body));
 
-const isSerializableHeaderValue = (value: any): boolean =>
-  value !== undefined &&
-  value !== null &&
-  value !== "" &&
-  (!Object.getOwnPropertyNames(value).includes("length") || value.length != 0) &&
-  (!Object.getOwnPropertyNames(value).includes("size") || value.size != 0);
-
 const _a = "alias";
 const _aI = "assetId";
 const _aMI = "assetModelId";
 const _aMT = "assetModelTypes";
+const _aMV = "assetModelVersion";
 const _aP = "aliasPrefix";
 const _aT = "aggregateTypes";
 const _cT = "clientToken";
+const _e = "etag";
 const _eD = "endDate";
 const _eP = "excludeProperties";
+const _eT = "eTag";
 const _eTIS = "endTimeInSeconds";
 const _eTOIN = "endTimeOffsetInNanos";
 const _f = "filter";
@@ -6218,9 +6266,15 @@ const _hI = "hierarchyId";
 const _iA = "iamArn";
 const _iI = "identityId";
 const _iIS = "intervalInSeconds";
+const _iM = "ifMatch";
+const _iNM = "ifNoneMatch";
 const _iT = "identityType";
 const _iWIS = "intervalWindowInSeconds";
+const _im = "if-match";
+const _inm = "if-none-match";
+const _mFVT = "matchForVersionType";
 const _mR = "maxResults";
+const _mfvt = "match-for-version-type";
 const _nT = "nextToken";
 const _pA = "propertyAlias";
 const _pI = "propertyId";

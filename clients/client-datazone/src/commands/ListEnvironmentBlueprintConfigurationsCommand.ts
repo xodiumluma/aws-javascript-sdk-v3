@@ -9,7 +9,7 @@ import { commonParams } from "../endpoint/EndpointParameters";
 import {
   ListEnvironmentBlueprintConfigurationsInput,
   ListEnvironmentBlueprintConfigurationsOutput,
-} from "../models/models_0";
+} from "../models/models_1";
 import {
   de_ListEnvironmentBlueprintConfigurationsCommand,
   se_ListEnvironmentBlueprintConfigurationsCommand,
@@ -68,6 +68,16 @@ export interface ListEnvironmentBlueprintConfigurationsCommandOutput
  * //       },
  * //       createdAt: new Date("TIMESTAMP"),
  * //       updatedAt: new Date("TIMESTAMP"),
+ * //       provisioningConfigurations: [ // ProvisioningConfigurationList
+ * //         { // ProvisioningConfiguration Union: only one key present
+ * //           lakeFormationConfiguration: { // LakeFormationConfiguration
+ * //             locationRegistrationRole: "STRING_VALUE",
+ * //             locationRegistrationExcludeS3Locations: [ // S3LocationList
+ * //               "STRING_VALUE",
+ * //             ],
+ * //           },
+ * //         },
+ * //       ],
  * //     },
  * //   ],
  * //   nextToken: "STRING_VALUE",
@@ -112,9 +122,7 @@ export class ListEnvironmentBlueprintConfigurationsCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: DataZoneClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -126,4 +134,16 @@ export class ListEnvironmentBlueprintConfigurationsCommand extends $Command
   .f(void 0, void 0)
   .ser(se_ListEnvironmentBlueprintConfigurationsCommand)
   .de(de_ListEnvironmentBlueprintConfigurationsCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: ListEnvironmentBlueprintConfigurationsInput;
+      output: ListEnvironmentBlueprintConfigurationsOutput;
+    };
+    sdk: {
+      input: ListEnvironmentBlueprintConfigurationsCommandInput;
+      output: ListEnvironmentBlueprintConfigurationsCommandOutput;
+    };
+  };
+}

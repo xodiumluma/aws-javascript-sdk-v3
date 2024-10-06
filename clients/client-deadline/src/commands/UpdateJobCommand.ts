@@ -28,7 +28,13 @@ export interface UpdateJobCommandInput extends UpdateJobRequest {}
 export interface UpdateJobCommandOutput extends UpdateJobResponse, __MetadataBearer {}
 
 /**
- * <p>Updates a job.</p>
+ * <p>Updates a job. </p>
+ *          <p>When you change the status of the job to <code>ARCHIVED</code>, the job can't be
+ *          scheduled or archived.</p>
+ *          <important>
+ *             <p>An archived jobs and its steps and tasks are deleted after 120 days. The job can't be
+ *             recovered.</p>
+ *          </important>
  * @example
  * Use a bare-bones client and the command you need to make an API call.
  * ```javascript
@@ -91,9 +97,7 @@ export class UpdateJobCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: DeadlineClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -105,4 +109,16 @@ export class UpdateJobCommand extends $Command
   .f(void 0, void 0)
   .ser(se_UpdateJobCommand)
   .de(de_UpdateJobCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: UpdateJobRequest;
+      output: {};
+    };
+    sdk: {
+      input: UpdateJobCommandInput;
+      output: UpdateJobCommandOutput;
+    };
+  };
+}

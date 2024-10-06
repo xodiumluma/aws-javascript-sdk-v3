@@ -1470,6 +1470,8 @@ const de_MemorySessionSummary = (output: any, context: __SerdeContext): MemorySe
   }) as any;
 };
 
+// de_Metadata omitted.
+
 /**
  * deserializeAws_restJson1ModelInvocationInput
  */
@@ -1500,6 +1502,8 @@ const de_Observation = (output: any, context: __SerdeContext): Observation => {
   }) as any;
 };
 
+// de_OrchestrationModelInvocationOutput omitted.
+
 /**
  * deserializeAws_restJson1OrchestrationTrace
  */
@@ -1512,6 +1516,11 @@ const de_OrchestrationTrace = (output: any, context: __SerdeContext): Orchestrat
   if (output.modelInvocationInput != null) {
     return {
       modelInvocationInput: de_ModelInvocationInput(output.modelInvocationInput, context),
+    };
+  }
+  if (output.modelInvocationOutput != null) {
+    return {
+      modelInvocationOutput: _json(output.modelInvocationOutput),
     };
   }
   if (output.observation != null) {
@@ -1611,6 +1620,8 @@ const de_PreProcessingTrace = (output: any, context: __SerdeContext): PreProcess
 // de_PropertyParameters omitted.
 
 // de_Rationale omitted.
+
+// de_RawResponse omitted.
 
 // de_RepromptResponse omitted.
 
@@ -1728,6 +1739,8 @@ const de_TracePart = (output: any, context: __SerdeContext): TracePart => {
   }) as any;
 };
 
+// de_Usage omitted.
+
 /**
  * deserializeAws_restJson1Document
  */
@@ -1746,13 +1759,6 @@ const deserializeMetadata = (output: __HttpResponse): __ResponseMetadata => ({
 // Encode Uint8Array data into string with utf-8.
 const collectBodyString = (streamBody: any, context: __SerdeContext): Promise<string> =>
   collectBody(streamBody, context).then((body) => context.utf8Encoder(body));
-
-const isSerializableHeaderValue = (value: any): boolean =>
-  value !== undefined &&
-  value !== null &&
-  value !== "" &&
-  (!Object.getOwnPropertyNames(value).includes("length") || value.length != 0) &&
-  (!Object.getOwnPropertyNames(value).includes("size") || value.size != 0);
 
 const _cT = "contentType";
 const _mI = "memoryId";

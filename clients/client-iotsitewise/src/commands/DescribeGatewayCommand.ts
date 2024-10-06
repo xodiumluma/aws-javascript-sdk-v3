@@ -51,11 +51,14 @@ export interface DescribeGatewayCommandOutput extends DescribeGatewayResponse, _
  * //     greengrassV2: { // GreengrassV2
  * //       coreDeviceThingName: "STRING_VALUE", // required
  * //     },
+ * //     siemensIE: { // SiemensIE
+ * //       iotCoreThingName: "STRING_VALUE", // required
+ * //     },
  * //   },
  * //   gatewayCapabilitySummaries: [ // GatewayCapabilitySummaries // required
  * //     { // GatewayCapabilitySummary
  * //       capabilityNamespace: "STRING_VALUE", // required
- * //       capabilitySyncStatus: "IN_SYNC" || "OUT_OF_SYNC" || "SYNC_FAILED" || "UNKNOWN", // required
+ * //       capabilitySyncStatus: "IN_SYNC" || "OUT_OF_SYNC" || "SYNC_FAILED" || "UNKNOWN" || "NOT_APPLICABLE", // required
  * //     },
  * //   ],
  * //   creationDate: new Date("TIMESTAMP"), // required
@@ -99,9 +102,7 @@ export class DescribeGatewayCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: IoTSiteWiseClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -113,4 +114,16 @@ export class DescribeGatewayCommand extends $Command
   .f(void 0, void 0)
   .ser(se_DescribeGatewayCommand)
   .de(de_DescribeGatewayCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: DescribeGatewayRequest;
+      output: DescribeGatewayResponse;
+    };
+    sdk: {
+      input: DescribeGatewayCommandInput;
+      output: DescribeGatewayCommandOutput;
+    };
+  };
+}

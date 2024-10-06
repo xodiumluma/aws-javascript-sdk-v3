@@ -153,9 +153,7 @@ export class CreateCustomActionTypeCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: CodePipelineClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -167,4 +165,16 @@ export class CreateCustomActionTypeCommand extends $Command
   .f(void 0, void 0)
   .ser(se_CreateCustomActionTypeCommand)
   .de(de_CreateCustomActionTypeCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: CreateCustomActionTypeInput;
+      output: CreateCustomActionTypeOutput;
+    };
+    sdk: {
+      input: CreateCustomActionTypeCommandInput;
+      output: CreateCustomActionTypeCommandOutput;
+    };
+  };
+}

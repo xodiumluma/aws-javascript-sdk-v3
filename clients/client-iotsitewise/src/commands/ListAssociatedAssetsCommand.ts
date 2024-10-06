@@ -32,10 +32,12 @@ export interface ListAssociatedAssetsCommandOutput extends ListAssociatedAssetsR
  *          <p>You can use this operation to do the following:</p>
  *          <ul>
  *             <li>
- *                <p>List child assets associated to a parent asset by a hierarchy that you specify.</p>
+ *                <p>
+ *                   <code>CHILD</code> - List all child assets associated to the asset.</p>
  *             </li>
  *             <li>
- *                <p>List an asset's parent asset.</p>
+ *                <p>
+ *                   <code>PARENT</code> - List the asset's parent asset.</p>
  *             </li>
  *          </ul>
  * @example
@@ -126,9 +128,7 @@ export class ListAssociatedAssetsCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: IoTSiteWiseClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -140,4 +140,16 @@ export class ListAssociatedAssetsCommand extends $Command
   .f(void 0, void 0)
   .ser(se_ListAssociatedAssetsCommand)
   .de(de_ListAssociatedAssetsCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: ListAssociatedAssetsRequest;
+      output: ListAssociatedAssetsResponse;
+    };
+    sdk: {
+      input: ListAssociatedAssetsCommandInput;
+      output: ListAssociatedAssetsCommandOutput;
+    };
+  };
+}

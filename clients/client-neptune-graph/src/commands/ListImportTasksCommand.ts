@@ -47,7 +47,7 @@ export interface ListImportTasksCommandOutput extends ListImportTasksOutput, __M
  * //       graphId: "STRING_VALUE",
  * //       taskId: "STRING_VALUE", // required
  * //       source: "STRING_VALUE", // required
- * //       format: "CSV" || "OPEN_CYPHER",
+ * //       format: "CSV" || "OPEN_CYPHER" || "NTRIPLES",
  * //       roleArn: "STRING_VALUE", // required
  * //       status: "INITIALIZING" || "EXPORTING" || "ANALYZING_DATA" || "IMPORTING" || "REPROVISIONING" || "ROLLING_BACK" || "SUCCEEDED" || "FAILED" || "CANCELLING" || "CANCELLED", // required
  * //     },
@@ -103,4 +103,16 @@ export class ListImportTasksCommand extends $Command
   .f(void 0, void 0)
   .ser(se_ListImportTasksCommand)
   .de(de_ListImportTasksCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: ListImportTasksInput;
+      output: ListImportTasksOutput;
+    };
+    sdk: {
+      input: ListImportTasksCommandInput;
+      output: ListImportTasksCommandOutput;
+    };
+  };
+}

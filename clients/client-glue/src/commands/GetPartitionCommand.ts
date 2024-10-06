@@ -6,7 +6,7 @@ import { MetadataBearer as __MetadataBearer } from "@smithy/types";
 
 import { commonParams } from "../endpoint/EndpointParameters";
 import { GlueClientResolvedConfig, ServiceInputTypes, ServiceOutputTypes } from "../GlueClient";
-import { GetPartitionRequest, GetPartitionResponse } from "../models/models_1";
+import { GetPartitionRequest, GetPartitionResponse } from "../models/models_2";
 import { de_GetPartitionCommand, se_GetPartitionCommand } from "../protocols/Aws_json1_1";
 
 /**
@@ -160,9 +160,7 @@ export class GetPartitionCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: GlueClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -174,4 +172,16 @@ export class GetPartitionCommand extends $Command
   .f(void 0, void 0)
   .ser(se_GetPartitionCommand)
   .de(de_GetPartitionCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: GetPartitionRequest;
+      output: GetPartitionResponse;
+    };
+    sdk: {
+      input: GetPartitionCommandInput;
+      output: GetPartitionCommandOutput;
+    };
+  };
+}

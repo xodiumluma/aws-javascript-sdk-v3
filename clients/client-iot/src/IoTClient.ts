@@ -72,6 +72,10 @@ import {
   AddThingToThingGroupCommandOutput,
 } from "./commands/AddThingToThingGroupCommand";
 import {
+  AssociateSbomWithPackageVersionCommandInput,
+  AssociateSbomWithPackageVersionCommandOutput,
+} from "./commands/AssociateSbomWithPackageVersionCommand";
+import {
   AssociateTargetsWithJobCommandInput,
   AssociateTargetsWithJobCommandOutput,
 } from "./commands/AssociateTargetsWithJobCommand";
@@ -387,6 +391,10 @@ import {
   DetachThingPrincipalCommandOutput,
 } from "./commands/DetachThingPrincipalCommand";
 import { DisableTopicRuleCommandInput, DisableTopicRuleCommandOutput } from "./commands/DisableTopicRuleCommand";
+import {
+  DisassociateSbomFromPackageVersionCommandInput,
+  DisassociateSbomFromPackageVersionCommandOutput,
+} from "./commands/DisassociateSbomFromPackageVersionCommand";
 import { EnableTopicRuleCommandInput, EnableTopicRuleCommandOutput } from "./commands/EnableTopicRuleCommand";
 import {
   GetBehaviorModelTrainingSummariesCommandInput,
@@ -537,6 +545,10 @@ import {
   ListRelatedResourcesForAuditFindingCommandOutput,
 } from "./commands/ListRelatedResourcesForAuditFindingCommand";
 import { ListRoleAliasesCommandInput, ListRoleAliasesCommandOutput } from "./commands/ListRoleAliasesCommand";
+import {
+  ListSbomValidationResultsCommandInput,
+  ListSbomValidationResultsCommandOutput,
+} from "./commands/ListSbomValidationResultsCommand";
 import {
   ListScheduledAuditsCommandInput,
   ListScheduledAuditsCommandOutput,
@@ -776,6 +788,7 @@ export type ServiceInputTypes =
   | AcceptCertificateTransferCommandInput
   | AddThingToBillingGroupCommandInput
   | AddThingToThingGroupCommandInput
+  | AssociateSbomWithPackageVersionCommandInput
   | AssociateTargetsWithJobCommandInput
   | AttachPolicyCommandInput
   | AttachPrincipalPolicyCommandInput
@@ -894,6 +907,7 @@ export type ServiceInputTypes =
   | DetachSecurityProfileCommandInput
   | DetachThingPrincipalCommandInput
   | DisableTopicRuleCommandInput
+  | DisassociateSbomFromPackageVersionCommandInput
   | EnableTopicRuleCommandInput
   | GetBehaviorModelTrainingSummariesCommandInput
   | GetBucketsAggregationCommandInput
@@ -954,6 +968,7 @@ export type ServiceInputTypes =
   | ListProvisioningTemplatesCommandInput
   | ListRelatedResourcesForAuditFindingCommandInput
   | ListRoleAliasesCommandInput
+  | ListSbomValidationResultsCommandInput
   | ListScheduledAuditsCommandInput
   | ListSecurityProfilesCommandInput
   | ListSecurityProfilesForTargetCommandInput
@@ -1036,6 +1051,7 @@ export type ServiceOutputTypes =
   | AcceptCertificateTransferCommandOutput
   | AddThingToBillingGroupCommandOutput
   | AddThingToThingGroupCommandOutput
+  | AssociateSbomWithPackageVersionCommandOutput
   | AssociateTargetsWithJobCommandOutput
   | AttachPolicyCommandOutput
   | AttachPrincipalPolicyCommandOutput
@@ -1154,6 +1170,7 @@ export type ServiceOutputTypes =
   | DetachSecurityProfileCommandOutput
   | DetachThingPrincipalCommandOutput
   | DisableTopicRuleCommandOutput
+  | DisassociateSbomFromPackageVersionCommandOutput
   | EnableTopicRuleCommandOutput
   | GetBehaviorModelTrainingSummariesCommandOutput
   | GetBucketsAggregationCommandOutput
@@ -1214,6 +1231,7 @@ export type ServiceOutputTypes =
   | ListProvisioningTemplatesCommandOutput
   | ListRelatedResourcesForAuditFindingCommandOutput
   | ListRoleAliasesCommandOutput
+  | ListSbomValidationResultsCommandOutput
   | ListScheduledAuditsCommandOutput
   | ListSecurityProfilesCommandOutput
   | ListSecurityProfilesForTargetCommandOutput
@@ -1426,11 +1444,11 @@ export interface ClientDefaults extends Partial<__SmithyConfiguration<__HttpHand
  */
 export type IoTClientConfigType = Partial<__SmithyConfiguration<__HttpHandlerOptions>> &
   ClientDefaults &
-  RegionInputConfig &
-  EndpointInputConfig<EndpointParameters> &
-  HostHeaderInputConfig &
   UserAgentInputConfig &
   RetryInputConfig &
+  RegionInputConfig &
+  HostHeaderInputConfig &
+  EndpointInputConfig<EndpointParameters> &
   HttpAuthSchemeInputConfig &
   ClientInputEndpointParameters;
 /**
@@ -1446,11 +1464,11 @@ export interface IoTClientConfig extends IoTClientConfigType {}
 export type IoTClientResolvedConfigType = __SmithyResolvedConfiguration<__HttpHandlerOptions> &
   Required<ClientDefaults> &
   RuntimeExtensionsConfig &
-  RegionResolvedConfig &
-  EndpointResolvedConfig<EndpointParameters> &
-  HostHeaderResolvedConfig &
   UserAgentResolvedConfig &
   RetryResolvedConfig &
+  RegionResolvedConfig &
+  HostHeaderResolvedConfig &
+  EndpointResolvedConfig<EndpointParameters> &
   HttpAuthSchemeResolvedConfig &
   ClientResolvedEndpointParameters;
 /**
@@ -1493,26 +1511,29 @@ export class IoTClient extends __Client<
   constructor(...[configuration]: __CheckOptionalClientConfig<IoTClientConfig>) {
     const _config_0 = __getRuntimeConfig(configuration || {});
     const _config_1 = resolveClientEndpointParameters(_config_0);
-    const _config_2 = resolveRegionConfig(_config_1);
-    const _config_3 = resolveEndpointConfig(_config_2);
-    const _config_4 = resolveHostHeaderConfig(_config_3);
-    const _config_5 = resolveUserAgentConfig(_config_4);
-    const _config_6 = resolveRetryConfig(_config_5);
+    const _config_2 = resolveUserAgentConfig(_config_1);
+    const _config_3 = resolveRetryConfig(_config_2);
+    const _config_4 = resolveRegionConfig(_config_3);
+    const _config_5 = resolveHostHeaderConfig(_config_4);
+    const _config_6 = resolveEndpointConfig(_config_5);
     const _config_7 = resolveHttpAuthSchemeConfig(_config_6);
     const _config_8 = resolveRuntimeExtensions(_config_7, configuration?.extensions || []);
     super(_config_8);
     this.config = _config_8;
-    this.middlewareStack.use(getHostHeaderPlugin(this.config));
-    this.middlewareStack.use(getLoggerPlugin(this.config));
-    this.middlewareStack.use(getRecursionDetectionPlugin(this.config));
     this.middlewareStack.use(getUserAgentPlugin(this.config));
     this.middlewareStack.use(getOmitRetryHeadersPlugin(this.config));
     this.middlewareStack.use(getRetryPlugin(this.config));
     this.middlewareStack.use(getContentLengthPlugin(this.config));
+    this.middlewareStack.use(getHostHeaderPlugin(this.config));
+    this.middlewareStack.use(getLoggerPlugin(this.config));
+    this.middlewareStack.use(getRecursionDetectionPlugin(this.config));
     this.middlewareStack.use(
       getHttpAuthSchemeEndpointRuleSetPlugin(this.config, {
-        httpAuthSchemeParametersProvider: this.getDefaultHttpAuthSchemeParametersProvider(),
-        identityProviderConfigProvider: this.getIdentityProviderConfigProvider(),
+        httpAuthSchemeParametersProvider: defaultIoTHttpAuthSchemeParametersProvider,
+        identityProviderConfigProvider: async (config: IoTClientResolvedConfig) =>
+          new DefaultIdentityProviderConfig({
+            "aws.auth#sigv4": config.credentials,
+          }),
       })
     );
     this.middlewareStack.use(getHttpSigningPlugin(this.config));
@@ -1525,14 +1546,5 @@ export class IoTClient extends __Client<
    */
   destroy(): void {
     super.destroy();
-  }
-  private getDefaultHttpAuthSchemeParametersProvider() {
-    return defaultIoTHttpAuthSchemeParametersProvider;
-  }
-  private getIdentityProviderConfigProvider() {
-    return async (config: IoTClientResolvedConfig) =>
-      new DefaultIdentityProviderConfig({
-        "aws.auth#sigv4": config.credentials,
-      });
   }
 }

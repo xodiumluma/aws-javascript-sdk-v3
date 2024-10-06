@@ -125,6 +125,11 @@ import {
   DeleteRegistrationFieldValueCommandOutput,
 } from "./commands/DeleteRegistrationFieldValueCommand";
 import {
+  DeleteResourcePolicyCommand,
+  DeleteResourcePolicyCommandInput,
+  DeleteResourcePolicyCommandOutput,
+} from "./commands/DeleteResourcePolicyCommand";
+import {
   DeleteTextMessageSpendLimitOverrideCommand,
   DeleteTextMessageSpendLimitOverrideCommandInput,
   DeleteTextMessageSpendLimitOverrideCommandOutput,
@@ -255,6 +260,11 @@ import {
   GetProtectConfigurationCountryRuleSetCommandOutput,
 } from "./commands/GetProtectConfigurationCountryRuleSetCommand";
 import {
+  GetResourcePolicyCommand,
+  GetResourcePolicyCommandInput,
+  GetResourcePolicyCommandOutput,
+} from "./commands/GetResourcePolicyCommand";
+import {
   ListPoolOriginationIdentitiesCommand,
   ListPoolOriginationIdentitiesCommandInput,
   ListPoolOriginationIdentitiesCommandOutput,
@@ -280,6 +290,11 @@ import {
   PutRegistrationFieldValueCommandInput,
   PutRegistrationFieldValueCommandOutput,
 } from "./commands/PutRegistrationFieldValueCommand";
+import {
+  PutResourcePolicyCommand,
+  PutResourcePolicyCommandInput,
+  PutResourcePolicyCommandOutput,
+} from "./commands/PutResourcePolicyCommand";
 import {
   ReleasePhoneNumberCommand,
   ReleasePhoneNumberCommandInput,
@@ -421,6 +436,7 @@ const commands = {
   DeleteRegistrationCommand,
   DeleteRegistrationAttachmentCommand,
   DeleteRegistrationFieldValueCommand,
+  DeleteResourcePolicyCommand,
   DeleteTextMessageSpendLimitOverrideCommand,
   DeleteVerifiedDestinationNumberCommand,
   DeleteVoiceMessageSpendLimitOverrideCommand,
@@ -447,12 +463,14 @@ const commands = {
   DisassociateProtectConfigurationCommand,
   DiscardRegistrationVersionCommand,
   GetProtectConfigurationCountryRuleSetCommand,
+  GetResourcePolicyCommand,
   ListPoolOriginationIdentitiesCommand,
   ListRegistrationAssociationsCommand,
   ListTagsForResourceCommand,
   PutKeywordCommand,
   PutOptedOutNumberCommand,
   PutRegistrationFieldValueCommand,
+  PutResourcePolicyCommand,
   ReleasePhoneNumberCommand,
   ReleaseSenderIdCommand,
   RequestPhoneNumberCommand,
@@ -909,6 +927,23 @@ export interface PinpointSMSVoiceV2 {
   ): void;
 
   /**
+   * @see {@link DeleteResourcePolicyCommand}
+   */
+  deleteResourcePolicy(
+    args: DeleteResourcePolicyCommandInput,
+    options?: __HttpHandlerOptions
+  ): Promise<DeleteResourcePolicyCommandOutput>;
+  deleteResourcePolicy(
+    args: DeleteResourcePolicyCommandInput,
+    cb: (err: any, data?: DeleteResourcePolicyCommandOutput) => void
+  ): void;
+  deleteResourcePolicy(
+    args: DeleteResourcePolicyCommandInput,
+    options: __HttpHandlerOptions,
+    cb: (err: any, data?: DeleteResourcePolicyCommandOutput) => void
+  ): void;
+
+  /**
    * @see {@link DeleteTextMessageSpendLimitOverrideCommand}
    */
   deleteTextMessageSpendLimitOverride(): Promise<DeleteTextMessageSpendLimitOverrideCommandOutput>;
@@ -1360,6 +1395,23 @@ export interface PinpointSMSVoiceV2 {
   ): void;
 
   /**
+   * @see {@link GetResourcePolicyCommand}
+   */
+  getResourcePolicy(
+    args: GetResourcePolicyCommandInput,
+    options?: __HttpHandlerOptions
+  ): Promise<GetResourcePolicyCommandOutput>;
+  getResourcePolicy(
+    args: GetResourcePolicyCommandInput,
+    cb: (err: any, data?: GetResourcePolicyCommandOutput) => void
+  ): void;
+  getResourcePolicy(
+    args: GetResourcePolicyCommandInput,
+    options: __HttpHandlerOptions,
+    cb: (err: any, data?: GetResourcePolicyCommandOutput) => void
+  ): void;
+
+  /**
    * @see {@link ListPoolOriginationIdentitiesCommand}
    */
   listPoolOriginationIdentities(
@@ -1453,6 +1505,23 @@ export interface PinpointSMSVoiceV2 {
     args: PutRegistrationFieldValueCommandInput,
     options: __HttpHandlerOptions,
     cb: (err: any, data?: PutRegistrationFieldValueCommandOutput) => void
+  ): void;
+
+  /**
+   * @see {@link PutResourcePolicyCommand}
+   */
+  putResourcePolicy(
+    args: PutResourcePolicyCommandInput,
+    options?: __HttpHandlerOptions
+  ): Promise<PutResourcePolicyCommandOutput>;
+  putResourcePolicy(
+    args: PutResourcePolicyCommandInput,
+    cb: (err: any, data?: PutResourcePolicyCommandOutput) => void
+  ): void;
+  putResourcePolicy(
+    args: PutResourcePolicyCommandInput,
+    options: __HttpHandlerOptions,
+    cb: (err: any, data?: PutResourcePolicyCommandOutput) => void
   ): void;
 
   /**
@@ -1835,25 +1904,24 @@ export interface PinpointSMSVoiceV2 {
 }
 
 /**
- * <p>Welcome to the <i>Amazon Pinpoint SMS and Voice, version 2 API Reference</i>.
- *             This guide provides information about Amazon Pinpoint SMS and Voice, version 2 API
+ * <p>Welcome to the <i>AWS End User Messaging SMS and Voice, version 2 API Reference</i>.
+ *             This guide provides information about AWS End User Messaging SMS and Voice, version 2 API
  *             resources, including supported HTTP methods, parameters, and schemas.</p>
  *          <p>Amazon Pinpoint is an Amazon Web Services service that you can use to engage with
- *             your recipients across multiple messaging channels. The Amazon Pinpoint SMS and
- *             Voice, version 2 API provides programmatic access to options that are unique to the SMS
- *             and voice channels. Amazon Pinpoint SMS and Voice, version 2 resources such as phone numbers, sender IDs, and opt-out lists can be used by the Amazon Pinpoint API.</p>
- *          <p>If you're new to Amazon Pinpoint SMS, it's also helpful to review the <a href="https://docs.aws.amazon.com/sms-voice/latest/userguide/what-is-service.html">
- *                 Amazon Pinpoint SMS User Guide</a>. The <i>Amazon Pinpoint
- *                 Developer Guide</i> provides tutorials, code samples, and procedures that
- *             demonstrate how to use Amazon Pinpoint SMS features programmatically and how to integrate
- *                 Amazon Pinpoint functionality into mobile apps and other types of applications.
- *             The guide also provides key information, such as Amazon Pinpoint integration with
+ *             your recipients across multiple messaging channels. The AWS End User Messaging SMS and Voice, version 2 API provides programmatic access to options that are unique to the SMS
+ *             and voice channels. AWS End User Messaging SMS and Voice, version 2 resources such as phone numbers, sender IDs, and opt-out lists can be used by the Amazon Pinpoint API.</p>
+ *          <p>If you're new to AWS End User Messaging SMS and Voice, it's also helpful to review the <a href="https://docs.aws.amazon.com/sms-voice/latest/userguide/what-is-service.html">
+ *             AWS End User Messaging SMS User Guide</a>. The <i>AWS End User Messaging SMS User Guide
+ *                 </i> provides tutorials, code samples, and procedures that
+ *             demonstrate how to use AWS End User Messaging SMS and Voice features programmatically and how to integrate
+ *                 functionality into mobile apps and other types of applications.
+ *                 The guide also provides key information, such as AWS End User Messaging SMS and Voice integration with
  *             other Amazon Web Services services, and the quotas that apply to use of the
  *             service.</p>
  *          <p>
  *             <b>Regional availability</b>
  *          </p>
- *          <p>The <i>Amazon Pinpoint SMS and Voice, version 2 API Reference</i> is
+ *          <p>The <i>AWS End User Messaging SMS and Voice version 2 API Reference</i> is
  *             available in several Amazon Web Services Regions and it provides an endpoint for each of
  *             these Regions. For a list of all the Regions and endpoints where the API is currently
  *             available, see <a href="https://docs.aws.amazon.com/general/latest/gr/rande.html#pinpoint_region">Amazon Web Services Service Endpoints</a> and <a href="https://docs.aws.amazon.com/general/latest/gr/pinpoint.html">Amazon Pinpoint

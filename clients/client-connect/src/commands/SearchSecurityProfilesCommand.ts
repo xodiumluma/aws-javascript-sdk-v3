@@ -30,6 +30,10 @@ export interface SearchSecurityProfilesCommandOutput extends SearchSecurityProfi
 /**
  * <p>Searches security profiles in an Amazon Connect instance, with optional
  *    filtering.</p>
+ *          <p>For information about security profiles, see <a href="https://docs.aws.amazon.com/connect/latest/adminguide/connect-security-profiles.html">Security Profiles</a> in the
+ *      <i>Amazon Connect Administrator Guide</i>. For a mapping of the API name and
+ *    user interface name of the security profile permissions, see <a href="https://docs.aws.amazon.com/connect/latest/adminguide/security-profile-list.html">List of security profile
+ *     permissions</a>. </p>
  * @example
  * Use a bare-bones client and the command you need to make an API call.
  * ```javascript
@@ -140,9 +144,7 @@ export class SearchSecurityProfilesCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: ConnectClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -154,4 +156,16 @@ export class SearchSecurityProfilesCommand extends $Command
   .f(void 0, void 0)
   .ser(se_SearchSecurityProfilesCommand)
   .de(de_SearchSecurityProfilesCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: SearchSecurityProfilesRequest;
+      output: SearchSecurityProfilesResponse;
+    };
+    sdk: {
+      input: SearchSecurityProfilesCommandInput;
+      output: SearchSecurityProfilesCommandOutput;
+    };
+  };
+}

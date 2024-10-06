@@ -15,6 +15,7 @@ import {
   expectNonNull as __expectNonNull,
   expectObject as __expectObject,
   expectString as __expectString,
+  isSerializableHeaderValue,
   limitedParseDouble as __limitedParseDouble,
   map,
   resolvedPath as __resolvedPath,
@@ -81,6 +82,7 @@ import {
   ResourceNotFoundException,
   ResponseStream,
   ServiceQuotaExceededException,
+  ServiceUnavailableException,
   SpecificToolChoice,
   SystemContentBlock,
   ThrottlingException,
@@ -245,6 +247,7 @@ export const de_ApplyGuardrailCommand = async (
   const doc = take(data, {
     action: __expectString,
     assessments: (_) => de_GuardrailAssessmentList(_, context),
+    guardrailCoverage: _json,
     outputs: _json,
     usage: _json,
   });
@@ -371,6 +374,9 @@ const de_CommandError = async (output: __HttpResponse, context: __SerdeContext):
     case "ModelTimeoutException":
     case "com.amazonaws.bedrockruntime#ModelTimeoutException":
       throw await de_ModelTimeoutExceptionRes(parsedOutput, context);
+    case "ServiceUnavailableException":
+    case "com.amazonaws.bedrockruntime#ServiceUnavailableException":
+      throw await de_ServiceUnavailableExceptionRes(parsedOutput, context);
     case "ModelStreamErrorException":
     case "com.amazonaws.bedrockruntime#ModelStreamErrorException":
       throw await de_ModelStreamErrorExceptionRes(parsedOutput, context);
@@ -547,6 +553,26 @@ const de_ServiceQuotaExceededExceptionRes = async (
 };
 
 /**
+ * deserializeAws_restJson1ServiceUnavailableExceptionRes
+ */
+const de_ServiceUnavailableExceptionRes = async (
+  parsedOutput: any,
+  context: __SerdeContext
+): Promise<ServiceUnavailableException> => {
+  const contents: any = map({});
+  const data: any = parsedOutput.body;
+  const doc = take(data, {
+    message: __expectString,
+  });
+  Object.assign(contents, doc);
+  const exception = new ServiceUnavailableException({
+    $metadata: deserializeMetadata(parsedOutput),
+    ...contents,
+  });
+  return __decorateServiceException(exception, parsedOutput.body);
+};
+
+/**
  * deserializeAws_restJson1ThrottlingExceptionRes
  */
 const de_ThrottlingExceptionRes = async (parsedOutput: any, context: __SerdeContext): Promise<ThrottlingException> => {
@@ -641,6 +667,14 @@ const de_ConverseStreamOutput = (
         throttlingException: await de_ThrottlingException_event(event["throttlingException"], context),
       };
     }
+    if (event["serviceUnavailableException"] != null) {
+      return {
+        serviceUnavailableException: await de_ServiceUnavailableException_event(
+          event["serviceUnavailableException"],
+          context
+        ),
+      };
+    }
     return { $unknown: output };
   });
 };
@@ -683,6 +717,14 @@ const de_ResponseStream = (
     if (event["modelTimeoutException"] != null) {
       return {
         modelTimeoutException: await de_ModelTimeoutException_event(event["modelTimeoutException"], context),
+      };
+    }
+    if (event["serviceUnavailableException"] != null) {
+      return {
+        serviceUnavailableException: await de_ServiceUnavailableException_event(
+          event["serviceUnavailableException"],
+          context
+        ),
       };
     }
     return { $unknown: output };
@@ -765,6 +807,16 @@ const de_PayloadPart_event = async (output: any, context: __SerdeContext): Promi
   const data: any = await parseBody(output.body, context);
   Object.assign(contents, de_PayloadPart(data, context));
   return contents;
+};
+const de_ServiceUnavailableException_event = async (
+  output: any,
+  context: __SerdeContext
+): Promise<ServiceUnavailableException> => {
+  const parsedOutput: any = {
+    ...output,
+    body: await parseBody(output.body, context),
+  };
+  return de_ServiceUnavailableExceptionRes(parsedOutput, context);
 };
 const de_ThrottlingException_event = async (output: any, context: __SerdeContext): Promise<ThrottlingException> => {
   const parsedOutput: any = {
@@ -1151,6 +1203,7 @@ const de_GuardrailAssessment = (output: any, context: __SerdeContext): Guardrail
   return take(output, {
     contentPolicy: _json,
     contextualGroundingPolicy: (_: any) => de_GuardrailContextualGroundingPolicyAssessment(_, context),
+    invocationMetrics: _json,
     sensitiveInformationPolicy: _json,
     topicPolicy: _json,
     wordPolicy: _json,
@@ -1249,9 +1302,13 @@ const de_GuardrailContextualGroundingPolicyAssessment = (
 
 // de_GuardrailConverseTextBlock omitted.
 
+// de_GuardrailCoverage omitted.
+
 // de_GuardrailCustomWord omitted.
 
 // de_GuardrailCustomWordList omitted.
+
+// de_GuardrailInvocationMetrics omitted.
 
 // de_GuardrailManagedWord omitted.
 
@@ -1270,6 +1327,8 @@ const de_GuardrailContextualGroundingPolicyAssessment = (
 // de_GuardrailRegexFilterList omitted.
 
 // de_GuardrailSensitiveInformationPolicyAssessment omitted.
+
+// de_GuardrailTextCharactersCoverage omitted.
 
 // de_GuardrailTopic omitted.
 
@@ -1430,13 +1489,6 @@ const deserializeMetadata = (output: __HttpResponse): __ResponseMetadata => ({
 // Encode Uint8Array data into string with utf-8.
 const collectBodyString = (streamBody: any, context: __SerdeContext): Promise<string> =>
   collectBody(streamBody, context).then((body) => context.utf8Encoder(body));
-
-const isSerializableHeaderValue = (value: any): boolean =>
-  value !== undefined &&
-  value !== null &&
-  value !== "" &&
-  (!Object.getOwnPropertyNames(value).includes("length") || value.length != 0) &&
-  (!Object.getOwnPropertyNames(value).includes("size") || value.size != 0);
 
 const _a = "accept";
 const _cT = "contentType";

@@ -84,7 +84,8 @@ export interface TerminateSolNetworkInstanceCommandOutput extends TerminateSolNe
  *  <p>Exception caused by throttling.</p>
  *
  * @throws {@link ValidationException} (client fault)
- *  <p>Unable to process the request because the client provided input failed to satisfy request constraints.</p>
+ *  <p>Unable to process the request because the client provided input failed to satisfy
+ *          request constraints.</p>
  *
  * @throws {@link TnbServiceException}
  * <p>Base exception class for all service exceptions from Tnb service.</p>
@@ -99,9 +100,7 @@ export class TerminateSolNetworkInstanceCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: TnbClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -113,4 +112,16 @@ export class TerminateSolNetworkInstanceCommand extends $Command
   .f(TerminateSolNetworkInstanceInputFilterSensitiveLog, TerminateSolNetworkInstanceOutputFilterSensitiveLog)
   .ser(se_TerminateSolNetworkInstanceCommand)
   .de(de_TerminateSolNetworkInstanceCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: TerminateSolNetworkInstanceInput;
+      output: TerminateSolNetworkInstanceOutput;
+    };
+    sdk: {
+      input: TerminateSolNetworkInstanceCommandInput;
+      output: TerminateSolNetworkInstanceCommandOutput;
+    };
+  };
+}

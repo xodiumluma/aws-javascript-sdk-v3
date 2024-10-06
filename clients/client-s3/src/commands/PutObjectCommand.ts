@@ -1,6 +1,6 @@
 // smithy-typescript generated code
 import { getFlexibleChecksumsPlugin } from "@aws-sdk/middleware-flexible-checksums";
-import { getCheckContentLengthHeaderPlugin } from "@aws-sdk/middleware-sdk-s3";
+import { getCheckContentLengthHeaderPlugin, getThrow200ExceptionsPlugin } from "@aws-sdk/middleware-sdk-s3";
 import { getSsecPlugin } from "@aws-sdk/middleware-ssec";
 import { getEndpointPlugin } from "@smithy/middleware-endpoint";
 import { getSerdePlugin } from "@smithy/middleware-serde";
@@ -127,6 +127,9 @@ export interface PutObjectCommandOutput extends PutObjectOutput, __MetadataBeare
  * Amazon Web Services CLI or SDKs create session and refresh the session token automatically to avoid service interruptions when a session expires. For more information about authorization, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_CreateSession.html">
  *                            <code>CreateSession</code>
  *                         </a>.</p>
+ *                      <p>If the object is encrypted with
+ *                         SSE-KMS, you must also have the
+ *                         <code>kms:GenerateDataKey</code> and <code>kms:Decrypt</code> permissions in IAM identity-based policies and KMS key policies for the KMS key.</p>
  *                   </li>
  *                </ul>
  *             </dd>
@@ -190,6 +193,7 @@ export interface PutObjectCommandOutput extends PutObjectOutput, __MetadataBeare
  *   ChecksumSHA1: "STRING_VALUE",
  *   ChecksumSHA256: "STRING_VALUE",
  *   Expires: new Date("TIMESTAMP"),
+ *   IfNoneMatch: "STRING_VALUE",
  *   GrantFullControl: "STRING_VALUE",
  *   GrantRead: "STRING_VALUE",
  *   GrantReadACP: "STRING_VALUE",
@@ -245,6 +249,45 @@ export interface PutObjectCommandOutput extends PutObjectOutput, __MetadataBeare
  * <p>Base exception class for all service exceptions from S3 service.</p>
  *
  * @public
+ * @example To upload an object and specify canned ACL.
+ * ```javascript
+ * // The following example uploads and object. The request specifies optional canned ACL (access control list) to all READ access to authenticated users. If the bucket is versioning enabled, S3 returns version ID in response.
+ * const input = {
+ *   "ACL": "authenticated-read",
+ *   "Body": "filetoupload",
+ *   "Bucket": "examplebucket",
+ *   "Key": "exampleobject"
+ * };
+ * const command = new PutObjectCommand(input);
+ * const response = await client.send(command);
+ * /* response ==
+ * {
+ *   "ETag": "\"6805f2cfc46c0f04559748bb039d69ae\"",
+ *   "VersionId": "Kirh.unyZwjQ69YxcQLA8z4F5j3kJJKr"
+ * }
+ * *\/
+ * // example id: to-upload-an-object-and-specify-canned-acl-1483397779571
+ * ```
+ *
+ * @example To create an object.
+ * ```javascript
+ * // The following example creates an object. If the bucket is versioning enabled, S3 returns version ID in response.
+ * const input = {
+ *   "Body": "filetoupload",
+ *   "Bucket": "examplebucket",
+ *   "Key": "objectkey"
+ * };
+ * const command = new PutObjectCommand(input);
+ * const response = await client.send(command);
+ * /* response ==
+ * {
+ *   "ETag": "\"6805f2cfc46c0f04559748bb039d69ae\"",
+ *   "VersionId": "Bvq0EDKxOcXLJXNo_Lkz37eM3R4pfzyQ"
+ * }
+ * *\/
+ * // example id: to-create-an-object-1483147613675
+ * ```
+ *
  * @example To upload an object
  * ```javascript
  * // The following example uploads an object to a versioning-enabled bucket. The source file is specified using Windows file syntax. S3 returns VersionId of the newly created object.
@@ -262,6 +305,26 @@ export interface PutObjectCommandOutput extends PutObjectOutput, __MetadataBeare
  * }
  * *\/
  * // example id: to-upload-an-object-1481760101010
+ * ```
+ *
+ * @example To upload an object and specify optional tags
+ * ```javascript
+ * // The following example uploads an object. The request specifies optional object tags. The bucket is versioned, therefore S3 returns version ID of the newly created object.
+ * const input = {
+ *   "Body": "c:\\HappyFace.jpg",
+ *   "Bucket": "examplebucket",
+ *   "Key": "HappyFace.jpg",
+ *   "Tagging": "key1=value1&key2=value2"
+ * };
+ * const command = new PutObjectCommand(input);
+ * const response = await client.send(command);
+ * /* response ==
+ * {
+ *   "ETag": "\"6805f2cfc46c0f04559748bb039d69ae\"",
+ *   "VersionId": "psM2sYY4.o1501dSx8wMvnkOzSBB.V4a"
+ * }
+ * *\/
+ * // example id: to-upload-an-object-and-specify-optional-tags-1481762310955
  * ```
  *
  * @example To upload an object and specify server-side encryption and object tags
@@ -331,65 +394,6 @@ export interface PutObjectCommandOutput extends PutObjectOutput, __MetadataBeare
  * // example id: to-upload-object-and-specify-user-defined-metadata-1483396974757
  * ```
  *
- * @example To upload an object and specify optional tags
- * ```javascript
- * // The following example uploads an object. The request specifies optional object tags. The bucket is versioned, therefore S3 returns version ID of the newly created object.
- * const input = {
- *   "Body": "c:\\HappyFace.jpg",
- *   "Bucket": "examplebucket",
- *   "Key": "HappyFace.jpg",
- *   "Tagging": "key1=value1&key2=value2"
- * };
- * const command = new PutObjectCommand(input);
- * const response = await client.send(command);
- * /* response ==
- * {
- *   "ETag": "\"6805f2cfc46c0f04559748bb039d69ae\"",
- *   "VersionId": "psM2sYY4.o1501dSx8wMvnkOzSBB.V4a"
- * }
- * *\/
- * // example id: to-upload-an-object-and-specify-optional-tags-1481762310955
- * ```
- *
- * @example To upload an object and specify canned ACL.
- * ```javascript
- * // The following example uploads and object. The request specifies optional canned ACL (access control list) to all READ access to authenticated users. If the bucket is versioning enabled, S3 returns version ID in response.
- * const input = {
- *   "ACL": "authenticated-read",
- *   "Body": "filetoupload",
- *   "Bucket": "examplebucket",
- *   "Key": "exampleobject"
- * };
- * const command = new PutObjectCommand(input);
- * const response = await client.send(command);
- * /* response ==
- * {
- *   "ETag": "\"6805f2cfc46c0f04559748bb039d69ae\"",
- *   "VersionId": "Kirh.unyZwjQ69YxcQLA8z4F5j3kJJKr"
- * }
- * *\/
- * // example id: to-upload-an-object-and-specify-canned-acl-1483397779571
- * ```
- *
- * @example To create an object.
- * ```javascript
- * // The following example creates an object. If the bucket is versioning enabled, S3 returns version ID in response.
- * const input = {
- *   "Body": "filetoupload",
- *   "Bucket": "examplebucket",
- *   "Key": "objectkey"
- * };
- * const command = new PutObjectCommand(input);
- * const response = await client.send(command);
- * /* response ==
- * {
- *   "ETag": "\"6805f2cfc46c0f04559748bb039d69ae\"",
- *   "VersionId": "Bvq0EDKxOcXLJXNo_Lkz37eM3R4pfzyQ"
- * }
- * *\/
- * // example id: to-create-an-object-1483147613675
- * ```
- *
  */
 export class PutObjectCommand extends $Command
   .classBuilder<
@@ -408,13 +412,14 @@ export class PutObjectCommand extends $Command
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
       getEndpointPlugin(config, Command.getEndpointParameterInstructions()),
-      getCheckContentLengthHeaderPlugin(config),
-      getSsecPlugin(config),
       getFlexibleChecksumsPlugin(config, {
         input: this.input,
         requestAlgorithmMember: "ChecksumAlgorithm",
         requestChecksumRequired: false,
       }),
+      getCheckContentLengthHeaderPlugin(config),
+      getThrow200ExceptionsPlugin(config),
+      getSsecPlugin(config),
     ];
   })
   .s("AmazonS3", "PutObject", {})
@@ -422,4 +427,16 @@ export class PutObjectCommand extends $Command
   .f(PutObjectRequestFilterSensitiveLog, PutObjectOutputFilterSensitiveLog)
   .ser(se_PutObjectCommand)
   .de(de_PutObjectCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: PutObjectRequest;
+      output: PutObjectOutput;
+    };
+    sdk: {
+      input: PutObjectCommandInput;
+      output: PutObjectCommandOutput;
+    };
+  };
+}

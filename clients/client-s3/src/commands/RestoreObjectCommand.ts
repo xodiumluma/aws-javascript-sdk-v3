@@ -1,5 +1,6 @@
 // smithy-typescript generated code
 import { getFlexibleChecksumsPlugin } from "@aws-sdk/middleware-flexible-checksums";
+import { getThrow200ExceptionsPlugin } from "@aws-sdk/middleware-sdk-s3";
 import { getEndpointPlugin } from "@smithy/middleware-endpoint";
 import { getSerdePlugin } from "@smithy/middleware-serde";
 import { Command as $Command } from "@smithy/smithy-client";
@@ -32,6 +33,10 @@ export interface RestoreObjectCommandOutput extends RestoreObjectOutput, __Metad
  * <note>
  *             <p>This operation is not supported by directory buckets.</p>
  *          </note>
+ *          <important>
+ *             <p>The <code>SELECT</code> job type for the RestoreObject operation is no longer available to new customers. Existing customers of Amazon S3 Select can continue to use the feature as usual. <a href="http://aws.amazon.com/blogs/storage/how-to-optimize-querying-your-data-in-amazon-s3/">Learn more</a>
+ *             </p>
+ *          </important>
  *          <p>Restores an archived copy of an object back into Amazon S3</p>
  *          <p>This functionality is not supported for Amazon S3 on Outposts.</p>
  *          <p>This action performs the following types of requests: </p>
@@ -391,6 +396,7 @@ export class RestoreObjectCommand extends $Command
         requestAlgorithmMember: "ChecksumAlgorithm",
         requestChecksumRequired: false,
       }),
+      getThrow200ExceptionsPlugin(config),
     ];
   })
   .s("AmazonS3", "RestoreObject", {})
@@ -398,4 +404,16 @@ export class RestoreObjectCommand extends $Command
   .f(RestoreObjectRequestFilterSensitiveLog, void 0)
   .ser(se_RestoreObjectCommand)
   .de(de_RestoreObjectCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: RestoreObjectRequest;
+      output: RestoreObjectOutput;
+    };
+    sdk: {
+      input: RestoreObjectCommandInput;
+      output: RestoreObjectCommandOutput;
+    };
+  };
+}

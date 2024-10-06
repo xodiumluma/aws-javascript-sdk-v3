@@ -32,13 +32,16 @@ export interface DeleteAppVersionResourceCommandOutput extends DeleteAppVersionR
  *          <note>
  *             <ul>
  *                <li>
- *                   <p>You can only delete a manually added resource. To exclude non-manually added resources, use the <code>UpdateAppVersionResource</code> API.</p>
+ *                   <p>You can only delete a manually added resource. To exclude non-manually added
+ *             resources, use the <code>UpdateAppVersionResource</code> API.</p>
  *                </li>
  *                <li>
  *                   <p>This action has no effect outside Resilience Hub.</p>
  *                </li>
  *                <li>
- *                   <p>This API updates the Resilience Hub application draft version. To use this resource for running resiliency assessments, you must publish the Resilience Hub application using the <code>PublishAppVersion</code> API.</p>
+ *                   <p>This API updates the Resilience Hub application draft version. To use this
+ *             resource for running resiliency assessments, you must publish the Resilience Hub
+ *             application using the <code>PublishAppVersion</code> API.</p>
  *                </li>
  *             </ul>
  *          </note>
@@ -152,9 +155,7 @@ export class DeleteAppVersionResourceCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: ResiliencehubClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -166,4 +167,16 @@ export class DeleteAppVersionResourceCommand extends $Command
   .f(void 0, void 0)
   .ser(se_DeleteAppVersionResourceCommand)
   .de(de_DeleteAppVersionResourceCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: DeleteAppVersionResourceRequest;
+      output: DeleteAppVersionResourceResponse;
+    };
+    sdk: {
+      input: DeleteAppVersionResourceCommandInput;
+      output: DeleteAppVersionResourceCommandOutput;
+    };
+  };
+}

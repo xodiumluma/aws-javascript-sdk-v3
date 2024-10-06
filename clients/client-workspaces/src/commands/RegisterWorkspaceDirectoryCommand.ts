@@ -55,7 +55,12 @@ export interface RegisterWorkspaceDirectoryCommandOutput extends RegisterWorkspa
  *   ],
  *   WorkspaceDirectoryName: "STRING_VALUE",
  *   WorkspaceDirectoryDescription: "STRING_VALUE",
- *   UserIdentityType: "CUSTOMER_MANAGED" || "AWS_DIRECTORY_SERVICE",
+ *   UserIdentityType: "CUSTOMER_MANAGED" || "AWS_DIRECTORY_SERVICE" || "AWS_IAM_IDENTITY_CENTER",
+ *   IdcInstanceArn: "STRING_VALUE",
+ *   MicrosoftEntraConfig: { // MicrosoftEntraConfig
+ *     TenantId: "STRING_VALUE",
+ *     ApplicationConfigSecretArn: "STRING_VALUE",
+ *   },
  *   WorkspaceType: "PERSONAL" || "POOLS",
  *   ActiveDirectoryConfig: { // ActiveDirectoryConfig
  *     DomainName: "STRING_VALUE", // required
@@ -121,9 +126,7 @@ export class RegisterWorkspaceDirectoryCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: WorkSpacesClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -135,4 +138,16 @@ export class RegisterWorkspaceDirectoryCommand extends $Command
   .f(void 0, void 0)
   .ser(se_RegisterWorkspaceDirectoryCommand)
   .de(de_RegisterWorkspaceDirectoryCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: RegisterWorkspaceDirectoryRequest;
+      output: RegisterWorkspaceDirectoryResult;
+    };
+    sdk: {
+      input: RegisterWorkspaceDirectoryCommandInput;
+      output: RegisterWorkspaceDirectoryCommandOutput;
+    };
+  };
+}

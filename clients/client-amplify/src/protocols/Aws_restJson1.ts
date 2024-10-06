@@ -99,6 +99,7 @@ import {
   BackendEnvironment,
   BadRequestException,
   Branch,
+  CacheConfig,
   CertificateSettings,
   CustomRule,
   DependentServiceFailureException,
@@ -135,6 +136,7 @@ export const se_CreateAppCommand = async (
       autoBranchCreationPatterns: (_) => _json(_),
       basicAuthCredentials: [],
       buildSpec: [],
+      cacheConfig: (_) => _json(_),
       customHeaders: [],
       customRules: (_) => _json(_),
       description: [],
@@ -799,10 +801,7 @@ export const se_UntagResourceCommand = async (
   b.bp("/tags/{resourceArn}");
   b.p("resourceArn", () => input.resourceArn!, "{resourceArn}", false);
   const query: any = map({
-    [_tK]: [
-      __expectNonNull(input.tagKeys, `tagKeys`) != null,
-      () => (input[_tK]! || []).map((_entry) => _entry as any),
-    ],
+    [_tK]: [__expectNonNull(input.tagKeys, `tagKeys`) != null, () => input[_tK]! || []],
   });
   let body: any;
   b.m("DELETE").h(headers).q(query).b(body);
@@ -830,6 +829,7 @@ export const se_UpdateAppCommand = async (
       autoBranchCreationPatterns: (_) => _json(_),
       basicAuthCredentials: [],
       buildSpec: [],
+      cacheConfig: (_) => _json(_),
       customHeaders: [],
       customRules: (_) => _json(_),
       description: [],
@@ -1904,6 +1904,8 @@ const de_UnauthorizedExceptionRes = async (
 
 // se_Backend omitted.
 
+// se_CacheConfig omitted.
+
 // se_CertificateSettings omitted.
 
 // se_CustomRule omitted.
@@ -1931,6 +1933,7 @@ const de_App = (output: any, context: __SerdeContext): App => {
     autoBranchCreationPatterns: _json,
     basicAuthCredentials: __expectString,
     buildSpec: __expectString,
+    cacheConfig: _json,
     createTime: (_: any) => __expectNonNull(__parseEpochTimestamp(__expectNumber(_))),
     customHeaders: __expectString,
     customRules: _json,
@@ -2051,6 +2054,8 @@ const de_Branches = (output: any, context: __SerdeContext): Branch[] => {
     });
   return retVal;
 };
+
+// de_CacheConfig omitted.
 
 // de_Certificate omitted.
 
@@ -2198,13 +2203,6 @@ const deserializeMetadata = (output: __HttpResponse): __ResponseMetadata => ({
 // Encode Uint8Array data into string with utf-8.
 const collectBodyString = (streamBody: any, context: __SerdeContext): Promise<string> =>
   collectBody(streamBody, context).then((body) => context.utf8Encoder(body));
-
-const isSerializableHeaderValue = (value: any): boolean =>
-  value !== undefined &&
-  value !== null &&
-  value !== "" &&
-  (!Object.getOwnPropertyNames(value).includes("length") || value.length != 0) &&
-  (!Object.getOwnPropertyNames(value).includes("size") || value.size != 0);
 
 const _eN = "environmentName";
 const _mR = "maxResults";

@@ -6,7 +6,7 @@ import { MetadataBearer as __MetadataBearer } from "@smithy/types";
 
 import { commonParams } from "../endpoint/EndpointParameters";
 import { GlueClientResolvedConfig, ServiceInputTypes, ServiceOutputTypes } from "../GlueClient";
-import { CreateBlueprintRequest, CreateBlueprintResponse } from "../models/models_0";
+import { CreateBlueprintRequest, CreateBlueprintResponse } from "../models/models_1";
 import { de_CreateBlueprintCommand, se_CreateBlueprintCommand } from "../protocols/Aws_json1_1";
 
 /**
@@ -85,9 +85,7 @@ export class CreateBlueprintCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: GlueClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -99,4 +97,16 @@ export class CreateBlueprintCommand extends $Command
   .f(void 0, void 0)
   .ser(se_CreateBlueprintCommand)
   .de(de_CreateBlueprintCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: CreateBlueprintRequest;
+      output: CreateBlueprintResponse;
+    };
+    sdk: {
+      input: CreateBlueprintCommandInput;
+      output: CreateBlueprintCommandOutput;
+    };
+  };
+}

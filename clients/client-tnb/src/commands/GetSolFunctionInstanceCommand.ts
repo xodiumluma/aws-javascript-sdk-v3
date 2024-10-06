@@ -32,7 +32,8 @@ export interface GetSolFunctionInstanceCommandInput extends GetSolFunctionInstan
 export interface GetSolFunctionInstanceCommandOutput extends GetSolFunctionInstanceOutput, __MetadataBearer {}
 
 /**
- * <p>Gets the details of a network function instance, including the instantation state and metadata from the function package descriptor in the network function package.</p>
+ * <p>Gets the details of a network function instance, including the instantiation state and
+ *          metadata from the function package descriptor in the network function package.</p>
  *          <p>A network function instance is a function in a function package .</p>
  * @example
  * Use a bare-bones client and the command you need to make an API call.
@@ -97,7 +98,8 @@ export interface GetSolFunctionInstanceCommandOutput extends GetSolFunctionInsta
  *  <p>Exception caused by throttling.</p>
  *
  * @throws {@link ValidationException} (client fault)
- *  <p>Unable to process the request because the client provided input failed to satisfy request constraints.</p>
+ *  <p>Unable to process the request because the client provided input failed to satisfy
+ *          request constraints.</p>
  *
  * @throws {@link TnbServiceException}
  * <p>Base exception class for all service exceptions from Tnb service.</p>
@@ -112,9 +114,7 @@ export class GetSolFunctionInstanceCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: TnbClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -126,4 +126,16 @@ export class GetSolFunctionInstanceCommand extends $Command
   .f(void 0, GetSolFunctionInstanceOutputFilterSensitiveLog)
   .ser(se_GetSolFunctionInstanceCommand)
   .de(de_GetSolFunctionInstanceCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: GetSolFunctionInstanceInput;
+      output: GetSolFunctionInstanceOutput;
+    };
+    sdk: {
+      input: GetSolFunctionInstanceCommandInput;
+      output: GetSolFunctionInstanceCommandOutput;
+    };
+  };
+}

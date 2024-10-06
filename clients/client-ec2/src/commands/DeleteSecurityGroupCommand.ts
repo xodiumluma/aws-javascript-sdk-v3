@@ -30,7 +30,7 @@ export interface DeleteSecurityGroupCommandOutput extends __MetadataBearer {}
 /**
  * <p>Deletes a security group.</p>
  *          <p>If you attempt to delete a security group that is associated with an instance or network interface or is
- * 			  referenced by another security group, the operation fails with
+ * 			  referenced by another security group in the same VPC, the operation fails with
  * 				<code>DependencyViolation</code>.</p>
  * @example
  * Use a bare-bones client and the command you need to make an API call.
@@ -79,9 +79,7 @@ export class DeleteSecurityGroupCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: EC2ClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -93,4 +91,16 @@ export class DeleteSecurityGroupCommand extends $Command
   .f(void 0, void 0)
   .ser(se_DeleteSecurityGroupCommand)
   .de(de_DeleteSecurityGroupCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: DeleteSecurityGroupRequest;
+      output: {};
+    };
+    sdk: {
+      input: DeleteSecurityGroupCommandInput;
+      output: DeleteSecurityGroupCommandOutput;
+    };
+  };
+}

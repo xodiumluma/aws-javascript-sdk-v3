@@ -37,15 +37,12 @@ export interface UpdateGlobalTableCommandOutput extends UpdateGlobalTableOutput,
  *             <p>To determine which version you're using, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/globaltables.DetermineVersion.html">Determining the global table version you are using</a>. To update existing global tables from version 2017.11.29 (Legacy) to version 2019.11.21 (Current), see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/V2globaltables_upgrade.html">Upgrading global tables</a>.</p>
  *          </important>
  *          <note>
- *             <p>
- *                 For global tables, this operation only applies to global tables using Version 2019.11.21 (Current version). If you are using global tables <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/GlobalTables.html">Version
- *                         2019.11.21</a> you can use <a href="https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateTable.html">UpdateTable</a> instead.
- *             </p>
- *             <p>
- *                 Although you can use <code>UpdateGlobalTable</code> to add replicas and remove
+ *             <p> For global tables, this operation only applies to global tables using Version
+ *                 2019.11.21 (Current version). If you are using global tables <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/GlobalTables.html">Version
+ *                     2019.11.21</a> you can use <a href="https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateTable.html">UpdateTable</a> instead. </p>
+ *             <p> Although you can use <code>UpdateGlobalTable</code> to add replicas and remove
  *                 replicas in a single request, for simplicity we recommend that you issue separate
- *                 requests for adding or removing replicas.
- *             </p>
+ *                 requests for adding or removing replicas. </p>
  *          </note>
  *          <p> If global secondary indexes are specified, then the following conditions must also be
  *             met: </p>
@@ -162,9 +159,7 @@ export class UpdateGlobalTableCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: DynamoDBClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -176,4 +171,16 @@ export class UpdateGlobalTableCommand extends $Command
   .f(void 0, void 0)
   .ser(se_UpdateGlobalTableCommand)
   .de(de_UpdateGlobalTableCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: UpdateGlobalTableInput;
+      output: UpdateGlobalTableOutput;
+    };
+    sdk: {
+      input: UpdateGlobalTableCommandInput;
+      output: UpdateGlobalTableCommandOutput;
+    };
+  };
+}

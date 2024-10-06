@@ -40,7 +40,8 @@ export interface InstantiateSolNetworkInstanceCommandOutput
 /**
  * <p>Instantiates a network instance.</p>
  *          <p>A network instance is a single network created in Amazon Web Services TNB that can be deployed and on which life-cycle operations (like terminate, update, and delete) can be performed.</p>
- *          <p>Before you can instantiate a network instance, you have to create a network instance. For more information, see <a href="https://docs.aws.amazon.com/tnb/latest/APIReference/API_CreateSolNetworkInstance.html">CreateSolNetworkInstance</a>.</p>
+ *          <p>Before you can instantiate a network instance, you have to create a network instance.
+ *          For more information, see <a href="https://docs.aws.amazon.com/tnb/latest/APIReference/API_CreateSolNetworkInstance.html">CreateSolNetworkInstance</a>.</p>
  * @example
  * Use a bare-bones client and the command you need to make an API call.
  * ```javascript
@@ -88,7 +89,8 @@ export interface InstantiateSolNetworkInstanceCommandOutput
  *  <p>Exception caused by throttling.</p>
  *
  * @throws {@link ValidationException} (client fault)
- *  <p>Unable to process the request because the client provided input failed to satisfy request constraints.</p>
+ *  <p>Unable to process the request because the client provided input failed to satisfy
+ *          request constraints.</p>
  *
  * @throws {@link TnbServiceException}
  * <p>Base exception class for all service exceptions from Tnb service.</p>
@@ -103,9 +105,7 @@ export class InstantiateSolNetworkInstanceCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: TnbClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -117,4 +117,16 @@ export class InstantiateSolNetworkInstanceCommand extends $Command
   .f(InstantiateSolNetworkInstanceInputFilterSensitiveLog, InstantiateSolNetworkInstanceOutputFilterSensitiveLog)
   .ser(se_InstantiateSolNetworkInstanceCommand)
   .de(de_InstantiateSolNetworkInstanceCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: InstantiateSolNetworkInstanceInput;
+      output: InstantiateSolNetworkInstanceOutput;
+    };
+    sdk: {
+      input: InstantiateSolNetworkInstanceCommandInput;
+      output: InstantiateSolNetworkInstanceCommandOutput;
+    };
+  };
+}

@@ -46,7 +46,7 @@ export interface GetConfigurationCommandOutput extends GetConfigurationCommandOu
  *                </li>
  *                <li>
  *                   <p>
- *                      <code>GetConfiguration</code> is a priced call. For more information, see
+ *                      <a>GetConfiguration</a> is a priced call. For more information, see
  *                      <a href="https://aws.amazon.com/systems-manager/pricing/">Pricing</a>.</p>
  *                </li>
  *             </ul>
@@ -124,9 +124,7 @@ export class GetConfigurationCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: AppConfigClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -138,4 +136,16 @@ export class GetConfigurationCommand extends $Command
   .f(void 0, ConfigurationFilterSensitiveLog)
   .ser(se_GetConfigurationCommand)
   .de(de_GetConfigurationCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: GetConfigurationRequest;
+      output: Configuration;
+    };
+    sdk: {
+      input: GetConfigurationCommandInput;
+      output: GetConfigurationCommandOutput;
+    };
+  };
+}

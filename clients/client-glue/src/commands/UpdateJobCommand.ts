@@ -6,7 +6,8 @@ import { MetadataBearer as __MetadataBearer } from "@smithy/types";
 
 import { commonParams } from "../endpoint/EndpointParameters";
 import { GlueClientResolvedConfig, ServiceInputTypes, ServiceOutputTypes } from "../GlueClient";
-import { UpdateJobRequest, UpdateJobRequestFilterSensitiveLog, UpdateJobResponse } from "../models/models_2";
+import { UpdateJobResponse } from "../models/models_2";
+import { UpdateJobRequest, UpdateJobRequestFilterSensitiveLog } from "../models/models_3";
 import { de_UpdateJobCommand, se_UpdateJobCommand } from "../protocols/Aws_json1_1";
 
 /**
@@ -39,6 +40,7 @@ export interface UpdateJobCommandOutput extends UpdateJobResponse, __MetadataBea
  *   JobName: "STRING_VALUE", // required
  *   JobUpdate: { // JobUpdate
  *     JobMode: "SCRIPT" || "VISUAL" || "NOTEBOOK",
+ *     JobRunQueuingEnabled: true || false,
  *     Description: "STRING_VALUE",
  *     LogUri: "STRING_VALUE",
  *     Role: "STRING_VALUE",
@@ -298,6 +300,9 @@ export interface UpdateJobCommandOutput extends UpdateJobResponse, __MetadataBea
  *           Inputs: [ // required
  *             "STRING_VALUE",
  *           ],
+ *           PartitionKeys: [ // GlueStudioPathList
+ *             "<EnclosedInStringProperties>",
+ *           ],
  *           Database: "STRING_VALUE", // required
  *           Table: "STRING_VALUE", // required
  *         },
@@ -323,7 +328,7 @@ export interface UpdateJobCommandOutput extends UpdateJobResponse, __MetadataBea
  *           Inputs: [ // required
  *             "STRING_VALUE",
  *           ],
- *           PartitionKeys: [ // GlueStudioPathList
+ *           PartitionKeys: [
  *             "<EnclosedInStringProperties>",
  *           ],
  *           Table: "STRING_VALUE", // required
@@ -397,9 +402,7 @@ export interface UpdateJobCommandOutput extends UpdateJobResponse, __MetadataBea
  *         DropFields: { // DropFields
  *           Name: "STRING_VALUE", // required
  *           Inputs: "<OneInput>", // required
- *           Paths: [ // required
- *             "<EnclosedInStringProperties>",
- *           ],
+ *           Paths: "<GlueStudioPathList>", // required
  *         },
  *         RenameField: { // RenameField
  *           Name: "STRING_VALUE", // required
@@ -1170,9 +1173,7 @@ export class UpdateJobCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: GlueClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -1184,4 +1185,16 @@ export class UpdateJobCommand extends $Command
   .f(UpdateJobRequestFilterSensitiveLog, void 0)
   .ser(se_UpdateJobCommand)
   .de(de_UpdateJobCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: UpdateJobRequest;
+      output: UpdateJobResponse;
+    };
+    sdk: {
+      input: UpdateJobCommandInput;
+      output: UpdateJobCommandOutput;
+    };
+  };
+}

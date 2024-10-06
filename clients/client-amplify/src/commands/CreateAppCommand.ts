@@ -86,6 +86,9 @@ export interface CreateAppCommandOutput extends CreateAppResult, __MetadataBeare
  *     enablePullRequestPreview: true || false,
  *     pullRequestEnvironmentName: "STRING_VALUE",
  *   },
+ *   cacheConfig: { // CacheConfig
+ *     type: "AMPLIFY_MANAGED" || "AMPLIFY_MANAGED_NO_COOKIES", // required
+ *   },
  * };
  * const command = new CreateAppCommand(input);
  * const response = await client.send(command);
@@ -146,6 +149,9 @@ export interface CreateAppCommandOutput extends CreateAppResult, __MetadataBeare
  * //       pullRequestEnvironmentName: "STRING_VALUE",
  * //     },
  * //     repositoryCloneMethod: "SSH" || "TOKEN" || "SIGV4",
+ * //     cacheConfig: { // CacheConfig
+ * //       type: "AMPLIFY_MANAGED" || "AMPLIFY_MANAGED_NO_COOKIES", // required
+ * //     },
  * //   },
  * // };
  *
@@ -185,9 +191,7 @@ export class CreateAppCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: AmplifyClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -199,4 +203,16 @@ export class CreateAppCommand extends $Command
   .f(CreateAppRequestFilterSensitiveLog, CreateAppResultFilterSensitiveLog)
   .ser(se_CreateAppCommand)
   .de(de_CreateAppCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: CreateAppRequest;
+      output: CreateAppResult;
+    };
+    sdk: {
+      input: CreateAppCommandInput;
+      output: CreateAppCommandOutput;
+    };
+  };
+}

@@ -64,7 +64,8 @@ export interface CancelSolNetworkOperationCommandOutput extends __MetadataBearer
  *  <p>Exception caused by throttling.</p>
  *
  * @throws {@link ValidationException} (client fault)
- *  <p>Unable to process the request because the client provided input failed to satisfy request constraints.</p>
+ *  <p>Unable to process the request because the client provided input failed to satisfy
+ *          request constraints.</p>
  *
  * @throws {@link TnbServiceException}
  * <p>Base exception class for all service exceptions from Tnb service.</p>
@@ -79,9 +80,7 @@ export class CancelSolNetworkOperationCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: TnbClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -93,4 +92,16 @@ export class CancelSolNetworkOperationCommand extends $Command
   .f(void 0, void 0)
   .ser(se_CancelSolNetworkOperationCommand)
   .de(de_CancelSolNetworkOperationCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: CancelSolNetworkOperationInput;
+      output: {};
+    };
+    sdk: {
+      input: CancelSolNetworkOperationCommandInput;
+      output: CancelSolNetworkOperationCommandOutput;
+    };
+  };
+}

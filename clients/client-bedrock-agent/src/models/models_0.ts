@@ -265,6 +265,20 @@ export interface ParameterDetail {
 }
 
 /**
+ * @public
+ * @enum
+ */
+export const RequireConfirmation = {
+  DISABLED: "DISABLED",
+  ENABLED: "ENABLED",
+} as const;
+
+/**
+ * @public
+ */
+export type RequireConfirmation = (typeof RequireConfirmation)[keyof typeof RequireConfirmation];
+
+/**
  * <p>Defines parameters that the agent needs to invoke from the user to complete the function. Corresponds to an action in an action group.</p>
  *          <p>This data type is used in the following API operations:</p>
  *          <ul>
@@ -314,6 +328,12 @@ export interface Function {
    * @public
    */
   parameters?: Record<string, ParameterDetail>;
+
+  /**
+   * <p>Contains information if user confirmation is required to invoke the function.</p>
+   * @public
+   */
+  requireConfirmation?: RequireConfirmation;
 }
 
 /**
@@ -1140,7 +1160,7 @@ export interface PromptOverrideConfiguration {
   promptConfigurations: PromptConfiguration[] | undefined;
 
   /**
-   * <p>The ARN of the Lambda function to use when parsing the raw foundation model output in parts of the agent sequence. If you specify this field, at least one of the <code>promptConfigurations</code> must contain a <code>parserMode</code> value that is set to <code>OVERRIDDEN</code>. For more information, see <a href="https://docs.aws.amazon.com/bedrock/latest/userguide/lambda-parser.html">Parser Lambda function in Agents for Amazon Bedrock</a>.</p>
+   * <p>The ARN of the Lambda function to use when parsing the raw foundation model output in parts of the agent sequence. If you specify this field, at least one of the <code>promptConfigurations</code> must contain a <code>parserMode</code> value that is set to <code>OVERRIDDEN</code>. For more information, see <a href="https://docs.aws.amazon.com/bedrock/latest/userguide/lambda-parser.html">Parser Lambda function in Amazon Bedrock Agents</a>.</p>
    * @public
    */
   overrideLambda?: string;
@@ -1628,7 +1648,7 @@ export interface CreateAgentRequest {
   instruction?: string;
 
   /**
-   * <p>The foundation model to be used for orchestration by the agent you create.</p>
+   * <p>The Amazon Resource Name (ARN) of the foundation model to be used for orchestration by the agent you create.</p>
    * @public
    */
   foundationModel?: string;
@@ -2487,7 +2507,7 @@ export interface ConfluenceSourceConfiguration {
 
   /**
    * <p>The Amazon Resource Name of an Secrets Manager secret that
-   *             stores your authentication credentials for your SharePoint site/sites.
+   *             stores your authentication credentials for your Confluence instance URL.
    *             For more information on the key-value pairs that must be included in
    *             your secret, depending on your authentication type, see
    *             <a href="https://docs.aws.amazon.com/bedrock/latest/userguide/confluence-data-source-connector.html#configuration-confluence-connector">Confluence connection configuration</a>.</p>
@@ -2588,7 +2608,7 @@ export interface SalesforceSourceConfiguration {
 
   /**
    * <p>The Amazon Resource Name of an Secrets Manager secret that
-   *             stores your authentication credentials for your SharePoint site/sites.
+   *             stores your authentication credentials for your Salesforce instance URL.
    *             For more information on the key-value pairs that must be included in
    *             your secret, depending on your authentication type, see
    *             <a href="https://docs.aws.amazon.com/bedrock/latest/userguide/salesforce-data-source-connector.html#configuration-salesforce-connector">Salesforce connection configuration</a>.</p>
@@ -3212,12 +3232,12 @@ export interface ParsingPrompt {
 }
 
 /**
- * <p>Settings for a foundation model used to parse documents for a data source.</p>
+ * <p>Settings for a foundation model or <a href="https://docs.aws.amazon.com/bedrock/latest/userguide/cross-region-inference.html">inference profile</a> used to parse documents for a data source.</p>
  * @public
  */
 export interface BedrockFoundationModelConfiguration {
   /**
-   * <p>The model's ARN.</p>
+   * <p>The ARN of the foundation model or <a href="https://docs.aws.amazon.com/bedrock/latest/userguide/cross-region-inference.html">inference profile</a>.</p>
    * @public
    */
   modelArn: string | undefined;
@@ -3248,7 +3268,7 @@ export type ParsingStrategy = (typeof ParsingStrategy)[keyof typeof ParsingStrat
  *     you can configure the data source to convert the pages of text into images and use a model to describe the
  *     contents of each page.</p>
  *          <p>To use a model to parse PDF documents, set the parsing strategy to <code>BEDROCK_FOUNDATION_MODEL</code> and
- *     specify the model to use by ARN. You can also override the default parsing prompt with instructions for how
+ *       specify the model or <a href="https://docs.aws.amazon.com/bedrock/latest/userguide/cross-region-inference.html">inference profile</a> to use by ARN. You can also override the default parsing prompt with instructions for how
  *     to interpret images and tables in your documents. The following models are supported.</p>
  *          <ul>
  *             <li>
@@ -3260,7 +3280,7 @@ export type ParsingStrategy = (typeof ParsingStrategy)[keyof typeof ParsingStrat
  *                </p>
  *             </li>
  *          </ul>
- *          <p>You can get the ARN of a model with the  action. Standard model usage
+ *          <p>You can get the ARN of a model with the <a href="https://docs.aws.amazon.com/bedrock/latest/APIReference/API_ListFoundationModels.html">ListFoundationModels</a> action. Standard model usage
  *     charges apply for the foundation model parsing strategy.</p>
  * @public
  */
@@ -3342,14 +3362,16 @@ export interface CreateDataSourceRequest {
    *          <p>You can set the data deletion policy to:</p>
    *          <ul>
    *             <li>
-   *                <p>DELETE: Deletes all underlying data belonging to
-   *           the data source from the vector store upon deletion of a knowledge base or data
-   *           source resource. Note that the vector store itself is not deleted, only the
-   *           underlying data. This flag is ignored if an Amazon Web Services account is deleted.</p>
+   *                <p>DELETE: Deletes all data from your data source that’s converted
+   *           into vector embeddings upon deletion of a knowledge base or data source resource.
+   *           Note that the <b>vector store itself is not deleted</b>,
+   *           only the data. This flag is ignored if an Amazon Web Services account is deleted.</p>
    *             </li>
    *             <li>
-   *                <p>RETAIN: Retains all underlying data in your
-   *           vector store upon deletion of a knowledge base or data source resource.</p>
+   *                <p>RETAIN: Retains all data from your data source that’s converted
+   *           into vector embeddings upon deletion of a knowledge base or data source resource.
+   *           Note that the <b>vector store itself is not deleted</b>
+   *           if you delete a knowledge base or data source resource.</p>
    *             </li>
    *          </ul>
    * @public
@@ -3526,7 +3548,7 @@ export interface DeleteDataSourceResponse {
  */
 export interface GetDataSourceRequest {
   /**
-   * <p>The unique identifier of the knowledge base that the data source was added to.</p>
+   * <p>The unique identifier of the knowledge base for the data source.</p>
    * @public
    */
   knowledgeBaseId: string | undefined;
@@ -3891,7 +3913,7 @@ export interface KnowledgeBaseFlowNodeConfiguration {
   knowledgeBaseId: string | undefined;
 
   /**
-   * <p>The unique identifier of the model to use to generate a response from the query results. Omit this field if you want to return the retrieved results as an array.</p>
+   * <p>The unique identifier of the model or <a href="https://docs.aws.amazon.com/bedrock/latest/userguide/cross-region-inference.html">inference profile</a> to use to generate a response from the query results. Omit this field if you want to return the retrieved results as an array.</p>
    * @public
    */
   modelId?: string;
@@ -4110,7 +4132,7 @@ export interface PromptFlowNodeInlineConfiguration {
   templateConfiguration: PromptTemplateConfiguration | undefined;
 
   /**
-   * <p>The unique identifier of the model to run inference with.</p>
+   * <p>The unique identifier of the model or <a href="https://docs.aws.amazon.com/bedrock/latest/userguide/cross-region-inference.html">inference profile</a> to run inference with.</p>
    * @public
    */
   modelId: string | undefined;
@@ -5108,7 +5130,7 @@ export interface GetFlowAliasRequest {
  */
 export interface GetFlowAliasResponse {
   /**
-   * <p>The name of the flow alias.</p>
+   * <p>The name of the alias.</p>
    * @public
    */
   name: string | undefined;
@@ -5150,7 +5172,7 @@ export interface GetFlowAliasResponse {
   createdAt: Date | undefined;
 
   /**
-   * <p>The time at which the flow alias was last updated.</p>
+   * <p>The time at which the alias was last updated.</p>
    * @public
    */
   updatedAt: Date | undefined;
@@ -5223,7 +5245,7 @@ export interface FlowAliasSummary {
   id: string | undefined;
 
   /**
-   * <p>The Amazon Resource Name (ARN) of the flow alias.</p>
+   * <p>The Amazon Resource Name (ARN) of the alias.</p>
    * @public
    */
   arn: string | undefined;
@@ -5246,7 +5268,7 @@ export interface FlowAliasSummary {
  */
 export interface ListFlowAliasesResponse {
   /**
-   * <p>A list, each member of which contains information about a flow alias.</p>
+   * <p>A list, each member of which contains information about an alias.</p>
    * @public
    */
   flowAliasSummaries: FlowAliasSummary[] | undefined;
@@ -5263,13 +5285,13 @@ export interface ListFlowAliasesResponse {
  */
 export interface UpdateFlowAliasRequest {
   /**
-   * <p>The name of the flow alias.</p>
+   * <p>The name of the alias.</p>
    * @public
    */
   name: string | undefined;
 
   /**
-   * <p>A description for the flow alias.</p>
+   * <p>A description for the alias.</p>
    * @public
    */
   description?: string;
@@ -5298,7 +5320,7 @@ export interface UpdateFlowAliasRequest {
  */
 export interface UpdateFlowAliasResponse {
   /**
-   * <p>The name of the flow alias.</p>
+   * <p>The name of the alias.</p>
    * @public
    */
   name: string | undefined;
@@ -5340,7 +5362,7 @@ export interface UpdateFlowAliasResponse {
   createdAt: Date | undefined;
 
   /**
-   * <p>The time at which the flow alias was last updated.</p>
+   * <p>The time at which the alias was last updated.</p>
    * @public
    */
   updatedAt: Date | undefined;
@@ -5375,13 +5397,13 @@ export interface CreateFlowVersionRequest {
  */
 export interface CreateFlowVersionResponse {
   /**
-   * <p>The name of the flow version.</p>
+   * <p>The name of the version.</p>
    * @public
    */
   name: string | undefined;
 
   /**
-   * <p>The description of the flow version.</p>
+   * <p>The description of the version.</p>
    * @public
    */
   description?: string;
@@ -5497,7 +5519,7 @@ export interface GetFlowVersionRequest {
  */
 export interface GetFlowVersionResponse {
   /**
-   * <p>The name of the flow version.</p>
+   * <p>The name of the version.</p>
    * @public
    */
   name: string | undefined;
@@ -5581,7 +5603,7 @@ export interface ListFlowVersionsRequest {
 }
 
 /**
- * <p>Contains information about the flow version.</p>
+ * <p>Contains information about a version of a flow.</p>
  *          <p>This data type is used in the following API operations:</p>
  *          <ul>
  *             <li>
@@ -5612,7 +5634,7 @@ export interface FlowVersionSummary {
   status: FlowStatus | undefined;
 
   /**
-   * <p>The time at the flow version was created.</p>
+   * <p>The time at the version was created.</p>
    * @public
    */
   createdAt: Date | undefined;
@@ -6035,26 +6057,26 @@ export interface UpdateFlowResponse {
  */
 export interface GetIngestionJobRequest {
   /**
-   * <p>The unique identifier of the knowledge base for which the ingestion job applies.</p>
+   * <p>The unique identifier of the knowledge base for the data ingestion job you want to get information on.</p>
    * @public
    */
   knowledgeBaseId: string | undefined;
 
   /**
-   * <p>The unique identifier of the data source in the ingestion job.</p>
+   * <p>The unique identifier of the data source for the data ingestion job you want to get information on.</p>
    * @public
    */
   dataSourceId: string | undefined;
 
   /**
-   * <p>The unique identifier of the ingestion job.</p>
+   * <p>The unique identifier of the data ingestion job you want to get information on.</p>
    * @public
    */
   ingestionJobId: string | undefined;
 }
 
 /**
- * <p>Contains the statistics for the ingestion job.</p>
+ * <p>Contains the statistics for the data ingestion job.</p>
  * @public
  */
 export interface IngestionJobStatistics {
@@ -6089,7 +6111,7 @@ export interface IngestionJobStatistics {
   numberOfMetadataDocumentsModified?: number;
 
   /**
-   * <p>The number of source documents that was deleted.</p>
+   * <p>The number of source documents that were deleted.</p>
    * @public
    */
   numberOfDocumentsDeleted?: number;
@@ -6110,6 +6132,8 @@ export const IngestionJobStatus = {
   FAILED: "FAILED",
   IN_PROGRESS: "IN_PROGRESS",
   STARTING: "STARTING",
+  STOPPED: "STOPPED",
+  STOPPING: "STOPPING",
 } as const;
 
 /**
@@ -6118,7 +6142,7 @@ export const IngestionJobStatus = {
 export type IngestionJobStatus = (typeof IngestionJobStatus)[keyof typeof IngestionJobStatus];
 
 /**
- * <p>Contains details about an ingestion job, which converts a data source to embeddings for a vector store in knowledge base.</p>
+ * <p>Contains details about a data ingestion job. Data sources are ingested into a knowledge base so that Large Language Models (LLMs) can use your data.</p>
  *          <p>This data type is used in the following API operations:</p>
  *          <ul>
  *             <li>
@@ -6141,55 +6165,57 @@ export type IngestionJobStatus = (typeof IngestionJobStatus)[keyof typeof Ingest
  */
 export interface IngestionJob {
   /**
-   * <p>The unique identifier of the knowledge base to which the data source is being added.</p>
+   * <p>The unique identifier of the knowledge for the data ingestion job.</p>
    * @public
    */
   knowledgeBaseId: string | undefined;
 
   /**
-   * <p>The unique identifier of the ingested data source.</p>
+   * <p>The unique identifier of the data source for the data ingestion job.</p>
    * @public
    */
   dataSourceId: string | undefined;
 
   /**
-   * <p>The unique identifier of the ingestion job.</p>
+   * <p>The unique identifier of the data ingestion job.</p>
    * @public
    */
   ingestionJobId: string | undefined;
 
   /**
-   * <p>The description of the ingestion job.</p>
+   * <p>The description of the data ingestion job.</p>
    * @public
    */
   description?: string;
 
   /**
-   * <p>The status of the ingestion job.</p>
+   * <p>The status of the data ingestion job.</p>
    * @public
    */
   status: IngestionJobStatus | undefined;
 
   /**
-   * <p>Contains statistics about the ingestion job.</p>
+   * <p>Contains statistics about the data ingestion job.</p>
    * @public
    */
   statistics?: IngestionJobStatistics;
 
   /**
-   * <p>A list of reasons that the ingestion job failed.</p>
+   * <p>A list of reasons that the data ingestion job failed.</p>
    * @public
    */
   failureReasons?: string[];
 
   /**
-   * <p>The time at which the ingestion job started.</p>
+   * <p>The time the data ingestion job started.</p>
+   *          <p>If you stop a data ingestion job, the <code>startedAt</code> time is the time the job was started before the job was stopped.</p>
    * @public
    */
   startedAt: Date | undefined;
 
   /**
-   * <p>The time at which the ingestion job was last updated.</p>
+   * <p>The time the data ingestion job was last updated.</p>
+   *          <p>If you stop a data ingestion job, the <code>updatedAt</code> time is the time the job was stopped.</p>
    * @public
    */
   updatedAt: Date | undefined;
@@ -6200,7 +6226,7 @@ export interface IngestionJob {
  */
 export interface GetIngestionJobResponse {
   /**
-   * <p>Contains details about the ingestion job.</p>
+   * <p>Contains details about the data ingestion job.</p>
    * @public
    */
   ingestionJob: IngestionJob | undefined;
@@ -6234,24 +6260,24 @@ export const IngestionJobFilterOperator = {
 export type IngestionJobFilterOperator = (typeof IngestionJobFilterOperator)[keyof typeof IngestionJobFilterOperator];
 
 /**
- * <p>Defines a filter by which to filter the results.</p>
+ * <p>The definition of a filter to filter the data.</p>
  * @public
  */
 export interface IngestionJobFilter {
   /**
-   * <p>The attribute by which to filter the results.</p>
+   * <p>The name of field or attribute to apply the filter.</p>
    * @public
    */
   attribute: IngestionJobFilterAttribute | undefined;
 
   /**
-   * <p>The operation to carry out between the attribute and the values.</p>
+   * <p>The operation to apply to the field or attribute.</p>
    * @public
    */
   operator: IngestionJobFilterOperator | undefined;
 
   /**
-   * <p>A list of values for the attribute.</p>
+   * <p>A list of values that belong to the field or attribute.</p>
    * @public
    */
   values: string[] | undefined;
@@ -6287,18 +6313,18 @@ export const SortOrder = {
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder];
 
 /**
- * <p>Parameters by which to sort the results.</p>
+ * <p>The parameters of sorting the data.</p>
  * @public
  */
 export interface IngestionJobSortBy {
   /**
-   * <p>The attribute by which to sort the results.</p>
+   * <p>The name of field or attribute to apply sorting of data.</p>
    * @public
    */
   attribute: IngestionJobSortByAttribute | undefined;
 
   /**
-   * <p>The order by which to sort the results.</p>
+   * <p>The order for sorting the data.</p>
    * @public
    */
   order: SortOrder | undefined;
@@ -6309,25 +6335,25 @@ export interface IngestionJobSortBy {
  */
 export interface ListIngestionJobsRequest {
   /**
-   * <p>The unique identifier of the knowledge base for which to return ingestion jobs.</p>
+   * <p>The unique identifier of the knowledge base for the list of data ingestion jobs.</p>
    * @public
    */
   knowledgeBaseId: string | undefined;
 
   /**
-   * <p>The unique identifier of the data source for which to return ingestion jobs.</p>
+   * <p>The unique identifier of the data source for the list of data ingestion jobs.</p>
    * @public
    */
   dataSourceId: string | undefined;
 
   /**
-   * <p>Contains a definition of a filter for which to filter the results.</p>
+   * <p>Contains information about the filters for filtering the data.</p>
    * @public
    */
   filters?: IngestionJobFilter[];
 
   /**
-   * <p>Contains details about how to sort the results.</p>
+   * <p>Contains details about how to sort the data.</p>
    * @public
    */
   sortBy?: IngestionJobSortBy;
@@ -6346,54 +6372,54 @@ export interface ListIngestionJobsRequest {
 }
 
 /**
- * <p>Contains details about an ingestion job.</p>
+ * <p>Contains details about a data ingestion job.</p>
  * @public
  */
 export interface IngestionJobSummary {
   /**
-   * <p>The unique identifier of the knowledge base to which the data source is added.</p>
+   * <p>The unique identifier of the knowledge base for the data ingestion job.</p>
    * @public
    */
   knowledgeBaseId: string | undefined;
 
   /**
-   * <p>The unique identifier of the data source in the ingestion job.</p>
+   * <p>The unique identifier of the data source for the data ingestion job.</p>
    * @public
    */
   dataSourceId: string | undefined;
 
   /**
-   * <p>The unique identifier of the ingestion job.</p>
+   * <p>The unique identifier of the data ingestion job.</p>
    * @public
    */
   ingestionJobId: string | undefined;
 
   /**
-   * <p>The description of the ingestion job.</p>
+   * <p>The description of the data ingestion job.</p>
    * @public
    */
   description?: string;
 
   /**
-   * <p>The status of the ingestion job.</p>
+   * <p>The status of the data ingestion job.</p>
    * @public
    */
   status: IngestionJobStatus | undefined;
 
   /**
-   * <p>The time at which the ingestion job was started.</p>
+   * <p>The time the data ingestion job started.</p>
    * @public
    */
   startedAt: Date | undefined;
 
   /**
-   * <p>The time at which the ingestion job was last updated.</p>
+   * <p>The time the data ingestion job was last updated.</p>
    * @public
    */
   updatedAt: Date | undefined;
 
   /**
-   * <p>Contains statistics for the ingestion job.</p>
+   * <p>Contains statistics for the data ingestion job.</p>
    * @public
    */
   statistics?: IngestionJobStatistics;
@@ -6404,7 +6430,7 @@ export interface IngestionJobSummary {
  */
 export interface ListIngestionJobsResponse {
   /**
-   * <p>A list of objects, each of which contains information about an ingestion job.</p>
+   * <p>A list of data ingestion jobs with information about each job.</p>
    * @public
    */
   ingestionJobSummaries: IngestionJobSummary[] | undefined;
@@ -6421,13 +6447,13 @@ export interface ListIngestionJobsResponse {
  */
 export interface StartIngestionJobRequest {
   /**
-   * <p>The unique identifier of the knowledge base to which to add the data source.</p>
+   * <p>The unique identifier of the knowledge base for the data ingestion job.</p>
    * @public
    */
   knowledgeBaseId: string | undefined;
 
   /**
-   * <p>The unique identifier of the data source to ingest.</p>
+   * <p>The unique identifier of the data source you want to ingest into your knowledge base.</p>
    * @public
    */
   dataSourceId: string | undefined;
@@ -6440,7 +6466,7 @@ export interface StartIngestionJobRequest {
   clientToken?: string;
 
   /**
-   * <p>A description of the ingestion job.</p>
+   * <p>A description of the data ingestion job.</p>
    * @public
    */
   description?: string;
@@ -6451,7 +6477,41 @@ export interface StartIngestionJobRequest {
  */
 export interface StartIngestionJobResponse {
   /**
-   * <p>An object containing information about the ingestion job.</p>
+   * <p>Contains information about the data ingestion job.</p>
+   * @public
+   */
+  ingestionJob: IngestionJob | undefined;
+}
+
+/**
+ * @public
+ */
+export interface StopIngestionJobRequest {
+  /**
+   * <p>The unique identifier of the knowledge base for the data ingestion job you want to stop.</p>
+   * @public
+   */
+  knowledgeBaseId: string | undefined;
+
+  /**
+   * <p>The unique identifier of the data source for the data ingestion job you want to stop.</p>
+   * @public
+   */
+  dataSourceId: string | undefined;
+
+  /**
+   * <p>The unique identifier of the data ingestion job you want to stop.</p>
+   * @public
+   */
+  ingestionJobId: string | undefined;
+}
+
+/**
+ * @public
+ */
+export interface StopIngestionJobResponse {
+  /**
+   * <p>Contains information about the stopped data ingestion job.</p>
    * @public
    */
   ingestionJob: IngestionJob | undefined;
@@ -6559,7 +6619,7 @@ export interface VectorKnowledgeBaseConfiguration {
 }
 
 /**
- * <p>Contains details about the embeddings configuration of the knowledge base.</p>
+ * <p>Contains details about the vector embeddings configuration of the knowledge base.</p>
  * @public
  */
 export interface KnowledgeBaseConfiguration {
@@ -6570,7 +6630,7 @@ export interface KnowledgeBaseConfiguration {
   type: KnowledgeBaseType | undefined;
 
   /**
-   * <p>Contains details about the embeddings model that'sused to convert the data source.</p>
+   * <p>Contains details about the model that's used to convert the data source into vector embeddings.</p>
    * @public
    */
   vectorKnowledgeBaseConfiguration?: VectorKnowledgeBaseConfiguration;
@@ -7060,13 +7120,13 @@ export interface KnowledgeBase {
   status: KnowledgeBaseStatus | undefined;
 
   /**
-   * <p>The time at which the knowledge base was created.</p>
+   * <p>The time the knowledge base was created.</p>
    * @public
    */
   createdAt: Date | undefined;
 
   /**
-   * <p>The time at which the knowledge base was last updated.</p>
+   * <p>The time the knowledge base was last updated.</p>
    * @public
    */
   updatedAt: Date | undefined;
@@ -7184,7 +7244,7 @@ export interface GetAgentKnowledgeBaseResponse {
  */
 export interface GetKnowledgeBaseRequest {
   /**
-   * <p>The unique identifier of the knowledge base for which to get information.</p>
+   * <p>The unique identifier of the knowledge base you want to get information on.</p>
    * @public
    */
   knowledgeBaseId: string | undefined;
@@ -7294,7 +7354,7 @@ export interface KnowledgeBaseSummary {
   status: KnowledgeBaseStatus | undefined;
 
   /**
-   * <p>The time at which the knowledge base was last updated.</p>
+   * <p>The time the knowledge base was last updated.</p>
    * @public
    */
   updatedAt: Date | undefined;
@@ -7305,7 +7365,7 @@ export interface KnowledgeBaseSummary {
  */
 export interface ListKnowledgeBasesResponse {
   /**
-   * <p>A list of objects, each of which contains information about a knowledge base.</p>
+   * <p>A list of knowledge bases with information about each knowledge base.</p>
    * @public
    */
   knowledgeBaseSummaries: KnowledgeBaseSummary[] | undefined;
@@ -7416,6 +7476,24 @@ export interface UpdateKnowledgeBaseResponse {
 }
 
 /**
+ * <p>Contains a key-value pair that defines a metadata tag and value to attach to a prompt variant. For more information, see <a href="https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-management-create.html">Create a prompt using Prompt management</a>.</p>
+ * @public
+ */
+export interface PromptMetadataEntry {
+  /**
+   * <p>The key of a metadata tag for a prompt variant.</p>
+   * @public
+   */
+  key: string | undefined;
+
+  /**
+   * <p>The value of a metadata tag for a prompt variant.</p>
+   * @public
+   */
+  value: string | undefined;
+}
+
+/**
  * <p>Contains details about a variant of the prompt.</p>
  * @public
  */
@@ -7439,7 +7517,7 @@ export interface PromptVariant {
   templateConfiguration?: PromptTemplateConfiguration;
 
   /**
-   * <p>The unique identifier of the model with which to run inference on the prompt.</p>
+   * <p>The unique identifier of the model or <a href="https://docs.aws.amazon.com/bedrock/latest/userguide/cross-region-inference.html">inference profile</a> with which to run inference on the prompt.</p>
    * @public
    */
   modelId?: string;
@@ -7449,6 +7527,12 @@ export interface PromptVariant {
    * @public
    */
   inferenceConfiguration?: PromptInferenceConfiguration;
+
+  /**
+   * <p>An array of objects, each containing a key-value pair that defines a metadata tag and value to attach to a prompt variant. For more information, see <a href="https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-management-create.html">Create a prompt using Prompt management</a>.</p>
+   * @public
+   */
+  metadata?: PromptMetadataEntry[];
 }
 
 /**
@@ -7599,13 +7683,13 @@ export interface CreatePromptVersionRequest {
  */
 export interface CreatePromptVersionResponse {
   /**
-   * <p>The name of the prompt version.</p>
+   * <p>The name of the prompt.</p>
    * @public
    */
   name: string | undefined;
 
   /**
-   * <p>A description for the prompt version.</p>
+   * <p>A description for the version.</p>
    * @public
    */
   description?: string;
@@ -7670,7 +7754,7 @@ export interface DeletePromptRequest {
   promptIdentifier: string | undefined;
 
   /**
-   * <p>The version of the prompt to delete.</p>
+   * <p>The version of the prompt to delete. To delete the prompt, omit this field.</p>
    * @public
    */
   promptVersion?: string;
@@ -7704,7 +7788,7 @@ export interface GetPromptRequest {
   promptIdentifier: string | undefined;
 
   /**
-   * <p>The version of the prompt about which you want to retrieve information.</p>
+   * <p>The version of the prompt about which you want to retrieve information. Omit this field to return information about the working draft of the prompt.</p>
    * @public
    */
   promptVersion?: string;
@@ -7751,7 +7835,7 @@ export interface GetPromptResponse {
   id: string | undefined;
 
   /**
-   * <p>The Amazon Resource Name (ARN) of the prompt.</p>
+   * <p>The Amazon Resource Name (ARN) of the prompt or the prompt version (if you specified a version in the request).</p>
    * @public
    */
   arn: string | undefined;
@@ -7780,7 +7864,7 @@ export interface GetPromptResponse {
  */
 export interface ListPromptsRequest {
   /**
-   * <p>The unique identifier of the prompt.</p>
+   * <p>The unique identifier of the prompt for whose versions you want to return information. Omit this field to list information about all prompts in an account.</p>
    * @public
    */
   promptIdentifier?: string;
@@ -7830,7 +7914,7 @@ export interface PromptSummary {
   id: string | undefined;
 
   /**
-   * <p>The Amazon Resource Name (ARN) of the prompt.</p>
+   * <p>The Amazon Resource Name (ARN) of the prompt or the prompt version (if you specified a version in the request).</p>
    * @public
    */
   arn: string | undefined;
@@ -8653,12 +8737,22 @@ export const UpdateFlowResponseFilterSensitiveLog = (obj: UpdateFlowResponse): a
 /**
  * @internal
  */
+export const PromptMetadataEntryFilterSensitiveLog = (obj: PromptMetadataEntry): any => ({
+  ...obj,
+  ...(obj.key && { key: SENSITIVE_STRING }),
+  ...(obj.value && { value: SENSITIVE_STRING }),
+});
+
+/**
+ * @internal
+ */
 export const PromptVariantFilterSensitiveLog = (obj: PromptVariant): any => ({
   ...obj,
   ...(obj.templateConfiguration && {
     templateConfiguration: PromptTemplateConfigurationFilterSensitiveLog(obj.templateConfiguration),
   }),
   ...(obj.inferenceConfiguration && { inferenceConfiguration: obj.inferenceConfiguration }),
+  ...(obj.metadata && { metadata: SENSITIVE_STRING }),
 });
 
 /**

@@ -32,7 +32,8 @@ export interface GetSolNetworkOperationCommandInput extends GetSolNetworkOperati
 export interface GetSolNetworkOperationCommandOutput extends GetSolNetworkOperationOutput, __MetadataBearer {}
 
 /**
- * <p>Gets the details of a network operation, including the tasks involved in the network operation and the status of the tasks.</p>
+ * <p>Gets the details of a network operation, including the tasks involved in the network
+ *          operation and the status of the tasks.</p>
  *          <p>A network operation is any operation that is done to your network, such as network instance instantiation or termination.</p>
  * @example
  * Use a bare-bones client and the command you need to make an API call.
@@ -51,11 +52,24 @@ export interface GetSolNetworkOperationCommandOutput extends GetSolNetworkOperat
  * //   operationState: "PROCESSING" || "COMPLETED" || "FAILED" || "CANCELLING" || "CANCELLED",
  * //   nsInstanceId: "STRING_VALUE",
  * //   lcmOperationType: "INSTANTIATE" || "UPDATE" || "TERMINATE",
+ * //   updateType: "MODIFY_VNF_INFORMATION" || "UPDATE_NS",
  * //   error: { // ProblemDetails
  * //     detail: "STRING_VALUE", // required
  * //     title: "STRING_VALUE",
  * //   },
  * //   metadata: { // GetSolNetworkOperationMetadata
+ * //     updateNsMetadata: { // UpdateNsMetadata
+ * //       nsdInfoId: "STRING_VALUE", // required
+ * //       additionalParamsForNs: "DOCUMENT_VALUE",
+ * //     },
+ * //     modifyVnfInfoMetadata: { // ModifyVnfInfoMetadata
+ * //       vnfInstanceId: "STRING_VALUE", // required
+ * //       vnfConfigurableProperties: "DOCUMENT_VALUE", // required
+ * //     },
+ * //     instantiateMetadata: { // InstantiateMetadata
+ * //       nsdInfoId: "STRING_VALUE", // required
+ * //       additionalParamsForNs: "DOCUMENT_VALUE",
+ * //     },
  * //     createdAt: new Date("TIMESTAMP"), // required
  * //     lastModified: new Date("TIMESTAMP"), // required
  * //   },
@@ -100,7 +114,8 @@ export interface GetSolNetworkOperationCommandOutput extends GetSolNetworkOperat
  *  <p>Exception caused by throttling.</p>
  *
  * @throws {@link ValidationException} (client fault)
- *  <p>Unable to process the request because the client provided input failed to satisfy request constraints.</p>
+ *  <p>Unable to process the request because the client provided input failed to satisfy
+ *          request constraints.</p>
  *
  * @throws {@link TnbServiceException}
  * <p>Base exception class for all service exceptions from Tnb service.</p>
@@ -115,9 +130,7 @@ export class GetSolNetworkOperationCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: TnbClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -129,4 +142,16 @@ export class GetSolNetworkOperationCommand extends $Command
   .f(void 0, GetSolNetworkOperationOutputFilterSensitiveLog)
   .ser(se_GetSolNetworkOperationCommand)
   .de(de_GetSolNetworkOperationCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: GetSolNetworkOperationInput;
+      output: GetSolNetworkOperationOutput;
+    };
+    sdk: {
+      input: GetSolNetworkOperationCommandInput;
+      output: GetSolNetworkOperationCommandOutput;
+    };
+  };
+}

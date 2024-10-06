@@ -68,7 +68,7 @@ export interface DeleteAttributesCommandOutput extends DeleteAttributesResponse,
  * @see {@link ECSClientResolvedConfig | config} for ECSClient's `config` shape.
  *
  * @throws {@link ClusterNotFoundException} (client fault)
- *  <p>The specified cluster wasn't found. You can view your available clusters with <a>ListClusters</a>. Amazon ECS clusters are Region specific.</p>
+ *  <p>The specified cluster wasn't found. You can view your available clusters with <a href="https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_ListClusters.html">ListClusters</a>. Amazon ECS clusters are Region specific.</p>
  *
  * @throws {@link InvalidParameterException} (client fault)
  *  <p>The specified parameter isn't valid. Review the available parameters for the API
@@ -76,8 +76,8 @@ export interface DeleteAttributesCommandOutput extends DeleteAttributesResponse,
  *
  * @throws {@link TargetNotFoundException} (client fault)
  *  <p>The specified target wasn't found. You can view your available container instances
- * 			with <a>ListContainerInstances</a>. Amazon ECS container instances are
- * 			cluster-specific and Region-specific.</p>
+ * 			with <a href="https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_ListContainerInstances.html">ListContainerInstances</a>. Amazon ECS container instances are cluster-specific and
+ * 			Region-specific.</p>
  *
  * @throws {@link ECSServiceException}
  * <p>Base exception class for all service exceptions from ECS service.</p>
@@ -92,9 +92,7 @@ export class DeleteAttributesCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: ECSClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -106,4 +104,16 @@ export class DeleteAttributesCommand extends $Command
   .f(void 0, void 0)
   .ser(se_DeleteAttributesCommand)
   .de(de_DeleteAttributesCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: DeleteAttributesRequest;
+      output: DeleteAttributesResponse;
+    };
+    sdk: {
+      input: DeleteAttributesCommandInput;
+      output: DeleteAttributesCommandOutput;
+    };
+  };
+}

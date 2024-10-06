@@ -501,6 +501,10 @@ import {
   ResumeContactRecordingCommandOutput,
 } from "../commands/ResumeContactRecordingCommand";
 import {
+  SearchAgentStatusesCommandInput,
+  SearchAgentStatusesCommandOutput,
+} from "../commands/SearchAgentStatusesCommand";
+import {
   SearchAvailablePhoneNumbersCommandInput,
   SearchAvailablePhoneNumbersCommandOutput,
 } from "../commands/SearchAvailablePhoneNumbersCommand";
@@ -533,6 +537,10 @@ import {
   SearchSecurityProfilesCommandInput,
   SearchSecurityProfilesCommandOutput,
 } from "../commands/SearchSecurityProfilesCommand";
+import {
+  SearchUserHierarchyGroupsCommandInput,
+  SearchUserHierarchyGroupsCommandOutput,
+} from "../commands/SearchUserHierarchyGroupsCommand";
 import { SearchUsersCommandInput, SearchUsersCommandOutput } from "../commands/SearchUsersCommand";
 import { SearchVocabulariesCommandInput, SearchVocabulariesCommandOutput } from "../commands/SearchVocabulariesCommand";
 import {
@@ -556,6 +564,10 @@ import {
   StartContactStreamingCommandInput,
   StartContactStreamingCommandOutput,
 } from "../commands/StartContactStreamingCommand";
+import {
+  StartOutboundChatContactCommandInput,
+  StartOutboundChatContactCommandOutput,
+} from "../commands/StartOutboundChatContactCommand";
 import {
   StartOutboundVoiceContactCommandInput,
   StartOutboundVoiceContactCommandOutput,
@@ -750,8 +762,10 @@ import {
   AgentHierarchyGroups,
   AgentInfo,
   AgentQualityMetrics,
+  AgentsCriteria,
   AgentStatus,
   AgentStatusReference,
+  AgentStatusSearchFilter,
   AgentStatusSummary,
   AllowedCapabilities,
   Application,
@@ -761,9 +775,11 @@ import {
   AuthenticationProfile,
   Campaign,
   Channel,
+  CommonAttributeAndCondition,
   ContactDataRequest,
   ContactInitiationMethod,
   ContactState,
+  ControlPlaneAttributeFilter,
   CreateCaseActionDefinition,
   CreatedByInfo,
   CrossChannelBehavior,
@@ -775,8 +791,6 @@ import {
   EncryptionConfig,
   EndAssociatedTasksActionDefinition,
   Endpoint,
-  EvaluationAnswerData,
-  EvaluationAnswerOutput,
   EvaluationFormNumericQuestionAutomation,
   EvaluationFormNumericQuestionOption,
   EvaluationFormNumericQuestionProperties,
@@ -807,6 +821,7 @@ import {
   LexBot,
   LexV2Bot,
   LimitExceededException,
+  MatchCriteria,
   MediaConcurrency,
   MonitorCapability,
   NotificationRecipientType,
@@ -833,11 +848,12 @@ import {
   RuleAction,
   RuleTriggerEventSource,
   S3Config,
-  SegmentAttributeValue,
   SendNotificationActionDefinition,
   ServiceQuotaExceededException,
   SingleSelectQuestionRuleCategoryAutomation,
+  StringCondition,
   SubmitAutoEvaluationActionDefinition,
+  TagCondition,
   TaskActionDefinition,
   TaskTemplateConstraints,
   TaskTemplateDefaultFieldValue,
@@ -864,6 +880,8 @@ import {
   CurrentMetricResult,
   CurrentMetricSortCriteria,
   Evaluation,
+  EvaluationAnswerData,
+  EvaluationAnswerOutput,
   EvaluationFormSummary,
   EvaluationFormVersionSummary,
   EvaluationMetadata,
@@ -915,9 +933,9 @@ import {
   SecurityKey,
   SecurityProfile,
   SecurityProfileSummary,
+  SegmentAttributeValue,
   SignInConfig,
   SignInDistribution,
-  TaskTemplateMetadata,
   TelephonyConfig,
   Threshold,
   ThresholdV2,
@@ -929,12 +947,14 @@ import {
   Vocabulary,
 } from "../models/models_1";
 import {
+  AgentStatusSearchCriteria,
   AnswerMachineDetectionConfig,
   AttributeAndCondition,
   ChatEvent,
   ChatMessage,
   ChatParticipantRoleConfig,
   ChatStreamingConfiguration,
+  Condition,
   ConflictException,
   Contact,
   ContactAnalysis,
@@ -961,8 +981,10 @@ import {
   HierarchyStructureUpdate,
   HoursOfOperationSearchCriteria,
   HoursOfOperationSearchFilter,
+  ListCondition,
   MaximumResultReturnedException,
   NewSessionDetails,
+  NumberCondition,
   OutboundContactNotPermittedException,
   ParticipantDetails,
   ParticipantTimerConfiguration,
@@ -977,6 +999,9 @@ import {
   QuickConnectSearchFilter,
   ResourceTagsSearchCriteria,
   RoutingCriteria,
+  RoutingCriteriaInput,
+  RoutingCriteriaInputStep,
+  RoutingCriteriaInputStepExpiry,
   RoutingProfileSearchCriteria,
   RoutingProfileSearchFilter,
   SearchableContactAttributes,
@@ -987,12 +1012,13 @@ import {
   SecurityProfilesSearchFilter,
   Sort,
   Step,
-  StringCondition,
-  TagCondition,
   TagSearchCondition,
+  TaskTemplateMetadata,
   Transcript,
   TranscriptCriteria,
   UpdateParticipantRoleConfigChannelInfo,
+  UserHierarchyGroupSearchCriteria,
+  UserHierarchyGroupSearchFilter,
   UserSearchCriteria,
   UserSearchFilter,
   UserSummary,
@@ -3600,7 +3626,7 @@ export const se_ListAgentStatusesCommand = async (
   const query: any = map({
     [_nT]: [, input[_NT]!],
     [_mR]: [() => input.MaxResults !== void 0, () => input[_MR]!.toString()],
-    [_AST]: [() => input.AgentStatusTypes !== void 0, () => (input[_AST]! || []).map((_entry) => _entry as any)],
+    [_AST]: [() => input.AgentStatusTypes !== void 0, () => input[_AST]! || []],
   });
   let body: any;
   b.m("GET").h(headers).q(query).b(body);
@@ -3742,7 +3768,7 @@ export const se_ListContactFlowsCommand = async (
   b.bp("/contact-flows-summary/{InstanceId}");
   b.p("InstanceId", () => input.InstanceId!, "{InstanceId}", false);
   const query: any = map({
-    [_cFT]: [() => input.ContactFlowTypes !== void 0, () => (input[_CFT]! || []).map((_entry) => _entry as any)],
+    [_cFT]: [() => input.ContactFlowTypes !== void 0, () => input[_CFT]! || []],
     [_nT]: [, input[_NT]!],
     [_mR]: [() => input.MaxResults !== void 0, () => input[_MR]!.toString()],
   });
@@ -3764,10 +3790,7 @@ export const se_ListContactReferencesCommand = async (
   b.p("InstanceId", () => input.InstanceId!, "{InstanceId}", false);
   b.p("ContactId", () => input.ContactId!, "{ContactId}", false);
   const query: any = map({
-    [_rTe]: [
-      __expectNonNull(input.ReferenceTypes, `ReferenceTypes`) != null,
-      () => (input[_RTe]! || []).map((_entry) => _entry as any),
-    ],
+    [_rTe]: [__expectNonNull(input.ReferenceTypes, `ReferenceTypes`) != null, () => input[_RTe]! || []],
     [_nT]: [, input[_NT]!],
   });
   let body: any;
@@ -4016,11 +4039,8 @@ export const se_ListPhoneNumbersCommand = async (
   b.bp("/phone-numbers-summary/{InstanceId}");
   b.p("InstanceId", () => input.InstanceId!, "{InstanceId}", false);
   const query: any = map({
-    [_pNT]: [() => input.PhoneNumberTypes !== void 0, () => (input[_PNT]! || []).map((_entry) => _entry as any)],
-    [_pNCC]: [
-      () => input.PhoneNumberCountryCodes !== void 0,
-      () => (input[_PNCC]! || []).map((_entry) => _entry as any),
-    ],
+    [_pNT]: [() => input.PhoneNumberTypes !== void 0, () => input[_PNT]! || []],
+    [_pNCC]: [() => input.PhoneNumberCountryCodes !== void 0, () => input[_PNCC]! || []],
     [_nT]: [, input[_NT]!],
     [_mR]: [() => input.MaxResults !== void 0, () => input[_MR]!.toString()],
   });
@@ -4130,7 +4150,7 @@ export const se_ListQueuesCommand = async (
   b.bp("/queues-summary/{InstanceId}");
   b.p("InstanceId", () => input.InstanceId!, "{InstanceId}", false);
   const query: any = map({
-    [_qT]: [() => input.QueueTypes !== void 0, () => (input[_QT]! || []).map((_entry) => _entry as any)],
+    [_qT]: [() => input.QueueTypes !== void 0, () => input[_QT]! || []],
     [_nT]: [, input[_NT]!],
     [_mR]: [() => input.MaxResults !== void 0, () => input[_MR]!.toString()],
   });
@@ -4153,7 +4173,7 @@ export const se_ListQuickConnectsCommand = async (
   const query: any = map({
     [_nT]: [, input[_NT]!],
     [_mR]: [() => input.MaxResults !== void 0, () => input[_MR]!.toString()],
-    [_QCT]: [() => input.QuickConnectTypes !== void 0, () => (input[_QCT]! || []).map((_entry) => _entry as any)],
+    [_QCT]: [() => input.QuickConnectTypes !== void 0, () => input[_QCT]! || []],
   });
   let body: any;
   b.m("GET").h(headers).q(query).b(body);
@@ -4701,6 +4721,32 @@ export const se_ResumeContactRecordingCommand = async (
 };
 
 /**
+ * serializeAws_restJson1SearchAgentStatusesCommand
+ */
+export const se_SearchAgentStatusesCommand = async (
+  input: SearchAgentStatusesCommandInput,
+  context: __SerdeContext
+): Promise<__HttpRequest> => {
+  const b = rb(input, context);
+  const headers: any = {
+    "content-type": "application/json",
+  };
+  b.bp("/search-agent-statuses");
+  let body: any;
+  body = JSON.stringify(
+    take(input, {
+      InstanceId: [],
+      MaxResults: [],
+      NextToken: [],
+      SearchCriteria: (_) => se_AgentStatusSearchCriteria(_, context),
+      SearchFilter: (_) => _json(_),
+    })
+  );
+  b.m("POST").h(headers).b(body);
+  return b.build();
+};
+
+/**
  * serializeAws_restJson1SearchAvailablePhoneNumbersCommand
  */
 export const se_SearchAvailablePhoneNumbersCommand = async (
@@ -5015,6 +5061,32 @@ export const se_SearchSecurityProfilesCommand = async (
 };
 
 /**
+ * serializeAws_restJson1SearchUserHierarchyGroupsCommand
+ */
+export const se_SearchUserHierarchyGroupsCommand = async (
+  input: SearchUserHierarchyGroupsCommandInput,
+  context: __SerdeContext
+): Promise<__HttpRequest> => {
+  const b = rb(input, context);
+  const headers: any = {
+    "content-type": "application/json",
+  };
+  b.bp("/search-user-hierarchy-groups");
+  let body: any;
+  body = JSON.stringify(
+    take(input, {
+      InstanceId: [],
+      MaxResults: [],
+      NextToken: [],
+      SearchCriteria: (_) => se_UserHierarchyGroupSearchCriteria(_, context),
+      SearchFilter: (_) => _json(_),
+    })
+  );
+  b.m("POST").h(headers).b(body);
+  return b.build();
+};
+
+/**
  * serializeAws_restJson1SearchUsersCommand
  */
 export const se_SearchUsersCommand = async (
@@ -5229,6 +5301,39 @@ export const se_StartContactStreamingCommand = async (
     })
   );
   b.m("POST").h(headers).b(body);
+  return b.build();
+};
+
+/**
+ * serializeAws_restJson1StartOutboundChatContactCommand
+ */
+export const se_StartOutboundChatContactCommand = async (
+  input: StartOutboundChatContactCommandInput,
+  context: __SerdeContext
+): Promise<__HttpRequest> => {
+  const b = rb(input, context);
+  const headers: any = {
+    "content-type": "application/json",
+  };
+  b.bp("/contact/outbound-chat");
+  let body: any;
+  body = JSON.stringify(
+    take(input, {
+      Attributes: (_) => _json(_),
+      ChatDurationInMinutes: [],
+      ClientToken: [true, (_) => _ ?? generateIdempotencyToken()],
+      ContactFlowId: [],
+      DestinationEndpoint: (_) => _json(_),
+      InitialSystemMessage: (_) => _json(_),
+      InstanceId: [],
+      ParticipantDetails: (_) => _json(_),
+      RelatedContactId: [],
+      SegmentAttributes: (_) => _json(_),
+      SourceEndpoint: (_) => _json(_),
+      SupportedMessagingContentTypes: (_) => _json(_),
+    })
+  );
+  b.m("PUT").h(headers).b(body);
   return b.build();
 };
 
@@ -5538,10 +5643,7 @@ export const se_UntagContactCommand = async (
   b.p("ContactId", () => input.ContactId!, "{ContactId}", false);
   b.p("InstanceId", () => input.InstanceId!, "{InstanceId}", false);
   const query: any = map({
-    [_TK]: [
-      __expectNonNull(input.TagKeys, `TagKeys`) != null,
-      () => (input[_TK]! || []).map((_entry) => _entry as any),
-    ],
+    [_TK]: [__expectNonNull(input.TagKeys, `TagKeys`) != null, () => input[_TK]! || []],
   });
   let body: any;
   b.m("DELETE").h(headers).q(query).b(body);
@@ -5560,10 +5662,7 @@ export const se_UntagResourceCommand = async (
   b.bp("/tags/{resourceArn}");
   b.p("resourceArn", () => input.resourceArn!, "{resourceArn}", false);
   const query: any = map({
-    [_tK]: [
-      __expectNonNull(input.tagKeys, `tagKeys`) != null,
-      () => (input[_tK]! || []).map((_entry) => _entry as any),
-    ],
+    [_tK]: [__expectNonNull(input.tagKeys, `tagKeys`) != null, () => input[_tK]! || []],
   });
   let body: any;
   b.m("DELETE").h(headers).q(query).b(body);
@@ -5845,6 +5944,7 @@ export const se_UpdateContactRoutingDataCommand = async (
     take(input, {
       QueuePriority: [],
       QueueTimeAdjustmentSeconds: [],
+      RoutingCriteria: (_) => se_RoutingCriteriaInput(_, context),
     })
   );
   b.m("POST").h(headers).b(body);
@@ -8300,6 +8400,7 @@ export const de_DescribeInstanceCommand = async (
   const data: Record<string, any> = __expectNonNull(__expectObject(await parseBody(output.body, context)), "body");
   const doc = take(data, {
     Instance: (_) => de_Instance(_, context),
+    ReplicationConfiguration: _json,
   });
   Object.assign(contents, doc);
   return contents;
@@ -10303,6 +10404,29 @@ export const de_ResumeContactRecordingCommand = async (
 };
 
 /**
+ * deserializeAws_restJson1SearchAgentStatusesCommand
+ */
+export const de_SearchAgentStatusesCommand = async (
+  output: __HttpResponse,
+  context: __SerdeContext
+): Promise<SearchAgentStatusesCommandOutput> => {
+  if (output.statusCode !== 200 && output.statusCode >= 300) {
+    return de_CommandError(output, context);
+  }
+  const contents: any = map({
+    $metadata: deserializeMetadata(output),
+  });
+  const data: Record<string, any> = __expectNonNull(__expectObject(await parseBody(output.body, context)), "body");
+  const doc = take(data, {
+    AgentStatuses: (_) => de_AgentStatusList(_, context),
+    ApproximateTotalCount: __expectLong,
+    NextToken: __expectString,
+  });
+  Object.assign(contents, doc);
+  return contents;
+};
+
+/**
  * deserializeAws_restJson1SearchAvailablePhoneNumbersCommand
  */
 export const de_SearchAvailablePhoneNumbersCommand = async (
@@ -10577,6 +10701,29 @@ export const de_SearchSecurityProfilesCommand = async (
 };
 
 /**
+ * deserializeAws_restJson1SearchUserHierarchyGroupsCommand
+ */
+export const de_SearchUserHierarchyGroupsCommand = async (
+  output: __HttpResponse,
+  context: __SerdeContext
+): Promise<SearchUserHierarchyGroupsCommandOutput> => {
+  if (output.statusCode !== 200 && output.statusCode >= 300) {
+    return de_CommandError(output, context);
+  }
+  const contents: any = map({
+    $metadata: deserializeMetadata(output),
+  });
+  const data: Record<string, any> = __expectNonNull(__expectObject(await parseBody(output.body, context)), "body");
+  const doc = take(data, {
+    ApproximateTotalCount: __expectLong,
+    NextToken: __expectString,
+    UserHierarchyGroups: (_) => de_UserHierarchyGroupList(_, context),
+  });
+  Object.assign(contents, doc);
+  return contents;
+};
+
+/**
  * deserializeAws_restJson1SearchUsersCommand
  */
 export const de_SearchUsersCommand = async (
@@ -10748,6 +10895,27 @@ export const de_StartContactStreamingCommand = async (
   const data: Record<string, any> = __expectNonNull(__expectObject(await parseBody(output.body, context)), "body");
   const doc = take(data, {
     StreamingId: __expectString,
+  });
+  Object.assign(contents, doc);
+  return contents;
+};
+
+/**
+ * deserializeAws_restJson1StartOutboundChatContactCommand
+ */
+export const de_StartOutboundChatContactCommand = async (
+  output: __HttpResponse,
+  context: __SerdeContext
+): Promise<StartOutboundChatContactCommandOutput> => {
+  if (output.statusCode !== 200 && output.statusCode >= 300) {
+    return de_CommandError(output, context);
+  }
+  const contents: any = map({
+    $metadata: deserializeMetadata(output),
+  });
+  const data: Record<string, any> = __expectNonNull(__expectObject(await parseBody(output.body, context)), "body");
+  const doc = take(data, {
+    ContactId: __expectString,
   });
   Object.assign(contents, doc);
   return contents;
@@ -12436,9 +12604,37 @@ const de_UserNotFoundExceptionRes = async (
 
 // se_AgentHierarchyGroups omitted.
 
+// se_AgentIds omitted.
+
 // se_AgentResourceIdList omitted.
 
+// se_AgentsCriteria omitted.
+
 // se_AgentsMinOneMaxHundred omitted.
+
+/**
+ * serializeAws_restJson1AgentStatusSearchConditionList
+ */
+const se_AgentStatusSearchConditionList = (input: AgentStatusSearchCriteria[], context: __SerdeContext): any => {
+  return input
+    .filter((e: any) => e != null)
+    .map((entry) => {
+      return se_AgentStatusSearchCriteria(entry, context);
+    });
+};
+
+/**
+ * serializeAws_restJson1AgentStatusSearchCriteria
+ */
+const se_AgentStatusSearchCriteria = (input: AgentStatusSearchCriteria, context: __SerdeContext): any => {
+  return take(input, {
+    AndConditions: (_) => se_AgentStatusSearchConditionList(_, context),
+    OrConditions: (_) => se_AgentStatusSearchConditionList(_, context),
+    StringCondition: _json,
+  });
+};
+
+// se_AgentStatusSearchFilter omitted.
 
 // se_AllowedAccessControlTags omitted.
 
@@ -12458,6 +12654,19 @@ const de_UserNotFoundExceptionRes = async (
 
 // se_AttributeAndCondition omitted.
 
+/**
+ * serializeAws_restJson1AttributeCondition
+ */
+const se_AttributeCondition = (input: AttributeCondition, context: __SerdeContext): any => {
+  return take(input, {
+    ComparisonOperator: [],
+    MatchCriteria: _json,
+    Name: [],
+    ProficiencyLevel: __serializeFloat,
+    Value: [],
+  });
+};
+
 // se_AttributeOrConditionList omitted.
 
 // se_Attributes omitted.
@@ -12475,6 +12684,14 @@ const de_UserNotFoundExceptionRes = async (
 // se_ChatParticipantRoleConfig omitted.
 
 // se_ChatStreamingConfiguration omitted.
+
+// se_CommonAttributeAndCondition omitted.
+
+// se_CommonAttributeOrConditionList omitted.
+
+// se_Condition omitted.
+
+// se_Conditions omitted.
 
 // se_ContactAnalysis omitted.
 
@@ -12543,6 +12760,8 @@ const se_ContactFlowSearchCriteria = (input: ContactFlowSearchCriteria, context:
 // se_ContactStates omitted.
 
 // se_ContactTagMap omitted.
+
+// se_ControlPlaneAttributeFilter omitted.
 
 // se_ControlPlaneTagFilter omitted.
 
@@ -12701,6 +12920,28 @@ const se_EvaluationFormSection = (input: EvaluationFormSection, context: __Serde
 // se_EventBridgeActionDefinition omitted.
 
 /**
+ * serializeAws_restJson1Expression
+ */
+const se_Expression = (input: Expression, context: __SerdeContext): any => {
+  return take(input, {
+    AndExpression: (_) => se_Expressions(_, context),
+    AttributeCondition: (_) => se_AttributeCondition(_, context),
+    OrExpression: (_) => se_Expressions(_, context),
+  });
+};
+
+/**
+ * serializeAws_restJson1Expressions
+ */
+const se_Expressions = (input: Expression[], context: __SerdeContext): any => {
+  return input
+    .filter((e: any) => e != null)
+    .map((entry) => {
+      return se_Expression(entry, context);
+    });
+};
+
+/**
  * serializeAws_restJson1FieldValue
  */
 const se_FieldValue = (input: FieldValue, context: __SerdeContext): any => {
@@ -12835,6 +13076,10 @@ const se_HoursOfOperationSearchCriteria = (input: HoursOfOperationSearchCriteria
 
 // se_LexV2Bot omitted.
 
+// se_ListCondition omitted.
+
+// se_MatchCriteria omitted.
+
 // se_MediaConcurrencies omitted.
 
 // se_MediaConcurrency omitted.
@@ -12870,6 +13115,8 @@ const se_MetricV2 = (input: MetricV2, context: __SerdeContext): any => {
 // se_NewSessionDetails omitted.
 
 // se_NotificationRecipientType omitted.
+
+// se_NumberCondition omitted.
 
 // se_NumericQuestionPropertyValueAutomation omitted.
 
@@ -13029,6 +13276,38 @@ const se_QuickConnectSearchCriteria = (input: QuickConnectSearchCriteria, contex
 // se_ResourceTagsSearchCriteria omitted.
 
 // se_ResourceTypeList omitted.
+
+/**
+ * serializeAws_restJson1RoutingCriteriaInput
+ */
+const se_RoutingCriteriaInput = (input: RoutingCriteriaInput, context: __SerdeContext): any => {
+  return take(input, {
+    Steps: (_) => se_RoutingCriteriaInputSteps(_, context),
+  });
+};
+
+/**
+ * serializeAws_restJson1RoutingCriteriaInputStep
+ */
+const se_RoutingCriteriaInputStep = (input: RoutingCriteriaInputStep, context: __SerdeContext): any => {
+  return take(input, {
+    Expiry: _json,
+    Expression: (_) => se_Expression(_, context),
+  });
+};
+
+// se_RoutingCriteriaInputStepExpiry omitted.
+
+/**
+ * serializeAws_restJson1RoutingCriteriaInputSteps
+ */
+const se_RoutingCriteriaInputSteps = (input: RoutingCriteriaInputStep[], context: __SerdeContext): any => {
+  return input
+    .filter((e: any) => e != null)
+    .map((entry) => {
+      return se_RoutingCriteriaInputStep(entry, context);
+    });
+};
 
 // se_RoutingExpressions omitted.
 
@@ -13256,6 +13535,33 @@ const se_UpdateCaseActionDefinition = (input: UpdateCaseActionDefinition, contex
 
 // se_UserDataHierarchyGroups omitted.
 
+/**
+ * serializeAws_restJson1UserHierarchyGroupSearchConditionList
+ */
+const se_UserHierarchyGroupSearchConditionList = (
+  input: UserHierarchyGroupSearchCriteria[],
+  context: __SerdeContext
+): any => {
+  return input
+    .filter((e: any) => e != null)
+    .map((entry) => {
+      return se_UserHierarchyGroupSearchCriteria(entry, context);
+    });
+};
+
+/**
+ * serializeAws_restJson1UserHierarchyGroupSearchCriteria
+ */
+const se_UserHierarchyGroupSearchCriteria = (input: UserHierarchyGroupSearchCriteria, context: __SerdeContext): any => {
+  return take(input, {
+    AndConditions: (_) => se_UserHierarchyGroupSearchConditionList(_, context),
+    OrConditions: (_) => se_UserHierarchyGroupSearchConditionList(_, context),
+    StringCondition: _json,
+  });
+};
+
+// se_UserHierarchyGroupSearchFilter omitted.
+
 // se_UserIdentityInfo omitted.
 
 // se_UserIdList omitted.
@@ -13308,6 +13614,7 @@ const se_UserSearchCriteria = (input: UserSearchCriteria, context: __SerdeContex
   return take(input, {
     AndConditions: (_) => se_UserSearchConditionList(_, context),
     HierarchyGroupCondition: _json,
+    ListCondition: _json,
     OrConditions: (_) => se_UserSearchConditionList(_, context),
     StringCondition: _json,
   });
@@ -13401,6 +13708,18 @@ const de_AgentStatus = (output: any, context: __SerdeContext): AgentStatus => {
     Tags: _json,
     Type: __expectString,
   }) as any;
+};
+
+/**
+ * deserializeAws_restJson1AgentStatusList
+ */
+const de_AgentStatusList = (output: any, context: __SerdeContext): AgentStatus[] => {
+  const retVal = (output || [])
+    .filter((e: any) => e != null)
+    .map((entry: any) => {
+      return de_AgentStatus(entry, context);
+    });
+  return retVal;
 };
 
 /**
@@ -14880,6 +15199,11 @@ const de_RealtimeContactAnalysisSegment = (output: any, context: __SerdeContext)
       Issues: _json(output.Issues),
     };
   }
+  if (output.PostContactSummary != null) {
+    return {
+      PostContactSummary: _json(output.PostContactSummary),
+    };
+  }
   if (output.Transcript != null) {
     return {
       Transcript: de_RealTimeContactAnalysisSegmentTranscript(output.Transcript, context),
@@ -14925,6 +15249,8 @@ const de_RealTimeContactAnalysisSegmentEvent = (
 };
 
 // de_RealTimeContactAnalysisSegmentIssues omitted.
+
+// de_RealTimeContactAnalysisSegmentPostContactSummary omitted.
 
 /**
  * deserializeAws_restJson1RealtimeContactAnalysisSegments
@@ -14985,6 +15311,12 @@ const de_RealTimeContactAnalysisTimeData = (output: any, context: __SerdeContext
 // de_ReferenceSummary omitted.
 
 // de_ReferenceSummaryList omitted.
+
+// de_ReplicationConfiguration omitted.
+
+// de_ReplicationStatusSummary omitted.
+
+// de_ReplicationStatusSummaryList omitted.
 
 // de_RequiredFieldInfo omitted.
 
@@ -15431,6 +15763,18 @@ const de_UserDataList = (output: any, context: __SerdeContext): UserData[] => {
   return retVal;
 };
 
+/**
+ * deserializeAws_restJson1UserHierarchyGroupList
+ */
+const de_UserHierarchyGroupList = (output: any, context: __SerdeContext): HierarchyGroup[] => {
+  const retVal = (output || [])
+    .filter((e: any) => e != null)
+    .map((entry: any) => {
+      return de_HierarchyGroup(entry, context);
+    });
+  return retVal;
+};
+
 // de_UserIdentityInfo omitted.
 
 // de_UserIdentityInfoLite omitted.
@@ -15587,13 +15931,6 @@ const deserializeMetadata = (output: __HttpResponse): __ResponseMetadata => ({
 // Encode Uint8Array data into string with utf-8.
 const collectBodyString = (streamBody: any, context: __SerdeContext): Promise<string> =>
   collectBody(streamBody, context).then((body) => context.utf8Encoder(body));
-
-const isSerializableHeaderValue = (value: any): boolean =>
-  value !== undefined &&
-  value !== null &&
-  value !== "" &&
-  (!Object.getOwnPropertyNames(value).includes("length") || value.length != 0) &&
-  (!Object.getOwnPropertyNames(value).includes("size") || value.size != 0);
 
 const _ARA = "AssociatedResourceArn";
 const _AST = "AgentStatusTypes";

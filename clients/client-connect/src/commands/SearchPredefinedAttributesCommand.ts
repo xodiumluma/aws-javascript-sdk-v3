@@ -28,7 +28,10 @@ export interface SearchPredefinedAttributesCommandInput extends SearchPredefined
 export interface SearchPredefinedAttributesCommandOutput extends SearchPredefinedAttributesResponse, __MetadataBearer {}
 
 /**
- * <p>Predefined attributes that meet certain criteria.</p>
+ * <p>Searches predefined attributes that meet certain criteria. <i>Predefined
+ *     attributes</i> are attributes in an Amazon Connect instance that can be used to route
+ *    contacts to an agent or pools of agents within a queue. For more information, see <a href="https://docs.aws.amazon.com/connect/latest/adminguide/predefined-attributes.html">Create
+ *     predefined attributes for routing contacts to agents</a>.</p>
  * @example
  * Use a bare-bones client and the command you need to make an API call.
  * ```javascript
@@ -120,9 +123,7 @@ export class SearchPredefinedAttributesCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: ConnectClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -134,4 +135,16 @@ export class SearchPredefinedAttributesCommand extends $Command
   .f(void 0, void 0)
   .ser(se_SearchPredefinedAttributesCommand)
   .de(de_SearchPredefinedAttributesCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: SearchPredefinedAttributesRequest;
+      output: SearchPredefinedAttributesResponse;
+    };
+    sdk: {
+      input: SearchPredefinedAttributesCommandInput;
+      output: SearchPredefinedAttributesCommandOutput;
+    };
+  };
+}

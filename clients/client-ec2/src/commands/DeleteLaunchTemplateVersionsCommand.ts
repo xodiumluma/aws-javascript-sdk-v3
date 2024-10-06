@@ -6,7 +6,8 @@ import { MetadataBearer as __MetadataBearer } from "@smithy/types";
 
 import { EC2ClientResolvedConfig, ServiceInputTypes, ServiceOutputTypes } from "../EC2Client";
 import { commonParams } from "../endpoint/EndpointParameters";
-import { DeleteLaunchTemplateVersionsRequest, DeleteLaunchTemplateVersionsResult } from "../models/models_2";
+import { DeleteLaunchTemplateVersionsRequest } from "../models/models_2";
+import { DeleteLaunchTemplateVersionsResult } from "../models/models_3";
 import { de_DeleteLaunchTemplateVersionsCommand, se_DeleteLaunchTemplateVersionsCommand } from "../protocols/Aws_ec2";
 
 /**
@@ -123,9 +124,7 @@ export class DeleteLaunchTemplateVersionsCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: EC2ClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -137,4 +136,16 @@ export class DeleteLaunchTemplateVersionsCommand extends $Command
   .f(void 0, void 0)
   .ser(se_DeleteLaunchTemplateVersionsCommand)
   .de(de_DeleteLaunchTemplateVersionsCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: DeleteLaunchTemplateVersionsRequest;
+      output: DeleteLaunchTemplateVersionsResult;
+    };
+    sdk: {
+      input: DeleteLaunchTemplateVersionsCommandInput;
+      output: DeleteLaunchTemplateVersionsCommandOutput;
+    };
+  };
+}

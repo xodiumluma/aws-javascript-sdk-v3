@@ -2703,6 +2703,7 @@ export const de_DescribeBackupVaultCommand = async (
     MaxRetentionDays: __expectLong,
     MinRetentionDays: __expectLong,
     NumberOfRecoveryPoints: __expectLong,
+    VaultState: __expectString,
     VaultType: __expectString,
   });
   Object.assign(contents, doc);
@@ -4815,6 +4816,8 @@ const de_BackupVaultListMember = (output: any, context: __SerdeContext): BackupV
     MaxRetentionDays: __expectLong,
     MinRetentionDays: __expectLong,
     NumberOfRecoveryPoints: __expectLong,
+    VaultState: __expectString,
+    VaultType: __expectString,
   }) as any;
 };
 
@@ -5378,13 +5381,6 @@ const deserializeMetadata = (output: __HttpResponse): __ResponseMetadata => ({
 // Encode Uint8Array data into string with utf-8.
 const collectBodyString = (streamBody: any, context: __SerdeContext): Promise<string> =>
   collectBody(streamBody, context).then((body) => context.utf8Encoder(body));
-
-const isSerializableHeaderValue = (value: any): boolean =>
-  value !== undefined &&
-  value !== null &&
-  value !== "" &&
-  (!Object.getOwnPropertyNames(value).includes("length") || value.length != 0) &&
-  (!Object.getOwnPropertyNames(value).includes("size") || value.size != 0);
 
 const _AI = "AccountId";
 const _AP = "AggregationPeriod";

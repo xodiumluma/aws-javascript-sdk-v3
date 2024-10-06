@@ -151,6 +151,9 @@ export interface RegisterClusterCommandOutput extends RegisterClusterResponse, _
  * //       bootstrapClusterCreatorAdminPermissions: true || false,
  * //       authenticationMode: "API" || "API_AND_CONFIG_MAP" || "CONFIG_MAP",
  * //     },
+ * //     upgradePolicy: { // UpgradePolicyResponse
+ * //       supportType: "STANDARD" || "EXTENDED",
+ * //     },
  * //   },
  * // };
  *
@@ -207,9 +210,7 @@ export class RegisterClusterCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: EKSClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -221,4 +222,16 @@ export class RegisterClusterCommand extends $Command
   .f(void 0, void 0)
   .ser(se_RegisterClusterCommand)
   .de(de_RegisterClusterCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: RegisterClusterRequest;
+      output: RegisterClusterResponse;
+    };
+    sdk: {
+      input: RegisterClusterCommandInput;
+      output: RegisterClusterCommandOutput;
+    };
+  };
+}

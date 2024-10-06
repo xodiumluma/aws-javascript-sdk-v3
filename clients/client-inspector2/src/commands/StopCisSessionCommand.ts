@@ -78,6 +78,9 @@ export interface StopCisSessionCommandOutput extends StopCisSessionResponse, __M
  *
  * @throws {@link AccessDeniedException} (client fault)
  *  <p>You do not have sufficient access to perform this action.</p>
+ *          <p>
+ *          For <code>Enable</code>, you receive this error if you attempt to use a feature in an unsupported Amazon Web Services Region.
+ *       </p>
  *
  * @throws {@link ConflictException} (client fault)
  *  <p>A conflict occurred.</p>
@@ -105,9 +108,7 @@ export class StopCisSessionCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: Inspector2ClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -119,4 +120,16 @@ export class StopCisSessionCommand extends $Command
   .f(void 0, void 0)
   .ser(se_StopCisSessionCommand)
   .de(de_StopCisSessionCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: StopCisSessionRequest;
+      output: {};
+    };
+    sdk: {
+      input: StopCisSessionCommandInput;
+      output: StopCisSessionCommandOutput;
+    };
+  };
+}

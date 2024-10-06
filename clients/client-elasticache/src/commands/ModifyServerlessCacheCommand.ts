@@ -146,9 +146,7 @@ export class ModifyServerlessCacheCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: ElastiCacheClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -160,4 +158,16 @@ export class ModifyServerlessCacheCommand extends $Command
   .f(void 0, void 0)
   .ser(se_ModifyServerlessCacheCommand)
   .de(de_ModifyServerlessCacheCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: ModifyServerlessCacheRequest;
+      output: ModifyServerlessCacheResponse;
+    };
+    sdk: {
+      input: ModifyServerlessCacheCommandInput;
+      output: ModifyServerlessCacheCommandOutput;
+    };
+  };
+}

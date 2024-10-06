@@ -54,6 +54,15 @@ export interface GetWebExperienceCommandOutput extends GetWebExperienceResponse,
  * //   welcomeMessage: "STRING_VALUE",
  * //   samplePromptsControlMode: "ENABLED" || "DISABLED",
  * //   roleArn: "STRING_VALUE",
+ * //   identityProviderConfiguration: { // IdentityProviderConfiguration Union: only one key present
+ * //     samlConfiguration: { // SamlProviderConfiguration
+ * //       authenticationUrl: "STRING_VALUE", // required
+ * //     },
+ * //     openIDConnectConfiguration: { // OpenIDConnectProviderConfiguration
+ * //       secretsArn: "STRING_VALUE", // required
+ * //       secretsRole: "STRING_VALUE", // required
+ * //     },
+ * //   },
  * //   authenticationConfiguration: { // WebExperienceAuthConfiguration Union: only one key present
  * //     samlConfiguration: { // SamlConfiguration
  * //       metadataXML: "STRING_VALUE", // required
@@ -109,9 +118,7 @@ export class GetWebExperienceCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: QBusinessClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -123,4 +130,16 @@ export class GetWebExperienceCommand extends $Command
   .f(void 0, void 0)
   .ser(se_GetWebExperienceCommand)
   .de(de_GetWebExperienceCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: GetWebExperienceRequest;
+      output: GetWebExperienceResponse;
+    };
+    sdk: {
+      input: GetWebExperienceCommandInput;
+      output: GetWebExperienceCommandOutput;
+    };
+  };
+}

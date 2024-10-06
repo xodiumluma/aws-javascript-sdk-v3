@@ -72,6 +72,9 @@ export interface UpdateEc2DeepInspectionConfigurationCommandOutput
  *
  * @throws {@link AccessDeniedException} (client fault)
  *  <p>You do not have sufficient access to perform this action.</p>
+ *          <p>
+ *          For <code>Enable</code>, you receive this error if you attempt to use a feature in an unsupported Amazon Web Services Region.
+ *       </p>
  *
  * @throws {@link InternalServerException} (server fault)
  *  <p>The request has failed due to an internal failure of the Amazon Inspector service.</p>
@@ -96,9 +99,7 @@ export class UpdateEc2DeepInspectionConfigurationCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: Inspector2ClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -110,4 +111,16 @@ export class UpdateEc2DeepInspectionConfigurationCommand extends $Command
   .f(void 0, void 0)
   .ser(se_UpdateEc2DeepInspectionConfigurationCommand)
   .de(de_UpdateEc2DeepInspectionConfigurationCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: UpdateEc2DeepInspectionConfigurationRequest;
+      output: UpdateEc2DeepInspectionConfigurationResponse;
+    };
+    sdk: {
+      input: UpdateEc2DeepInspectionConfigurationCommandInput;
+      output: UpdateEc2DeepInspectionConfigurationCommandOutput;
+    };
+  };
+}

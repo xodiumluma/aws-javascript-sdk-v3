@@ -34,8 +34,8 @@ export interface RestoreTableToPointInTimeCommandOutput extends RestoreTableToPo
  *             users can execute up to 50 concurrent restores (any type of restore) in a given account. </p>
  *          <p>When you restore using point in time recovery, DynamoDB restores your table data to
  *             the state based on the selected date and time (day:hour:minute:second) to a new table. </p>
- *          <p>Along with data, the following are also included on the new restored table using
- *             point in time recovery: </p>
+ *          <p>Along with data, the following are also included on the new restored table using point
+ *             in time recovery: </p>
  *          <ul>
  *             <li>
  *                <p>Global secondary indexes (GSIs)</p>
@@ -361,9 +361,7 @@ export class RestoreTableToPointInTimeCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: DynamoDBClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -375,4 +373,16 @@ export class RestoreTableToPointInTimeCommand extends $Command
   .f(void 0, void 0)
   .ser(se_RestoreTableToPointInTimeCommand)
   .de(de_RestoreTableToPointInTimeCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: RestoreTableToPointInTimeInput;
+      output: RestoreTableToPointInTimeOutput;
+    };
+    sdk: {
+      input: RestoreTableToPointInTimeCommandInput;
+      output: RestoreTableToPointInTimeCommandOutput;
+    };
+  };
+}

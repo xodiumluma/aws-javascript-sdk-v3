@@ -339,6 +339,7 @@ import {
   AdminUpdateDeviceStatusRequest,
   AdminUpdateUserAttributesRequest,
   AdminUserGlobalSignOutRequest,
+  AdvancedSecurityAdditionalFlowsType,
   AliasAttributeType,
   AliasExistsException,
   AnalyticsConfigurationType,
@@ -398,10 +399,13 @@ import {
   DeviceType,
   DuplicateProviderException,
   EmailConfigurationType,
+  EmailMfaConfigType,
+  EmailMfaSettingsType,
   EventFeedbackType,
   EventFilterType,
   ExpiredCodeException,
   ExplicitAuthFlowsType,
+  FirehoseConfigurationType,
   ForbiddenException,
   ForgetDeviceRequest,
   ForgotPasswordRequest,
@@ -462,6 +466,7 @@ import {
   NotifyEmailType,
   NumberAttributeConstraintsType,
   OAuthFlowType,
+  PasswordHistoryPolicyViolationException,
   PasswordPolicyType,
   PasswordResetRequiredException,
   PreconditionNotMetException,
@@ -473,12 +478,11 @@ import {
   ResourceNotFoundException,
   ResourceServerScopeType,
   RespondToAuthChallengeRequest,
-  RevokeTokenRequest,
   RiskConfigurationType,
   RiskExceptionConfigurationType,
+  S3ConfigurationType,
   SchemaAttributeType,
   ScopeDoesNotExistException,
-  SetLogDeliveryConfigurationRequest,
   SmsConfigurationType,
   SmsMfaConfigType,
   SMSMfaSettingsType,
@@ -490,11 +494,8 @@ import {
   TooManyFailedAttemptsException,
   TooManyRequestsException,
   UICustomizationType,
-  UnauthorizedException,
   UnexpectedLambdaException,
   UnsupportedIdentityProviderException,
-  UnsupportedOperationException,
-  UnsupportedTokenTypeException,
   UnsupportedUserStateException,
   UserAttributeUpdateSettingsType,
   UserContextDataType,
@@ -519,6 +520,8 @@ import {
 } from "../models/models_0";
 import {
   EnableSoftwareTokenMFAException,
+  RevokeTokenRequest,
+  SetLogDeliveryConfigurationRequest,
   SetRiskConfigurationRequest,
   SetRiskConfigurationResponse,
   SetUICustomizationRequest,
@@ -532,6 +535,9 @@ import {
   StopUserImportJobRequest,
   StopUserImportJobResponse,
   TagResourceRequest,
+  UnauthorizedException,
+  UnsupportedOperationException,
+  UnsupportedTokenTypeException,
   UntagResourceRequest,
   UpdateAuthEventFeedbackRequest,
   UpdateDeviceStatusRequest,
@@ -3985,6 +3991,9 @@ const de_CommandError = async (output: __HttpResponse, context: __SerdeContext):
     case "InvalidUserPoolConfigurationException":
     case "com.amazonaws.cognitoidentityprovider#InvalidUserPoolConfigurationException":
       throw await de_InvalidUserPoolConfigurationExceptionRes(parsedOutput, context);
+    case "InvalidEmailRoleAccessPolicyException":
+    case "com.amazonaws.cognitoidentityprovider#InvalidEmailRoleAccessPolicyException":
+      throw await de_InvalidEmailRoleAccessPolicyExceptionRes(parsedOutput, context);
     case "MFAMethodNotFoundException":
     case "com.amazonaws.cognitoidentityprovider#MFAMethodNotFoundException":
       throw await de_MFAMethodNotFoundExceptionRes(parsedOutput, context);
@@ -3997,15 +4006,15 @@ const de_CommandError = async (output: __HttpResponse, context: __SerdeContext):
     case "UserPoolAddOnNotEnabledException":
     case "com.amazonaws.cognitoidentityprovider#UserPoolAddOnNotEnabledException":
       throw await de_UserPoolAddOnNotEnabledExceptionRes(parsedOutput, context);
-    case "InvalidEmailRoleAccessPolicyException":
-    case "com.amazonaws.cognitoidentityprovider#InvalidEmailRoleAccessPolicyException":
-      throw await de_InvalidEmailRoleAccessPolicyExceptionRes(parsedOutput, context);
     case "CodeMismatchException":
     case "com.amazonaws.cognitoidentityprovider#CodeMismatchException":
       throw await de_CodeMismatchExceptionRes(parsedOutput, context);
     case "ExpiredCodeException":
     case "com.amazonaws.cognitoidentityprovider#ExpiredCodeException":
       throw await de_ExpiredCodeExceptionRes(parsedOutput, context);
+    case "PasswordHistoryPolicyViolationException":
+    case "com.amazonaws.cognitoidentityprovider#PasswordHistoryPolicyViolationException":
+      throw await de_PasswordHistoryPolicyViolationExceptionRes(parsedOutput, context);
     case "SoftwareTokenMFANotFoundException":
     case "com.amazonaws.cognitoidentityprovider#SoftwareTokenMFANotFoundException":
       throw await de_SoftwareTokenMFANotFoundExceptionRes(parsedOutput, context);
@@ -4382,6 +4391,22 @@ const de_NotAuthorizedExceptionRes = async (
   const body = parsedOutput.body;
   const deserialized: any = _json(body);
   const exception = new NotAuthorizedException({
+    $metadata: deserializeMetadata(parsedOutput),
+    ...deserialized,
+  });
+  return __decorateServiceException(exception, body);
+};
+
+/**
+ * deserializeAws_json1_1PasswordHistoryPolicyViolationExceptionRes
+ */
+const de_PasswordHistoryPolicyViolationExceptionRes = async (
+  parsedOutput: any,
+  context: __SerdeContext
+): Promise<PasswordHistoryPolicyViolationException> => {
+  const body = parsedOutput.body;
+  const deserialized: any = _json(body);
+  const exception = new PasswordHistoryPolicyViolationException({
     $metadata: deserializeMetadata(parsedOutput),
     ...deserialized,
   });
@@ -4772,6 +4797,8 @@ const de_UserPoolTaggingExceptionRes = async (
 
 // se_AdminUserGlobalSignOutRequest omitted.
 
+// se_AdvancedSecurityAdditionalFlowsType omitted.
+
 // se_AliasAttributesListType omitted.
 
 // se_AnalyticsConfigurationType omitted.
@@ -4878,9 +4905,15 @@ const de_UserPoolTaggingExceptionRes = async (
 
 // se_EmailConfigurationType omitted.
 
+// se_EmailMfaConfigType omitted.
+
+// se_EmailMfaSettingsType omitted.
+
 // se_EventFiltersType omitted.
 
 // se_ExplicitAuthFlowsListType omitted.
+
+// se_FirehoseConfigurationType omitted.
 
 // se_ForgetDeviceRequest omitted.
 
@@ -4981,6 +5014,8 @@ const de_UserPoolTaggingExceptionRes = async (
 // se_RevokeTokenRequest omitted.
 
 // se_RiskExceptionConfigurationType omitted.
+
+// se_S3ConfigurationType omitted.
 
 // se_SchemaAttributesListType omitted.
 
@@ -5190,6 +5225,8 @@ const de_AdminListUserAuthEventsResponse = (output: any, context: __SerdeContext
 // de_AdminUpdateUserAttributesResponse omitted.
 
 // de_AdminUserGlobalSignOutResponse omitted.
+
+// de_AdvancedSecurityAdditionalFlowsType omitted.
 
 // de_AliasAttributesListType omitted.
 
@@ -5420,6 +5457,8 @@ const de_DeviceType = (output: any, context: __SerdeContext): DeviceType => {
 
 // de_EmailConfigurationType omitted.
 
+// de_EmailMfaConfigType omitted.
+
 // de_EnableSoftwareTokenMFAException omitted.
 
 // de_EventContextDataType omitted.
@@ -5442,6 +5481,8 @@ const de_EventFeedbackType = (output: any, context: __SerdeContext): EventFeedba
 // de_ExpiredCodeException omitted.
 
 // de_ExplicitAuthFlowsListType omitted.
+
+// de_FirehoseConfigurationType omitted.
 
 // de_ForbiddenException omitted.
 
@@ -5677,6 +5718,8 @@ const de_ListUsersResponse = (output: any, context: __SerdeContext): ListUsersRe
 
 // de_OAuthFlowsType omitted.
 
+// de_PasswordHistoryPolicyViolationException omitted.
+
 // de_PasswordPolicyType omitted.
 
 // de_PasswordResetRequiredException omitted.
@@ -5746,6 +5789,8 @@ const de_RiskConfigurationType = (output: any, context: __SerdeContext): RiskCon
 };
 
 // de_RiskExceptionConfigurationType omitted.
+
+// de_S3ConfigurationType omitted.
 
 // de_SchemaAttributesListType omitted.
 

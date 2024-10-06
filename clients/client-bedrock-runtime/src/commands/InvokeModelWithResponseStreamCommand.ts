@@ -49,7 +49,7 @@ export interface InvokeModelWithResponseStreamCommandOutput
  *          <p>To see if a model supports streaming, call <a href="https://docs.aws.amazon.com/bedrock/latest/APIReference/API_GetFoundationModel.html">GetFoundationModel</a>
  *          and check the <code>responseStreamingSupported</code> field in the response.</p>
  *          <note>
- *             <p>The CLI doesn't support <code>InvokeModelWithResponseStream</code>.</p>
+ *             <p>The CLI doesn't support streaming operations in Amazon Bedrock, including <code>InvokeModelWithResponseStream</code>.</p>
  *          </note>
  *          <p>For example code, see <i>Invoke model with streaming code
  *          example</i> in the <i>Amazon Bedrock User Guide</i>.
@@ -94,6 +94,9 @@ export interface InvokeModelWithResponseStreamCommandOutput
  * //     modelTimeoutException: { // ModelTimeoutException
  * //       message: "STRING_VALUE",
  * //     },
+ * //     serviceUnavailableException: { // ServiceUnavailableException
+ * //       message: "STRING_VALUE",
+ * //     },
  * //   },
  * //   contentType: "STRING_VALUE", // required
  * // };
@@ -116,7 +119,10 @@ export interface InvokeModelWithResponseStreamCommandOutput
  *  <p>The request failed due to an error while processing the model.</p>
  *
  * @throws {@link ModelNotReadyException} (client fault)
- *  <p>The model specified in the request is not ready to serve inference requests.</p>
+ *  <p>The model specified in the request is not ready to serve inference requests. The AWS SDK
+ *            will automatically retry the operation up to 5 times. For information about configuring
+ *            automatic retries, see <a href="https://docs.aws.amazon.com/sdkref/latest/guide/feature-retry-behavior.html">Retry behavior</a> in the <i>AWS SDKs and Tools</i>
+ *            reference guide.</p>
  *
  * @throws {@link ModelStreamErrorException} (client fault)
  *  <p>An error occurred while streaming the response. Retry your request.</p>
@@ -128,10 +134,13 @@ export interface InvokeModelWithResponseStreamCommandOutput
  *  <p>The specified resource ARN was not found. Check the ARN and try your request again.</p>
  *
  * @throws {@link ServiceQuotaExceededException} (client fault)
- *  <p>The number of requests exceeds the service quota. Resubmit your request later.</p>
+ *  <p>Your request exceeds the service quota for your account. You can view your quotas at <a href="https://docs.aws.amazon.com/servicequotas/latest/userguide/gs-request-quota.html">Viewing service quotas</a>. You can resubmit your request later.</p>
+ *
+ * @throws {@link ServiceUnavailableException} (server fault)
+ *  <p>The service isn't currently available. Try again later.</p>
  *
  * @throws {@link ThrottlingException} (client fault)
- *  <p>The number of requests exceeds the limit. Resubmit your request later.</p>
+ *  <p>Your request was throttled because of service-wide limitations. Resubmit your request later or in a different region. You can also purchase <a href="https://docs.aws.amazon.com/bedrock/latest/userguide/prov-throughput.html">Provisioned Throughput</a> to increase the rate or number of tokens you can process.</p>
  *
  * @throws {@link ValidationException} (client fault)
  *  <p>Input validation failed. Check your request parameters and retry the request.</p>
@@ -149,9 +158,7 @@ export class InvokeModelWithResponseStreamCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: BedrockRuntimeClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -170,4 +177,16 @@ export class InvokeModelWithResponseStreamCommand extends $Command
   .f(InvokeModelWithResponseStreamRequestFilterSensitiveLog, InvokeModelWithResponseStreamResponseFilterSensitiveLog)
   .ser(se_InvokeModelWithResponseStreamCommand)
   .de(de_InvokeModelWithResponseStreamCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: InvokeModelWithResponseStreamRequest;
+      output: InvokeModelWithResponseStreamResponse;
+    };
+    sdk: {
+      input: InvokeModelWithResponseStreamCommandInput;
+      output: InvokeModelWithResponseStreamCommandOutput;
+    };
+  };
+}

@@ -6,11 +6,8 @@ import { MetadataBearer as __MetadataBearer } from "@smithy/types";
 
 import { EC2ClientResolvedConfig, ServiceInputTypes, ServiceOutputTypes } from "../EC2Client";
 import { commonParams } from "../endpoint/EndpointParameters";
-import {
-  ModifyVpnConnectionRequest,
-  ModifyVpnConnectionResult,
-  ModifyVpnConnectionResultFilterSensitiveLog,
-} from "../models/models_6";
+import { ModifyVpnConnectionRequest } from "../models/models_6";
+import { ModifyVpnConnectionResult, ModifyVpnConnectionResultFilterSensitiveLog } from "../models/models_7";
 import { de_ModifyVpnConnectionCommand, se_ModifyVpnConnectionCommand } from "../protocols/Aws_ec2";
 
 /**
@@ -85,13 +82,7 @@ export interface ModifyVpnConnectionCommandOutput extends ModifyVpnConnectionRes
  * const response = await client.send(command);
  * // { // ModifyVpnConnectionResult
  * //   VpnConnection: { // VpnConnection
- * //     CustomerGatewayConfiguration: "STRING_VALUE",
- * //     CustomerGatewayId: "STRING_VALUE",
  * //     Category: "STRING_VALUE",
- * //     State: "pending" || "available" || "deleting" || "deleted",
- * //     Type: "ipsec.1",
- * //     VpnConnectionId: "STRING_VALUE",
- * //     VpnGatewayId: "STRING_VALUE",
  * //     TransitGatewayId: "STRING_VALUE",
  * //     CoreNetworkArn: "STRING_VALUE",
  * //     CoreNetworkAttachmentArn: "STRING_VALUE",
@@ -189,6 +180,12 @@ export interface ModifyVpnConnectionCommandOutput extends ModifyVpnConnectionRes
  * //         CertificateArn: "STRING_VALUE",
  * //       },
  * //     ],
+ * //     VpnConnectionId: "STRING_VALUE",
+ * //     State: "pending" || "available" || "deleting" || "deleted",
+ * //     CustomerGatewayConfiguration: "STRING_VALUE",
+ * //     Type: "ipsec.1",
+ * //     CustomerGatewayId: "STRING_VALUE",
+ * //     VpnGatewayId: "STRING_VALUE",
  * //   },
  * // };
  *
@@ -213,9 +210,7 @@ export class ModifyVpnConnectionCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: EC2ClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -227,4 +222,16 @@ export class ModifyVpnConnectionCommand extends $Command
   .f(void 0, ModifyVpnConnectionResultFilterSensitiveLog)
   .ser(se_ModifyVpnConnectionCommand)
   .de(de_ModifyVpnConnectionCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: ModifyVpnConnectionRequest;
+      output: ModifyVpnConnectionResult;
+    };
+    sdk: {
+      input: ModifyVpnConnectionCommandInput;
+      output: ModifyVpnConnectionCommandOutput;
+    };
+  };
+}

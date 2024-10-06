@@ -28,8 +28,8 @@ export interface ListAppInputSourcesCommandInput extends ListAppInputSourcesRequ
 export interface ListAppInputSourcesCommandOutput extends ListAppInputSourcesResponse, __MetadataBearer {}
 
 /**
- * <p>Lists all the input sources of the Resilience Hub application. For more information about the
- *       input sources supported by Resilience Hub, see <a href="https://docs.aws.amazon.com/resilience-hub/latest/userguide/discover-structure.html">Discover
+ * <p>Lists all the input sources of the Resilience Hub application. For more
+ *       information about the input sources supported by Resilience Hub, see <a href="https://docs.aws.amazon.com/resilience-hub/latest/userguide/discover-structure.html">Discover
  *         the structure and describe your Resilience Hub application</a>.</p>
  * @example
  * Use a bare-bones client and the command you need to make an API call.
@@ -103,9 +103,7 @@ export class ListAppInputSourcesCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: ResiliencehubClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -117,4 +115,16 @@ export class ListAppInputSourcesCommand extends $Command
   .f(void 0, void 0)
   .ser(se_ListAppInputSourcesCommand)
   .de(de_ListAppInputSourcesCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: ListAppInputSourcesRequest;
+      output: ListAppInputSourcesResponse;
+    };
+    sdk: {
+      input: ListAppInputSourcesCommandInput;
+      output: ListAppInputSourcesCommandOutput;
+    };
+  };
+}

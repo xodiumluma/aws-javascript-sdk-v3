@@ -1,5 +1,6 @@
 // smithy-typescript generated code
 import { getFlexibleChecksumsPlugin } from "@aws-sdk/middleware-flexible-checksums";
+import { getThrow200ExceptionsPlugin } from "@aws-sdk/middleware-sdk-s3";
 import { getEndpointPlugin } from "@smithy/middleware-endpoint";
 import { getSerdePlugin } from "@smithy/middleware-serde";
 import { Command as $Command } from "@smithy/smithy-client";
@@ -94,6 +95,7 @@ export class PutObjectLegalHoldCommand extends $Command
         requestAlgorithmMember: "ChecksumAlgorithm",
         requestChecksumRequired: true,
       }),
+      getThrow200ExceptionsPlugin(config),
     ];
   })
   .s("AmazonS3", "PutObjectLegalHold", {})
@@ -101,4 +103,16 @@ export class PutObjectLegalHoldCommand extends $Command
   .f(void 0, void 0)
   .ser(se_PutObjectLegalHoldCommand)
   .de(de_PutObjectLegalHoldCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: PutObjectLegalHoldRequest;
+      output: PutObjectLegalHoldOutput;
+    };
+    sdk: {
+      input: PutObjectLegalHoldCommandInput;
+      output: PutObjectLegalHoldCommandOutput;
+    };
+  };
+}

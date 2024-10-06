@@ -52,6 +52,56 @@ export interface UpdateContactRoutingDataCommandOutput extends UpdateContactRout
  *   ContactId: "STRING_VALUE", // required
  *   QueueTimeAdjustmentSeconds: Number("int"),
  *   QueuePriority: Number("long"),
+ *   RoutingCriteria: { // RoutingCriteriaInput
+ *     Steps: [ // RoutingCriteriaInputSteps
+ *       { // RoutingCriteriaInputStep
+ *         Expiry: { // RoutingCriteriaInputStepExpiry
+ *           DurationInSeconds: Number("int"),
+ *         },
+ *         Expression: { // Expression
+ *           AttributeCondition: { // AttributeCondition
+ *             Name: "STRING_VALUE",
+ *             Value: "STRING_VALUE",
+ *             ProficiencyLevel: Number("float"),
+ *             MatchCriteria: { // MatchCriteria
+ *               AgentsCriteria: { // AgentsCriteria
+ *                 AgentIds: [ // AgentIds
+ *                   "STRING_VALUE",
+ *                 ],
+ *               },
+ *             },
+ *             ComparisonOperator: "STRING_VALUE",
+ *           },
+ *           AndExpression: [ // Expressions
+ *             {
+ *               AttributeCondition: {
+ *                 Name: "STRING_VALUE",
+ *                 Value: "STRING_VALUE",
+ *                 ProficiencyLevel: Number("float"),
+ *                 MatchCriteria: {
+ *                   AgentsCriteria: {
+ *                     AgentIds: [
+ *                       "STRING_VALUE",
+ *                     ],
+ *                   },
+ *                 },
+ *                 ComparisonOperator: "STRING_VALUE",
+ *               },
+ *               AndExpression: [
+ *                 "<Expression>",
+ *               ],
+ *               OrExpression: [
+ *                 "<Expression>",
+ *               ],
+ *             },
+ *           ],
+ *           OrExpression: [
+ *             "<Expression>",
+ *           ],
+ *         },
+ *       },
+ *     ],
+ *   },
  * };
  * const command = new UpdateContactRoutingDataCommand(input);
  * const response = await client.send(command);
@@ -96,9 +146,7 @@ export class UpdateContactRoutingDataCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: ConnectClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -110,4 +158,16 @@ export class UpdateContactRoutingDataCommand extends $Command
   .f(void 0, void 0)
   .ser(se_UpdateContactRoutingDataCommand)
   .de(de_UpdateContactRoutingDataCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: UpdateContactRoutingDataRequest;
+      output: {};
+    };
+    sdk: {
+      input: UpdateContactRoutingDataCommandInput;
+      output: UpdateContactRoutingDataCommandOutput;
+    };
+  };
+}

@@ -51,6 +51,7 @@ export interface GetJobRunsCommandOutput extends GetJobRunsResponse, __MetadataB
  * //       TriggerName: "STRING_VALUE",
  * //       JobName: "STRING_VALUE",
  * //       JobMode: "SCRIPT" || "VISUAL" || "NOTEBOOK",
+ * //       JobRunQueuingEnabled: true || false,
  * //       StartedOn: new Date("TIMESTAMP"),
  * //       LastModifiedOn: new Date("TIMESTAMP"),
  * //       CompletedOn: new Date("TIMESTAMP"),
@@ -81,6 +82,7 @@ export interface GetJobRunsCommandOutput extends GetJobRunsResponse, __MetadataB
  * //       ExecutionClass: "FLEX" || "STANDARD",
  * //       MaintenanceWindow: "STRING_VALUE",
  * //       ProfileName: "STRING_VALUE",
+ * //       StateDetail: "STRING_VALUE",
  * //     },
  * //   ],
  * //   NextToken: "STRING_VALUE",
@@ -119,9 +121,7 @@ export class GetJobRunsCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: GlueClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -133,4 +133,16 @@ export class GetJobRunsCommand extends $Command
   .f(void 0, void 0)
   .ser(se_GetJobRunsCommand)
   .de(de_GetJobRunsCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: GetJobRunsRequest;
+      output: GetJobRunsResponse;
+    };
+    sdk: {
+      input: GetJobRunsCommandInput;
+      output: GetJobRunsCommandOutput;
+    };
+  };
+}

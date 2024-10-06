@@ -114,6 +114,10 @@ export interface AdminSetUserPasswordCommandOutput extends AdminSetUserPasswordR
  * @throws {@link NotAuthorizedException} (client fault)
  *  <p>This exception is thrown when a user isn't authorized.</p>
  *
+ * @throws {@link PasswordHistoryPolicyViolationException} (client fault)
+ *  <p>The message returned when a user's new password matches a previous password and
+ *             doesn't comply with the password-history policy.</p>
+ *
  * @throws {@link ResourceNotFoundException} (client fault)
  *  <p>This exception is thrown when the Amazon Cognito service can't find the requested
  *             resource.</p>
@@ -138,9 +142,7 @@ export class AdminSetUserPasswordCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: CognitoIdentityProviderClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -152,4 +154,16 @@ export class AdminSetUserPasswordCommand extends $Command
   .f(AdminSetUserPasswordRequestFilterSensitiveLog, void 0)
   .ser(se_AdminSetUserPasswordCommand)
   .de(de_AdminSetUserPasswordCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: AdminSetUserPasswordRequest;
+      output: {};
+    };
+    sdk: {
+      input: AdminSetUserPasswordCommandInput;
+      output: AdminSetUserPasswordCommandOutput;
+    };
+  };
+}

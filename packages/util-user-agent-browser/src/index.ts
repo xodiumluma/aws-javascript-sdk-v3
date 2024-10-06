@@ -3,6 +3,10 @@ import bowser from "bowser";
 
 import { DefaultUserAgentOptions } from "./configurations";
 
+export interface PreviouslyResolved {
+  userAgentAppId: Provider<string | undefined>;
+}
+
 /**
  * @internal
  *
@@ -10,8 +14,8 @@ import { DefaultUserAgentOptions } from "./configurations";
  * the device information. It uses bowser library to detect the browser and version
  */
 export const defaultUserAgent =
-  ({ serviceId, clientVersion }: DefaultUserAgentOptions): Provider<UserAgent> =>
-  async () => {
+  ({ serviceId, clientVersion }: DefaultUserAgentOptions): ((config: PreviouslyResolved) => Promise<UserAgent>) =>
+  async (config?: PreviouslyResolved) => {
     const parsedUA =
       typeof window !== "undefined" && window?.navigator?.userAgent
         ? bowser.parse(window.navigator.userAgent)
@@ -20,7 +24,7 @@ export const defaultUserAgent =
       // sdk-metadata
       ["aws-sdk-js", clientVersion],
       // ua-metadata
-      ["ua", "2.0"],
+      ["ua", "2.1"],
       // os-metadata
       [`os/${parsedUA?.os?.name || "other"}`, parsedUA?.os?.version],
       // language-metadata
@@ -34,6 +38,11 @@ export const defaultUserAgent =
       // api-metadata
       // service Id may not appear in non-AWS clients
       sections.push([`api/${serviceId}`, clientVersion]);
+    }
+
+    const appId = await config?.userAgentAppId?.();
+    if (appId) {
+      sections.push([`app/${appId}`]);
     }
 
     return sections;

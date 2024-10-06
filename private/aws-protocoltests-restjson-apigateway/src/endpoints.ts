@@ -67,6 +67,7 @@ const partitionHash: PartitionHash = {
       "ap-southeast-2",
       "ap-southeast-3",
       "ap-southeast-4",
+      "ap-southeast-5",
       "ca-central-1",
       "ca-west-1",
       "eu-central-1",
@@ -92,7 +93,7 @@ const partitionHash: PartitionHash = {
       "us-west-1",
       "us-west-2",
     ],
-    regionRegex: "^(us|eu|ap|sa|ca|me|af|il)\\-\\w+\\-\\d+$",
+    regionRegex: "^(us|eu|ap|sa|ca|me|af|il|mx)\\-\\w+\\-\\d+$",
     variants: [
       {
         hostname: "apigateway.{region}.amazonaws.com",

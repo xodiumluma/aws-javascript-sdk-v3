@@ -88,6 +88,10 @@ export interface ChangePasswordCommandOutput extends ChangePasswordResponse, __M
  * @throws {@link NotAuthorizedException} (client fault)
  *  <p>This exception is thrown when a user isn't authorized.</p>
  *
+ * @throws {@link PasswordHistoryPolicyViolationException} (client fault)
+ *  <p>The message returned when a user's new password matches a previous password and
+ *             doesn't comply with the password-history policy.</p>
+ *
  * @throws {@link PasswordResetRequiredException} (client fault)
  *  <p>This exception is thrown when a password reset is required.</p>
  *
@@ -118,9 +122,7 @@ export class ChangePasswordCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: CognitoIdentityProviderClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -132,4 +134,16 @@ export class ChangePasswordCommand extends $Command
   .f(ChangePasswordRequestFilterSensitiveLog, void 0)
   .ser(se_ChangePasswordCommand)
   .de(de_ChangePasswordCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: ChangePasswordRequest;
+      output: {};
+    };
+    sdk: {
+      input: ChangePasswordCommandInput;
+      output: ChangePasswordCommandOutput;
+    };
+  };
+}

@@ -6,7 +6,7 @@ import { MetadataBearer as __MetadataBearer } from "@smithy/types";
 
 import { DataZoneClientResolvedConfig, ServiceInputTypes, ServiceOutputTypes } from "../DataZoneClient";
 import { commonParams } from "../endpoint/EndpointParameters";
-import { ListLineageNodeHistoryInput, ListLineageNodeHistoryOutput } from "../models/models_0";
+import { ListLineageNodeHistoryInput, ListLineageNodeHistoryOutput } from "../models/models_1";
 import { de_ListLineageNodeHistoryCommand, se_ListLineageNodeHistoryCommand } from "../protocols/Aws_restJson1";
 
 /**
@@ -106,9 +106,7 @@ export class ListLineageNodeHistoryCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: DataZoneClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -120,4 +118,16 @@ export class ListLineageNodeHistoryCommand extends $Command
   .f(void 0, void 0)
   .ser(se_ListLineageNodeHistoryCommand)
   .de(de_ListLineageNodeHistoryCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: ListLineageNodeHistoryInput;
+      output: ListLineageNodeHistoryOutput;
+    };
+    sdk: {
+      input: ListLineageNodeHistoryCommandInput;
+      output: ListLineageNodeHistoryCommandOutput;
+    };
+  };
+}

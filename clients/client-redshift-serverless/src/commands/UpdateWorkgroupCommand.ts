@@ -59,6 +59,7 @@ export interface UpdateWorkgroupCommandOutput extends UpdateWorkgroupResponse, _
  *   ],
  *   port: Number("int"),
  *   maxCapacity: Number("int"),
+ *   ipAddressType: "STRING_VALUE",
  * };
  * const command = new UpdateWorkgroupCommand(input);
  * const response = await client.send(command);
@@ -96,6 +97,7 @@ export interface UpdateWorkgroupCommandOutput extends UpdateWorkgroupResponse, _
  * //               subnetId: "STRING_VALUE",
  * //               privateIpAddress: "STRING_VALUE",
  * //               availabilityZone: "STRING_VALUE",
+ * //               ipv6Address: "STRING_VALUE",
  * //             },
  * //           ],
  * //         },
@@ -113,6 +115,7 @@ export interface UpdateWorkgroupCommandOutput extends UpdateWorkgroupResponse, _
  * //     crossAccountVpcs: [ // VpcIds
  * //       "STRING_VALUE",
  * //     ],
+ * //     ipAddressType: "STRING_VALUE",
  * //   },
  * // };
  *
@@ -133,6 +136,9 @@ export interface UpdateWorkgroupCommandOutput extends UpdateWorkgroupResponse, _
  * @throws {@link InternalServerException} (server fault)
  *  <p>The request processing has failed because of an unknown error, exception or failure.</p>
  *
+ * @throws {@link Ipv6CidrBlockNotFoundException} (client fault)
+ *  <p>There are no subnets in your VPC with associated IPv6 CIDR blocks. To use dual-stack mode, associate an IPv6 CIDR block with each subnet in your VPC.</p>
+ *
  * @throws {@link ResourceNotFoundException} (client fault)
  *  <p>The resource could not be found.</p>
  *
@@ -152,9 +158,7 @@ export class UpdateWorkgroupCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: RedshiftServerlessClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -166,4 +170,16 @@ export class UpdateWorkgroupCommand extends $Command
   .f(void 0, void 0)
   .ser(se_UpdateWorkgroupCommand)
   .de(de_UpdateWorkgroupCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: UpdateWorkgroupRequest;
+      output: UpdateWorkgroupResponse;
+    };
+    sdk: {
+      input: UpdateWorkgroupCommandInput;
+      output: UpdateWorkgroupCommandOutput;
+    };
+  };
+}

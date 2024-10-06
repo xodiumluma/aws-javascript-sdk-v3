@@ -9,7 +9,7 @@ import { commonParams } from "../endpoint/EndpointParameters";
 import {
   GetEnvironmentBlueprintConfigurationInput,
   GetEnvironmentBlueprintConfigurationOutput,
-} from "../models/models_0";
+} from "../models/models_1";
 import {
   de_GetEnvironmentBlueprintConfigurationCommand,
   se_GetEnvironmentBlueprintConfigurationCommand,
@@ -64,6 +64,16 @@ export interface GetEnvironmentBlueprintConfigurationCommandOutput
  * //   },
  * //   createdAt: new Date("TIMESTAMP"),
  * //   updatedAt: new Date("TIMESTAMP"),
+ * //   provisioningConfigurations: [ // ProvisioningConfigurationList
+ * //     { // ProvisioningConfiguration Union: only one key present
+ * //       lakeFormationConfiguration: { // LakeFormationConfiguration
+ * //         locationRegistrationRole: "STRING_VALUE",
+ * //         locationRegistrationExcludeS3Locations: [ // S3LocationList
+ * //           "STRING_VALUE",
+ * //         ],
+ * //       },
+ * //     },
+ * //   ],
  * // };
  *
  * ```
@@ -105,9 +115,7 @@ export class GetEnvironmentBlueprintConfigurationCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: DataZoneClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -119,4 +127,16 @@ export class GetEnvironmentBlueprintConfigurationCommand extends $Command
   .f(void 0, void 0)
   .ser(se_GetEnvironmentBlueprintConfigurationCommand)
   .de(de_GetEnvironmentBlueprintConfigurationCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: GetEnvironmentBlueprintConfigurationInput;
+      output: GetEnvironmentBlueprintConfigurationOutput;
+    };
+    sdk: {
+      input: GetEnvironmentBlueprintConfigurationCommandInput;
+      output: GetEnvironmentBlueprintConfigurationCommandOutput;
+    };
+  };
+}

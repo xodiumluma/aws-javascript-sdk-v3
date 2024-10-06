@@ -52,6 +52,7 @@ export interface GetDataQualityRulesetCommandOutput extends GetDataQualityRulese
  * //   CreatedOn: new Date("TIMESTAMP"),
  * //   LastModifiedOn: new Date("TIMESTAMP"),
  * //   RecommendationRunId: "STRING_VALUE",
+ * //   DataQualitySecurityConfiguration: "STRING_VALUE",
  * // };
  *
  * ```
@@ -87,9 +88,7 @@ export class GetDataQualityRulesetCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: GlueClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -101,4 +100,16 @@ export class GetDataQualityRulesetCommand extends $Command
   .f(void 0, void 0)
   .ser(se_GetDataQualityRulesetCommand)
   .de(de_GetDataQualityRulesetCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: GetDataQualityRulesetRequest;
+      output: GetDataQualityRulesetResponse;
+    };
+    sdk: {
+      input: GetDataQualityRulesetCommandInput;
+      output: GetDataQualityRulesetCommandOutput;
+    };
+  };
+}

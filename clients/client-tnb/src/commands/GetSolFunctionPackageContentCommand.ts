@@ -84,7 +84,8 @@ export interface GetSolFunctionPackageContentCommandOutput
  *  <p>Exception caused by throttling.</p>
  *
  * @throws {@link ValidationException} (client fault)
- *  <p>Unable to process the request because the client provided input failed to satisfy request constraints.</p>
+ *  <p>Unable to process the request because the client provided input failed to satisfy
+ *          request constraints.</p>
  *
  * @throws {@link TnbServiceException}
  * <p>Base exception class for all service exceptions from Tnb service.</p>
@@ -99,9 +100,7 @@ export class GetSolFunctionPackageContentCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: TnbClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -113,4 +112,16 @@ export class GetSolFunctionPackageContentCommand extends $Command
   .f(void 0, void 0)
   .ser(se_GetSolFunctionPackageContentCommand)
   .de(de_GetSolFunctionPackageContentCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: GetSolFunctionPackageContentInput;
+      output: GetSolFunctionPackageContentOutput;
+    };
+    sdk: {
+      input: GetSolFunctionPackageContentCommandInput;
+      output: GetSolFunctionPackageContentCommandOutput;
+    };
+  };
+}

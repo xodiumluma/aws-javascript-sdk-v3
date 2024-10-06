@@ -6,7 +6,7 @@ import { MetadataBearer as __MetadataBearer } from "@smithy/types";
 
 import { EC2ClientResolvedConfig, ServiceInputTypes, ServiceOutputTypes } from "../EC2Client";
 import { commonParams } from "../endpoint/EndpointParameters";
-import { MonitorInstancesRequest, MonitorInstancesResult } from "../models/models_6";
+import { MonitorInstancesRequest, MonitorInstancesResult } from "../models/models_7";
 import { de_MonitorInstancesCommand, se_MonitorInstancesCommand } from "../protocols/Aws_ec2";
 
 /**
@@ -78,9 +78,7 @@ export class MonitorInstancesCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: EC2ClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -92,4 +90,16 @@ export class MonitorInstancesCommand extends $Command
   .f(void 0, void 0)
   .ser(se_MonitorInstancesCommand)
   .de(de_MonitorInstancesCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: MonitorInstancesRequest;
+      output: MonitorInstancesResult;
+    };
+    sdk: {
+      input: MonitorInstancesCommandInput;
+      output: MonitorInstancesCommandOutput;
+    };
+  };
+}

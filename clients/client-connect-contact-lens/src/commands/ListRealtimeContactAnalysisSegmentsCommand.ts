@@ -90,6 +90,11 @@ export interface ListRealtimeContactAnalysisSegmentsCommandOutput
  * //           },
  * //         },
  * //       },
+ * //       PostContactSummary: { // PostContactSummary
+ * //         Content: "STRING_VALUE",
+ * //         Status: "FAILED" || "COMPLETED", // required
+ * //         FailureCode: "QUOTA_EXCEEDED" || "INSUFFICIENT_CONVERSATION_CONTENT" || "FAILED_SAFETY_GUIDELINES" || "INVALID_ANALYSIS_CONFIGURATION" || "INTERNAL_ERROR",
+ * //       },
  * //     },
  * //   ],
  * //   NextToken: "STRING_VALUE",
@@ -131,9 +136,7 @@ export class ListRealtimeContactAnalysisSegmentsCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: ConnectContactLensClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -145,4 +148,16 @@ export class ListRealtimeContactAnalysisSegmentsCommand extends $Command
   .f(void 0, void 0)
   .ser(se_ListRealtimeContactAnalysisSegmentsCommand)
   .de(de_ListRealtimeContactAnalysisSegmentsCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: ListRealtimeContactAnalysisSegmentsRequest;
+      output: ListRealtimeContactAnalysisSegmentsResponse;
+    };
+    sdk: {
+      input: ListRealtimeContactAnalysisSegmentsCommandInput;
+      output: ListRealtimeContactAnalysisSegmentsCommandOutput;
+    };
+  };
+}

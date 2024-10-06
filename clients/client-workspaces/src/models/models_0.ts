@@ -1168,8 +1168,7 @@ export interface BundleResourceAssociation {
  */
 export interface Capacity {
   /**
-   * <p>The desired number of user sessions for a multi-session pool.
-   *          This is not allowed for single-session pools.</p>
+   * <p>The desired number of user sessions for the WorkSpaces in the pool.</p>
    * @public
    */
   DesiredUserSessions: number | undefined;
@@ -1181,7 +1180,8 @@ export interface Capacity {
  */
 export interface CapacityStatus {
   /**
-   * <p>The number of user sessions currently being used for pool sessions. This only applies to multi-session pools.</p>
+   * <p>The number of user sessions currently available for streaming from your pool.</p>
+   *          <p>AvailableUserSessions = ActualUserSessions - ActiveUserSessions</p>
    * @public
    */
   AvailableUserSessions: number | undefined;
@@ -1195,13 +1195,15 @@ export interface CapacityStatus {
   DesiredUserSessions: number | undefined;
 
   /**
-   * <p>The total number of session slots that are available for a pool of WorkSpaces.</p>
+   * <p>The total number of user sessions that are available for streaming or are currently
+   *          streaming in your pool.</p>
+   *          <p>ActualUserSessions = AvailableUserSessions + ActiveUserSessions</p>
    * @public
    */
   ActualUserSessions: number | undefined;
 
   /**
-   * <p>The number of user sessions currently being used for pool sessions. This only applies to multi-session pools.</p>
+   * <p>The number of user sessions currently being used for your pool.</p>
    * @public
    */
   ActiveUserSessions: number | undefined;
@@ -2244,6 +2246,9 @@ export interface WorkspaceProperties {
    *             your account team to be allow-listed to use this value. For more information, see
    *             <a href="http://aws.amazon.com/workspaces/core/">Amazon WorkSpaces Core</a>.</p>
    *          </note>
+   *          <p>Review your running mode to ensure you are using one that is optimal for your needs and
+   *          budget. For more information on switching running modes, see <a href="http://aws.amazon.com/workspaces-family/workspaces/faqs/#:~:text=Can%20I%20switch%20between%20hourly%20and%20monthly%20billing%20on%20WorkSpaces%20Personal%3F"> Can I switch between hourly and monthly billing?</a>
+   *          </p>
    * @public
    */
   RunningMode?: RunningMode;
@@ -2288,7 +2293,7 @@ export interface WorkspaceProperties {
    *                   <p>Only available for WorkSpaces created with PCoIP bundles.</p>
    *                </li>
    *                <li>
-   *                   <p>The <code>Protocols</code> property is case sensitive. Ensure you use <code>PCOIP</code> or <code>WSP</code>.</p>
+   *                   <p>The <code>Protocols</code> property is case sensitive. Ensure you use <code>PCOIP</code> or <code>DCV</code> (formerly WSP).</p>
    *                </li>
    *                <li>
    *                   <p>Unavailable for Windows 7 WorkSpaces and WorkSpaces using GPU-based bundles
@@ -2364,6 +2369,13 @@ export interface WorkspaceRequest {
 
   /**
    * <p>The name of the user-decoupled WorkSpace.</p>
+   *          <note>
+   *             <p>
+   *                <code>WorkspaceName</code> is required if <code>UserName</code> is
+   *             <code>[UNDEFINED]</code> for user-decoupled WorkSpaces.
+   *             <code>WorkspaceName</code> is not applicable if <code>UserName</code> is specified
+   *             for user-assigned WorkSpaces.</p>
+   *          </note>
    * @public
    */
   WorkspaceName?: string;
@@ -4369,6 +4381,39 @@ export interface DescribeWorkspaceBundlesResult {
 
 /**
  * @public
+ * @enum
+ */
+export const DescribeWorkspaceDirectoriesFilterName = {
+  USER_IDENTITY_TYPE: "USER_IDENTITY_TYPE",
+  WORKSPACE_TYPE: "WORKSPACE_TYPE",
+} as const;
+
+/**
+ * @public
+ */
+export type DescribeWorkspaceDirectoriesFilterName =
+  (typeof DescribeWorkspaceDirectoriesFilterName)[keyof typeof DescribeWorkspaceDirectoriesFilterName];
+
+/**
+ * <p>Describes the filter conditions for the WorkSpaces to return.</p>
+ * @public
+ */
+export interface DescribeWorkspaceDirectoriesFilter {
+  /**
+   * <p>The name of the WorkSpaces to filter.</p>
+   * @public
+   */
+  Name: DescribeWorkspaceDirectoriesFilterName | undefined;
+
+  /**
+   * <p>The values for filtering WorkSpaces</p>
+   * @public
+   */
+  Values: string[] | undefined;
+}
+
+/**
+ * @public
  */
 export interface DescribeWorkspaceDirectoriesRequest {
   /**
@@ -4396,6 +4441,12 @@ export interface DescribeWorkspaceDirectoriesRequest {
    * @public
    */
   NextToken?: string;
+
+  /**
+   * <p>The filter condition for the WorkSpaces.</p>
+   * @public
+   */
+  Filters?: DescribeWorkspaceDirectoriesFilter[];
 }
 
 /**
@@ -4404,6 +4455,7 @@ export interface DescribeWorkspaceDirectoriesRequest {
  */
 export const WorkspaceDirectoryType = {
   AD_CONNECTOR: "AD_CONNECTOR",
+  AWS_IAM_IDENTITY_CENTER: "AWS_IAM_IDENTITY_CENTER",
   CUSTOMER_MANAGED: "CUSTOMER_MANAGED",
   SIMPLE_AD: "SIMPLE_AD",
 } as const;
@@ -4412,6 +4464,42 @@ export const WorkspaceDirectoryType = {
  * @public
  */
 export type WorkspaceDirectoryType = (typeof WorkspaceDirectoryType)[keyof typeof WorkspaceDirectoryType];
+
+/**
+ * <p>Specifies the configurations of the identity center.</p>
+ * @public
+ */
+export interface IDCConfig {
+  /**
+   * <p>The Amazon Resource Name (ARN) of the identity center instance.</p>
+   * @public
+   */
+  InstanceArn?: string;
+
+  /**
+   * <p>The Amazon Resource Name (ARN) of the application.</p>
+   * @public
+   */
+  ApplicationArn?: string;
+}
+
+/**
+ * <p>Specifies the configurations of the Microsoft Entra.</p>
+ * @public
+ */
+export interface MicrosoftEntraConfig {
+  /**
+   * <p>The identifier of the tenant.</p>
+   * @public
+   */
+  TenantId?: string;
+
+  /**
+   * <p>The Amazon Resource Name (ARN) of the application config.</p>
+   * @public
+   */
+  ApplicationConfigSecretArn?: string;
+}
 
 /**
  * @public
@@ -4687,6 +4775,7 @@ export type Tenancy = (typeof Tenancy)[keyof typeof Tenancy];
  */
 export const UserIdentityType = {
   AWS_DIRECTORY_SERVICE: "AWS_DIRECTORY_SERVICE",
+  AWS_IAM_IDENTITY_CENTER: "AWS_IAM_IDENTITY_CENTER",
   CUSTOMER_MANAGED: "CUSTOMER_MANAGED",
 } as const;
 
@@ -4891,6 +4980,12 @@ export interface WorkspaceDirectory {
   CertificateBasedAuthProperties?: CertificateBasedAuthProperties;
 
   /**
+   * <p>Specifies details about Microsoft Entra configurations.</p>
+   * @public
+   */
+  MicrosoftEntraConfig?: MicrosoftEntraConfig;
+
+  /**
    * <p>The name fo the WorkSpace directory.</p>
    * @public
    */
@@ -4913,6 +5008,12 @@ export interface WorkspaceDirectory {
    * @public
    */
   WorkspaceType?: WorkspaceType;
+
+  /**
+   * <p>Specifies details about identity center configurations.</p>
+   * @public
+   */
+  IDCConfig?: IDCConfig;
 
   /**
    * <p>Information about the Active Directory config.</p>
@@ -5066,6 +5167,7 @@ export interface DescribeWorkspaceImagesRequest {
 export const WorkspaceImageErrorDetailCode = {
   ADDITIONAL_DRIVES_ATTACHED: "AdditionalDrivesAttached",
   ANTI_VIRUS_INSTALLED: "AntiVirusInstalled",
+  APPX_PACKAGES_INSTALLED: "AppXPackagesInstalled",
   AUTO_LOGON_ENABLED: "AutoLogonEnabled",
   AUTO_MOUNT_DISABLED: "AutoMountDisabled",
   AZURE_DOMAIN_JOINED: "AzureDomainJoined",
@@ -5083,8 +5185,10 @@ export const WorkspaceImageErrorDetailCode = {
   PCOIP_AGENT_INSTALLED: "PCoIPAgentInstalled",
   PENDING_REBOOT: "PendingReboot",
   REALTIME_UNIVERSAL_DISABLED: "RealTimeUniversalDisabled",
+  RESERVED_STORAGE_IN_USE: "ReservedStorageInUse",
   SIXTY_FOUR_BIT_OS: "Requires64BitOS",
   UEFI_NOT_SUPPORTED: "UEFINotSupported",
+  UNKNOWN_ERROR: "UnknownError",
   VMWARE_TOOLS_INSTALLED: "VMWareToolsInstalled",
   WINDOWS_UPDATES_ENABLED: "WindowsUpdatesEnabled",
   WORKSPACES_BYOL_ACCOUNT_DISABLED: "WorkspacesBYOLAccountDisabled",
@@ -5986,6 +6090,7 @@ export const WorkspaceImageIngestionProcess = {
   BYOL_GRAPHICSPRO: "BYOL_GRAPHICSPRO",
   BYOL_GRAPHICS_G4DN: "BYOL_GRAPHICS_G4DN",
   BYOL_GRAPHICS_G4DN_BYOP: "BYOL_GRAPHICS_G4DN_BYOP",
+  BYOL_GRAPHICS_G4DN_WSP: "BYOL_GRAPHICS_G4DN_WSP",
   BYOL_REGULAR: "BYOL_REGULAR",
   BYOL_REGULAR_BYOP: "BYOL_REGULAR_BYOP",
   BYOL_REGULAR_WSP: "BYOL_REGULAR_WSP",
@@ -6009,12 +6114,12 @@ export interface ImportWorkspaceImageRequest {
 
   /**
    * <p>The ingestion process to be used when importing the image, depending on which protocol
-   *          you want to use for your BYOL Workspace image, either PCoIP, WorkSpaces Streaming Protocol
-   *          (WSP), or bring your own protocol (BYOP). To use WSP, specify a value that ends in
-   *          <code>_WSP</code>. To use PCoIP, specify a value that does not end in <code>_WSP</code>.
+   *          you want to use for your BYOL Workspace image, either PCoIP, DCV, or
+   *          bring your own protocol (BYOP). To use WSP, specify a value that ends in
+   *          <code>_DCV</code>. To use PCoIP, specify a value that does not end in <code>_DCV</code>.
    *          To use BYOP, specify a value that ends in <code>_BYOP</code>.</p>
    *          <p>For non-GPU-enabled bundles (bundles other than Graphics or GraphicsPro), specify
-   *          <code>BYOL_REGULAR</code>, <code>BYOL_REGULAR_WSP</code>, or <code>BYOL_REGULAR_BYOP</code>,
+   *          <code>BYOL_REGULAR</code>, <code>BYOL_REGULAR_DCV</code>, or <code>BYOL_REGULAR_BYOP</code>,
    *          depending on the protocol.</p>
    *          <note>
    *             <p>The <code>BYOL_REGULAR_BYOP</code> and <code>BYOL_GRAPHICS_G4DN_BYOP</code> values
@@ -6050,10 +6155,13 @@ export interface ImportWorkspaceImageRequest {
    *          <note>
    *             <ul>
    *                <li>
-   *                   <p>Although this parameter is an array, only one item is allowed at this time.</p>
+   *                   <p>Although this parameter is an array, only one item is allowed at this
+   *                   time.</p>
    *                </li>
    *                <li>
-   *                   <p>Windows 11 only supports <code>Microsoft_Office_2019</code>.</p>
+   *                   <p>During the image import process, non-GPU DCV (formerly WSP) WorkSpaces with Windows 11 support
+   *                   only <code>Microsoft_Office_2019</code>. GPU DCV (formerly WSP) WorkSpaces with Windows 11 do not
+   *                   support Office installation.</p>
    *                </li>
    *             </ul>
    *          </note>
@@ -6725,6 +6833,18 @@ export interface RegisterWorkspaceDirectoryRequest {
   UserIdentityType?: UserIdentityType;
 
   /**
+   * <p>The Amazon Resource Name (ARN) of the identity center instance.</p>
+   * @public
+   */
+  IdcInstanceArn?: string;
+
+  /**
+   * <p>The details about Microsoft Entra config.</p>
+   * @public
+   */
+  MicrosoftEntraConfig?: MicrosoftEntraConfig;
+
+  /**
    * <p>Indicates whether the directory's WorkSpace type is personal or pools.</p>
    * @public
    */
@@ -6825,41 +6945,3 @@ export interface RejectAccountLinkInvitationResult {
    */
   AccountLink?: AccountLink;
 }
-
-/**
- * @public
- */
-export interface RestoreWorkspaceRequest {
-  /**
-   * <p>The identifier of the WorkSpace.</p>
-   * @public
-   */
-  WorkspaceId: string | undefined;
-}
-
-/**
- * @public
- */
-export interface RestoreWorkspaceResult {}
-
-/**
- * @public
- */
-export interface RevokeIpRulesRequest {
-  /**
-   * <p>The identifier of the group.</p>
-   * @public
-   */
-  GroupId: string | undefined;
-
-  /**
-   * <p>The rules to remove from the group.</p>
-   * @public
-   */
-  UserRules: string[] | undefined;
-}
-
-/**
- * @public
- */
-export interface RevokeIpRulesResult {}

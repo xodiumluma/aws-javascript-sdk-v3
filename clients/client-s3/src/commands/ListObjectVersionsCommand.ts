@@ -1,4 +1,5 @@
 // smithy-typescript generated code
+import { getThrow200ExceptionsPlugin } from "@aws-sdk/middleware-sdk-s3";
 import { getEndpointPlugin } from "@smithy/middleware-endpoint";
 import { getSerdePlugin } from "@smithy/middleware-serde";
 import { Command as $Command } from "@smithy/smithy-client";
@@ -216,6 +217,7 @@ export class ListObjectVersionsCommand extends $Command
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
       getEndpointPlugin(config, Command.getEndpointParameterInstructions()),
+      getThrow200ExceptionsPlugin(config),
     ];
   })
   .s("AmazonS3", "ListObjectVersions", {})
@@ -223,4 +225,16 @@ export class ListObjectVersionsCommand extends $Command
   .f(void 0, void 0)
   .ser(se_ListObjectVersionsCommand)
   .de(de_ListObjectVersionsCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: ListObjectVersionsRequest;
+      output: ListObjectVersionsOutput;
+    };
+    sdk: {
+      input: ListObjectVersionsCommandInput;
+      output: ListObjectVersionsCommandOutput;
+    };
+  };
+}

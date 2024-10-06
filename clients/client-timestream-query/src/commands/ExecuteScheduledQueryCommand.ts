@@ -86,14 +86,16 @@ export class ExecuteScheduledQueryCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: TimestreamQueryClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
       getEndpointPlugin(config, Command.getEndpointParameterInstructions()),
-      getEndpointDiscoveryPlugin(config, { clientStack: cs, isDiscoveredEndpointRequired: true, options: o }),
+      getEndpointDiscoveryPlugin(config, {
+        clientStack: cs,
+        isDiscoveredEndpointRequired: true,
+        options: o,
+      }),
     ];
   })
   .s("Timestream_20181101", "ExecuteScheduledQuery", {})
@@ -101,4 +103,16 @@ export class ExecuteScheduledQueryCommand extends $Command
   .f(ExecuteScheduledQueryRequestFilterSensitiveLog, void 0)
   .ser(se_ExecuteScheduledQueryCommand)
   .de(de_ExecuteScheduledQueryCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: ExecuteScheduledQueryRequest;
+      output: {};
+    };
+    sdk: {
+      input: ExecuteScheduledQueryCommandInput;
+      output: ExecuteScheduledQueryCommandOutput;
+    };
+  };
+}

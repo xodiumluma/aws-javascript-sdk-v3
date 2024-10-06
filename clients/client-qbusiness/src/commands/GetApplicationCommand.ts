@@ -48,6 +48,8 @@ export interface GetApplicationCommandOutput extends GetApplicationResponse, __M
  * //   displayName: "STRING_VALUE",
  * //   applicationId: "STRING_VALUE",
  * //   applicationArn: "STRING_VALUE",
+ * //   identityType: "AWS_IAM_IDP_SAML" || "AWS_IAM_IDP_OIDC" || "AWS_IAM_IDC",
+ * //   iamIdentityProviderArn: "STRING_VALUE",
  * //   identityCenterApplicationArn: "STRING_VALUE",
  * //   roleArn: "STRING_VALUE",
  * //   status: "CREATING" || "ACTIVE" || "DELETING" || "FAILED" || "UPDATING",
@@ -70,6 +72,13 @@ export interface GetApplicationCommandOutput extends GetApplicationResponse, __M
  * //   personalizationConfiguration: { // PersonalizationConfiguration
  * //     personalizationControlMode: "ENABLED" || "DISABLED", // required
  * //   },
+ * //   autoSubscriptionConfiguration: { // AutoSubscriptionConfiguration
+ * //     autoSubscribe: "ENABLED" || "DISABLED", // required
+ * //     defaultSubscriptionType: "Q_LITE" || "Q_BUSINESS",
+ * //   },
+ * //   clientIdsForOIDC: [ // ClientIdsForOIDC
+ * //     "STRING_VALUE",
+ * //   ],
  * // };
  *
  * ```
@@ -113,9 +122,7 @@ export class GetApplicationCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: QBusinessClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -127,4 +134,16 @@ export class GetApplicationCommand extends $Command
   .f(void 0, GetApplicationResponseFilterSensitiveLog)
   .ser(se_GetApplicationCommand)
   .de(de_GetApplicationCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: GetApplicationRequest;
+      output: GetApplicationResponse;
+    };
+    sdk: {
+      input: GetApplicationCommandInput;
+      output: GetApplicationCommandOutput;
+    };
+  };
+}

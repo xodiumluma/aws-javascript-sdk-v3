@@ -66,7 +66,9 @@ export class PutWithContentEncodingCommand extends $Command
   .m(function (this: any, Command: any, cs: any, config: JSONRPC10ClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
-      getCompressionPlugin(config, { encodings: ["gzip"] }),
+      getCompressionPlugin(config, {
+        encodings: ["gzip"],
+      }),
     ];
   })
   .s("JsonRpc10", "PutWithContentEncoding", {})
@@ -74,4 +76,16 @@ export class PutWithContentEncodingCommand extends $Command
   .f(void 0, void 0)
   .ser(se_PutWithContentEncodingCommand)
   .de(de_PutWithContentEncodingCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: PutWithContentEncodingInput;
+      output: {};
+    };
+    sdk: {
+      input: PutWithContentEncodingCommandInput;
+      output: PutWithContentEncodingCommandOutput;
+    };
+  };
+}

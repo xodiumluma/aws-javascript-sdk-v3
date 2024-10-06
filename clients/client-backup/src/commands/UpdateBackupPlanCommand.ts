@@ -32,9 +32,7 @@ export interface UpdateBackupPlanCommandInput extends UpdateBackupPlanInput {}
 export interface UpdateBackupPlanCommandOutput extends UpdateBackupPlanOutput, __MetadataBearer {}
 
 /**
- * <p>Updates an existing backup plan identified by its <code>backupPlanId</code> with the
- *          input document in JSON format. The new version is uniquely identified by a
- *             <code>VersionId</code>.</p>
+ * <p>Updates the specified backup plan. The new version is uniquely identified by its ID.</p>
  * @example
  * Use a bare-bones client and the command you need to make an API call.
  * ```javascript
@@ -135,9 +133,7 @@ export class UpdateBackupPlanCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: BackupClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -149,4 +145,16 @@ export class UpdateBackupPlanCommand extends $Command
   .f(UpdateBackupPlanInputFilterSensitiveLog, void 0)
   .ser(se_UpdateBackupPlanCommand)
   .de(de_UpdateBackupPlanCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: UpdateBackupPlanInput;
+      output: UpdateBackupPlanOutput;
+    };
+    sdk: {
+      input: UpdateBackupPlanCommandInput;
+      output: UpdateBackupPlanCommandOutput;
+    };
+  };
+}

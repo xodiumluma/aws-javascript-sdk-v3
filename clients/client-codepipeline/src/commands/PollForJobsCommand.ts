@@ -156,9 +156,7 @@ export class PollForJobsCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: CodePipelineClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -170,4 +168,16 @@ export class PollForJobsCommand extends $Command
   .f(void 0, PollForJobsOutputFilterSensitiveLog)
   .ser(se_PollForJobsCommand)
   .de(de_PollForJobsCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: PollForJobsInput;
+      output: PollForJobsOutput;
+    };
+    sdk: {
+      input: PollForJobsCommandInput;
+      output: PollForJobsCommandOutput;
+    };
+  };
+}

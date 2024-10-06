@@ -10,7 +10,7 @@ import {
   GetSubscriptionInput,
   GetSubscriptionOutput,
   GetSubscriptionOutputFilterSensitiveLog,
-} from "../models/models_0";
+} from "../models/models_1";
 import { de_GetSubscriptionCommand, se_GetSubscriptionCommand } from "../protocols/Aws_restJson1";
 
 /**
@@ -76,6 +76,33 @@ export interface GetSubscriptionCommandOutput extends GetSubscriptionOutput, __M
  * //             shortDescription: "STRING_VALUE",
  * //           },
  * //         ],
+ * //         assetScope: { // AssetScope
+ * //           assetId: "STRING_VALUE", // required
+ * //           filterIds: [ // FilterIds // required
+ * //             "STRING_VALUE",
+ * //           ],
+ * //           status: "STRING_VALUE", // required
+ * //           errorMessage: "STRING_VALUE",
+ * //         },
+ * //       },
+ * //       productListing: { // SubscribedProductListing
+ * //         entityId: "STRING_VALUE",
+ * //         entityRevision: "STRING_VALUE",
+ * //         glossaryTerms: [
+ * //           {
+ * //             name: "STRING_VALUE",
+ * //             shortDescription: "STRING_VALUE",
+ * //           },
+ * //         ],
+ * //         name: "STRING_VALUE",
+ * //         description: "STRING_VALUE",
+ * //         assetListings: [ // AssetInDataProductListingItems
+ * //           { // AssetInDataProductListingItem
+ * //             entityId: "STRING_VALUE",
+ * //             entityRevision: "STRING_VALUE",
+ * //             entityType: "STRING_VALUE",
+ * //           },
+ * //         ],
  * //       },
  * //     },
  * //     ownerProjectId: "STRING_VALUE", // required
@@ -124,9 +151,7 @@ export class GetSubscriptionCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: DataZoneClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -138,4 +163,16 @@ export class GetSubscriptionCommand extends $Command
   .f(void 0, GetSubscriptionOutputFilterSensitiveLog)
   .ser(se_GetSubscriptionCommand)
   .de(de_GetSubscriptionCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: GetSubscriptionInput;
+      output: GetSubscriptionOutput;
+    };
+    sdk: {
+      input: GetSubscriptionCommandInput;
+      output: GetSubscriptionCommandOutput;
+    };
+  };
+}

@@ -90,6 +90,7 @@ export interface InvokeAgentCommandOutput extends InvokeAgentResponse, __Metadat
  *           actionGroup: "STRING_VALUE", // required
  *           httpMethod: "STRING_VALUE",
  *           apiPath: "STRING_VALUE",
+ *           confirmationState: "CONFIRM" || "DENY",
  *           responseBody: { // ResponseBody
  *             "<keys>": { // ContentBody
  *               body: "STRING_VALUE",
@@ -100,6 +101,7 @@ export interface InvokeAgentCommandOutput extends InvokeAgentResponse, __Metadat
  *         },
  *         functionResult: { // FunctionResult
  *           actionGroup: "STRING_VALUE", // required
+ *           confirmationState: "CONFIRM" || "DENY",
  *           function: "STRING_VALUE",
  *           responseBody: {
  *             "<keys>": {
@@ -391,6 +393,15 @@ export interface InvokeAgentCommandOutput extends InvokeAgentResponse, __Metadat
  * //               rationale: "STRING_VALUE",
  * //               isValid: true || false,
  * //             },
+ * //             rawResponse: { // RawResponse
+ * //               content: "STRING_VALUE",
+ * //             },
+ * //             metadata: { // Metadata
+ * //               usage: { // Usage
+ * //                 inputTokens: Number("int"),
+ * //                 outputTokens: Number("int"),
+ * //               },
+ * //             },
  * //           },
  * //         },
  * //         orchestrationTrace: { // OrchestrationTrace Union: only one key present
@@ -507,6 +518,18 @@ export interface InvokeAgentCommandOutput extends InvokeAgentResponse, __Metadat
  * //             promptCreationMode: "DEFAULT" || "OVERRIDDEN",
  * //             parserMode: "DEFAULT" || "OVERRIDDEN",
  * //           },
+ * //           modelInvocationOutput: { // OrchestrationModelInvocationOutput
+ * //             traceId: "STRING_VALUE",
+ * //             rawResponse: {
+ * //               content: "STRING_VALUE",
+ * //             },
+ * //             metadata: {
+ * //               usage: {
+ * //                 inputTokens: Number("int"),
+ * //                 outputTokens: Number("int"),
+ * //               },
+ * //             },
+ * //           },
  * //         },
  * //         postProcessingTrace: { // PostProcessingTrace Union: only one key present
  * //           modelInvocationInput: {
@@ -530,6 +553,15 @@ export interface InvokeAgentCommandOutput extends InvokeAgentResponse, __Metadat
  * //             traceId: "STRING_VALUE",
  * //             parsedResponse: { // PostProcessingParsedResponse
  * //               text: "STRING_VALUE",
+ * //             },
+ * //             rawResponse: {
+ * //               content: "STRING_VALUE",
+ * //             },
+ * //             metadata: {
+ * //               usage: {
+ * //                 inputTokens: Number("int"),
+ * //                 outputTokens: Number("int"),
+ * //               },
  * //             },
  * //           },
  * //         },
@@ -566,6 +598,7 @@ export interface InvokeAgentCommandOutput extends InvokeAgentResponse, __Metadat
  * //                 },
  * //               },
  * //             },
+ * //             actionInvocationType: "RESULT" || "USER_CONFIRMATION" || "USER_CONFIRMATION_AND_RESULT",
  * //           },
  * //           functionInvocationInput: { // FunctionInvocationInput
  * //             actionGroup: "STRING_VALUE", // required
@@ -577,6 +610,7 @@ export interface InvokeAgentCommandOutput extends InvokeAgentResponse, __Metadat
  * //               },
  * //             ],
  * //             function: "STRING_VALUE",
+ * //             actionInvocationType: "RESULT" || "USER_CONFIRMATION" || "USER_CONFIRMATION_AND_RESULT",
  * //           },
  * //         },
  * //       ],
@@ -674,9 +708,7 @@ export class InvokeAgentCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: BedrockAgentRuntimeClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -695,4 +727,16 @@ export class InvokeAgentCommand extends $Command
   .f(InvokeAgentRequestFilterSensitiveLog, InvokeAgentResponseFilterSensitiveLog)
   .ser(se_InvokeAgentCommand)
   .de(de_InvokeAgentCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: InvokeAgentRequest;
+      output: InvokeAgentResponse;
+    };
+    sdk: {
+      input: InvokeAgentCommandInput;
+      output: InvokeAgentCommandOutput;
+    };
+  };
+}

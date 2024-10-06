@@ -14,6 +14,7 @@ import {
   expectObject as __expectObject,
   expectString as __expectString,
   extendedEncodeURIComponent as __extendedEncodeURIComponent,
+  isSerializableHeaderValue,
   limitedParseDouble as __limitedParseDouble,
   map,
   parseEpochTimestamp as __parseEpochTimestamp,
@@ -107,6 +108,10 @@ import {
   GetFunctionEventInvokeConfigCommandOutput,
 } from "../commands/GetFunctionEventInvokeConfigCommand";
 import {
+  GetFunctionRecursionConfigCommandInput,
+  GetFunctionRecursionConfigCommandOutput,
+} from "../commands/GetFunctionRecursionConfigCommand";
+import {
   GetFunctionUrlConfigCommandInput,
   GetFunctionUrlConfigCommandOutput,
 } from "../commands/GetFunctionUrlConfigCommand";
@@ -184,6 +189,10 @@ import {
   PutFunctionEventInvokeConfigCommandInput,
   PutFunctionEventInvokeConfigCommandOutput,
 } from "../commands/PutFunctionEventInvokeConfigCommand";
+import {
+  PutFunctionRecursionConfigCommandInput,
+  PutFunctionRecursionConfigCommandOutput,
+} from "../commands/PutFunctionRecursionConfigCommand";
 import {
   PutProvisionedConcurrencyConfigCommandInput,
   PutProvisionedConcurrencyConfigCommandOutput,
@@ -407,6 +416,7 @@ export const se_CreateCodeSigningConfigCommand = async (
       AllowedPublishers: (_) => _json(_),
       CodeSigningPolicies: (_) => _json(_),
       Description: [],
+      Tags: (_) => _json(_),
     })
   );
   b.m("POST").h(headers).b(body);
@@ -438,6 +448,7 @@ export const se_CreateEventSourceMappingCommand = async (
       FilterCriteria: (_) => _json(_),
       FunctionName: [],
       FunctionResponseTypes: (_) => _json(_),
+      KMSKeyArn: [],
       MaximumBatchingWindowInSeconds: [],
       MaximumRecordAgeInSeconds: [],
       MaximumRetryAttempts: [],
@@ -449,6 +460,7 @@ export const se_CreateEventSourceMappingCommand = async (
       SourceAccessConfigurations: (_) => _json(_),
       StartingPosition: [],
       StartingPositionTimestamp: (_) => _.getTime() / 1_000,
+      Tags: (_) => _json(_),
       Topics: (_) => _json(_),
       TumblingWindowInSeconds: [],
     })
@@ -854,6 +866,22 @@ export const se_GetFunctionEventInvokeConfigCommand = async (
   });
   let body: any;
   b.m("GET").h(headers).q(query).b(body);
+  return b.build();
+};
+
+/**
+ * serializeAws_restJson1GetFunctionRecursionConfigCommand
+ */
+export const se_GetFunctionRecursionConfigCommand = async (
+  input: GetFunctionRecursionConfigCommandInput,
+  context: __SerdeContext
+): Promise<__HttpRequest> => {
+  const b = rb(input, context);
+  const headers: any = {};
+  b.bp("/2024-08-31/functions/{FunctionName}/recursion-config");
+  b.p("FunctionName", () => input.FunctionName!, "{FunctionName}", false);
+  let body: any;
+  b.m("GET").h(headers).b(body);
   return b.build();
 };
 
@@ -1427,6 +1455,29 @@ export const se_PutFunctionEventInvokeConfigCommand = async (
 };
 
 /**
+ * serializeAws_restJson1PutFunctionRecursionConfigCommand
+ */
+export const se_PutFunctionRecursionConfigCommand = async (
+  input: PutFunctionRecursionConfigCommandInput,
+  context: __SerdeContext
+): Promise<__HttpRequest> => {
+  const b = rb(input, context);
+  const headers: any = {
+    "content-type": "application/json",
+  };
+  b.bp("/2024-08-31/functions/{FunctionName}/recursion-config");
+  b.p("FunctionName", () => input.FunctionName!, "{FunctionName}", false);
+  let body: any;
+  body = JSON.stringify(
+    take(input, {
+      RecursiveLoop: [],
+    })
+  );
+  b.m("PUT").h(headers).b(body);
+  return b.build();
+};
+
+/**
  * serializeAws_restJson1PutProvisionedConcurrencyConfigCommand
  */
 export const se_PutProvisionedConcurrencyConfigCommand = async (
@@ -1556,10 +1607,7 @@ export const se_UntagResourceCommand = async (
   b.bp("/2017-03-31/tags/{Resource}");
   b.p("Resource", () => input.Resource!, "{Resource}", false);
   const query: any = map({
-    [_tK]: [
-      __expectNonNull(input.TagKeys, `TagKeys`) != null,
-      () => (input[_TK]! || []).map((_entry) => _entry as any),
-    ],
+    [_tK]: [__expectNonNull(input.TagKeys, `TagKeys`) != null, () => input[_TK]! || []],
   });
   let body: any;
   b.m("DELETE").h(headers).q(query).b(body);
@@ -1642,6 +1690,7 @@ export const se_UpdateEventSourceMappingCommand = async (
       FilterCriteria: (_) => _json(_),
       FunctionName: [],
       FunctionResponseTypes: (_) => _json(_),
+      KMSKeyArn: [],
       MaximumBatchingWindowInSeconds: [],
       MaximumRecordAgeInSeconds: [],
       MaximumRetryAttempts: [],
@@ -1893,9 +1942,12 @@ export const de_CreateEventSourceMappingCommand = async (
     DestinationConfig: _json,
     DocumentDBEventSourceConfig: _json,
     EventSourceArn: __expectString,
+    EventSourceMappingArn: __expectString,
     FilterCriteria: _json,
+    FilterCriteriaError: _json,
     FunctionArn: __expectString,
     FunctionResponseTypes: _json,
+    KMSKeyArn: __expectString,
     LastModified: (_) => __expectNonNull(__parseEpochTimestamp(__expectNumber(_))),
     LastProcessingResult: __expectString,
     MaximumBatchingWindowInSeconds: __expectInt32,
@@ -2056,9 +2108,12 @@ export const de_DeleteEventSourceMappingCommand = async (
     DestinationConfig: _json,
     DocumentDBEventSourceConfig: _json,
     EventSourceArn: __expectString,
+    EventSourceMappingArn: __expectString,
     FilterCriteria: _json,
+    FilterCriteriaError: _json,
     FunctionArn: __expectString,
     FunctionResponseTypes: _json,
+    KMSKeyArn: __expectString,
     LastModified: (_) => __expectNonNull(__parseEpochTimestamp(__expectNumber(_))),
     LastProcessingResult: __expectString,
     MaximumBatchingWindowInSeconds: __expectInt32,
@@ -2291,9 +2346,12 @@ export const de_GetEventSourceMappingCommand = async (
     DestinationConfig: _json,
     DocumentDBEventSourceConfig: _json,
     EventSourceArn: __expectString,
+    EventSourceMappingArn: __expectString,
     FilterCriteria: _json,
+    FilterCriteriaError: _json,
     FunctionArn: __expectString,
     FunctionResponseTypes: _json,
+    KMSKeyArn: __expectString,
     LastModified: (_) => __expectNonNull(__parseEpochTimestamp(__expectNumber(_))),
     LastProcessingResult: __expectString,
     MaximumBatchingWindowInSeconds: __expectInt32,
@@ -2460,6 +2518,27 @@ export const de_GetFunctionEventInvokeConfigCommand = async (
     LastModified: (_) => __expectNonNull(__parseEpochTimestamp(__expectNumber(_))),
     MaximumEventAgeInSeconds: __expectInt32,
     MaximumRetryAttempts: __expectInt32,
+  });
+  Object.assign(contents, doc);
+  return contents;
+};
+
+/**
+ * deserializeAws_restJson1GetFunctionRecursionConfigCommand
+ */
+export const de_GetFunctionRecursionConfigCommand = async (
+  output: __HttpResponse,
+  context: __SerdeContext
+): Promise<GetFunctionRecursionConfigCommandOutput> => {
+  if (output.statusCode !== 200 && output.statusCode >= 300) {
+    return de_CommandError(output, context);
+  }
+  const contents: any = map({
+    $metadata: deserializeMetadata(output),
+  });
+  const data: Record<string, any> = __expectNonNull(__expectObject(await parseBody(output.body, context)), "body");
+  const doc = take(data, {
+    RecursiveLoop: __expectString,
   });
   Object.assign(contents, doc);
   return contents;
@@ -3127,6 +3206,27 @@ export const de_PutFunctionEventInvokeConfigCommand = async (
 };
 
 /**
+ * deserializeAws_restJson1PutFunctionRecursionConfigCommand
+ */
+export const de_PutFunctionRecursionConfigCommand = async (
+  output: __HttpResponse,
+  context: __SerdeContext
+): Promise<PutFunctionRecursionConfigCommandOutput> => {
+  if (output.statusCode !== 200 && output.statusCode >= 300) {
+    return de_CommandError(output, context);
+  }
+  const contents: any = map({
+    $metadata: deserializeMetadata(output),
+  });
+  const data: Record<string, any> = __expectNonNull(__expectObject(await parseBody(output.body, context)), "body");
+  const doc = take(data, {
+    RecursiveLoop: __expectString,
+  });
+  Object.assign(contents, doc);
+  return contents;
+};
+
+/**
  * deserializeAws_restJson1PutProvisionedConcurrencyConfigCommand
  */
 export const de_PutProvisionedConcurrencyConfigCommand = async (
@@ -3311,9 +3411,12 @@ export const de_UpdateEventSourceMappingCommand = async (
     DestinationConfig: _json,
     DocumentDBEventSourceConfig: _json,
     EventSourceArn: __expectString,
+    EventSourceMappingArn: __expectString,
     FilterCriteria: _json,
+    FilterCriteriaError: _json,
     FunctionArn: __expectString,
     FunctionResponseTypes: _json,
+    KMSKeyArn: __expectString,
     LastModified: (_) => __expectNonNull(__parseEpochTimestamp(__expectNumber(_))),
     LastProcessingResult: __expectString,
     MaximumBatchingWindowInSeconds: __expectInt32,
@@ -4707,9 +4810,12 @@ const de_EventSourceMappingConfiguration = (output: any, context: __SerdeContext
     DestinationConfig: _json,
     DocumentDBEventSourceConfig: _json,
     EventSourceArn: __expectString,
+    EventSourceMappingArn: __expectString,
     FilterCriteria: _json,
+    FilterCriteriaError: _json,
     FunctionArn: __expectString,
     FunctionResponseTypes: _json,
+    KMSKeyArn: __expectString,
     LastModified: (_: any) => __expectNonNull(__parseEpochTimestamp(__expectNumber(_))),
     LastProcessingResult: __expectString,
     MaximumBatchingWindowInSeconds: __expectInt32,
@@ -4750,6 +4856,8 @@ const de_EventSourceMappingsList = (output: any, context: __SerdeContext): Event
 // de_Filter omitted.
 
 // de_FilterCriteria omitted.
+
+// de_FilterCriteriaError omitted.
 
 // de_FilterList omitted.
 
@@ -4871,13 +4979,6 @@ const deserializeMetadata = (output: __HttpResponse): __ResponseMetadata => ({
 // Encode Uint8Array data into string with utf-8.
 const collectBodyString = (streamBody: any, context: __SerdeContext): Promise<string> =>
   collectBody(streamBody, context).then((body) => context.utf8Encoder(body));
-
-const isSerializableHeaderValue = (value: any): boolean =>
-  value !== undefined &&
-  value !== null &&
-  value !== "" &&
-  (!Object.getOwnPropertyNames(value).includes("length") || value.length != 0) &&
-  (!Object.getOwnPropertyNames(value).includes("size") || value.size != 0);
 
 const _A = "Arn";
 const _CA = "CompatibleArchitecture";

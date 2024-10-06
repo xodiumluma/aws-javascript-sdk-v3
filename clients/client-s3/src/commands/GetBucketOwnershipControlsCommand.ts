@@ -1,4 +1,5 @@
 // smithy-typescript generated code
+import { getThrow200ExceptionsPlugin } from "@aws-sdk/middleware-sdk-s3";
 import { getEndpointPlugin } from "@smithy/middleware-endpoint";
 import { getSerdePlugin } from "@smithy/middleware-serde";
 import { Command as $Command } from "@smithy/smithy-client";
@@ -102,6 +103,7 @@ export class GetBucketOwnershipControlsCommand extends $Command
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
       getEndpointPlugin(config, Command.getEndpointParameterInstructions()),
+      getThrow200ExceptionsPlugin(config),
     ];
   })
   .s("AmazonS3", "GetBucketOwnershipControls", {})
@@ -109,4 +111,16 @@ export class GetBucketOwnershipControlsCommand extends $Command
   .f(void 0, void 0)
   .ser(se_GetBucketOwnershipControlsCommand)
   .de(de_GetBucketOwnershipControlsCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: GetBucketOwnershipControlsRequest;
+      output: GetBucketOwnershipControlsOutput;
+    };
+    sdk: {
+      input: GetBucketOwnershipControlsCommandInput;
+      output: GetBucketOwnershipControlsCommandOutput;
+    };
+  };
+}

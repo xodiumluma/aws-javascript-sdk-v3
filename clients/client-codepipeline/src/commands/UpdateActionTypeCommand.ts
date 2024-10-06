@@ -130,9 +130,7 @@ export class UpdateActionTypeCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: CodePipelineClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -144,4 +142,16 @@ export class UpdateActionTypeCommand extends $Command
   .f(void 0, void 0)
   .ser(se_UpdateActionTypeCommand)
   .de(de_UpdateActionTypeCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: UpdateActionTypeInput;
+      output: {};
+    };
+    sdk: {
+      input: UpdateActionTypeCommandInput;
+      output: UpdateActionTypeCommandOutput;
+    };
+  };
+}

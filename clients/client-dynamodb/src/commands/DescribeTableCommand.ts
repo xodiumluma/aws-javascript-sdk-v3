@@ -31,8 +31,8 @@ export interface DescribeTableCommandOutput extends DescribeTableOutput, __Metad
  * <p>Returns information about the table, including the current status of the table, when
  *             it was created, the primary key schema, and any indexes on the table.</p>
  *          <important>
- *             <p>For global tables, this operation only applies to global tables using Version 2019.11.21 (Current version).
- *             </p>
+ *             <p>For global tables, this operation only applies to global tables using Version
+ *                 2019.11.21 (Current version). </p>
  *          </important>
  *          <note>
  *             <p>If you issue a <code>DescribeTable</code> request immediately after a
@@ -282,9 +282,7 @@ export class DescribeTableCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: DynamoDBClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -296,4 +294,16 @@ export class DescribeTableCommand extends $Command
   .f(void 0, void 0)
   .ser(se_DescribeTableCommand)
   .de(de_DescribeTableCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: DescribeTableInput;
+      output: DescribeTableOutput;
+    };
+    sdk: {
+      input: DescribeTableCommandInput;
+      output: DescribeTableCommandOutput;
+    };
+  };
+}

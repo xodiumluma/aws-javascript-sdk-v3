@@ -129,6 +129,18 @@ export interface StartAppAssessmentCommandOutput extends StartAppAssessmentRespo
  * //     },
  * //     versionName: "STRING_VALUE",
  * //     driftStatus: "STRING_VALUE",
+ * //     summary: { // AssessmentSummary
+ * //       summary: "STRING_VALUE",
+ * //       riskRecommendations: [ // AssessmentRiskRecommendationList
+ * //         { // AssessmentRiskRecommendation
+ * //           risk: "STRING_VALUE",
+ * //           recommendation: "STRING_VALUE",
+ * //           appComponents: [ // AppComponentNameList
+ * //             "STRING_VALUE",
+ * //           ],
+ * //         },
+ * //       ],
+ * //     },
  * //   },
  * // };
  *
@@ -181,9 +193,7 @@ export class StartAppAssessmentCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: ResiliencehubClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -195,4 +205,16 @@ export class StartAppAssessmentCommand extends $Command
   .f(StartAppAssessmentRequestFilterSensitiveLog, StartAppAssessmentResponseFilterSensitiveLog)
   .ser(se_StartAppAssessmentCommand)
   .de(de_StartAppAssessmentCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: StartAppAssessmentRequest;
+      output: StartAppAssessmentResponse;
+    };
+    sdk: {
+      input: StartAppAssessmentCommandInput;
+      output: StartAppAssessmentCommandOutput;
+    };
+  };
+}

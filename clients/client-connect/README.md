@@ -9,8 +9,7 @@ AWS SDK for JavaScript Connect Client for Node.js, Browser and React Native.
 <ul>
 <li>
 <p>
-<a href="https://docs.aws.amazon.com/connect/latest/APIReference/API_Operations_Amazon_Connect_Service.html">Amazon Connect
-actions</a>
+<a href="https://docs.aws.amazon.com/connect/latest/APIReference/API_Operations_Amazon_Connect_Service.html">Amazon Connect actions</a>
 </p>
 </li>
 <li>
@@ -1613,6 +1612,14 @@ ResumeContactRecording
 </details>
 <details>
 <summary>
+SearchAgentStatuses
+</summary>
+
+[Command API Reference](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/connect/command/SearchAgentStatusesCommand/) / [Input](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/Package/-aws-sdk-client-connect/Interface/SearchAgentStatusesCommandInput/) / [Output](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/Package/-aws-sdk-client-connect/Interface/SearchAgentStatusesCommandOutput/)
+
+</details>
+<details>
+<summary>
 SearchAvailablePhoneNumbers
 </summary>
 
@@ -1709,6 +1716,14 @@ SearchSecurityProfiles
 </details>
 <details>
 <summary>
+SearchUserHierarchyGroups
+</summary>
+
+[Command API Reference](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/connect/command/SearchUserHierarchyGroupsCommand/) / [Input](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/Package/-aws-sdk-client-connect/Interface/SearchUserHierarchyGroupsCommandInput/) / [Output](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/Package/-aws-sdk-client-connect/Interface/SearchUserHierarchyGroupsCommandOutput/)
+
+</details>
+<details>
+<summary>
 SearchUsers
 </summary>
 
@@ -1769,6 +1784,14 @@ StartContactStreaming
 </summary>
 
 [Command API Reference](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/connect/command/StartContactStreamingCommand/) / [Input](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/Package/-aws-sdk-client-connect/Interface/StartContactStreamingCommandInput/) / [Output](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/Package/-aws-sdk-client-connect/Interface/StartContactStreamingCommandOutput/)
+
+</details>
+<details>
+<summary>
+StartOutboundChatContact
+</summary>
+
+[Command API Reference](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/connect/command/StartOutboundChatContactCommand/) / [Input](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/Package/-aws-sdk-client-connect/Interface/StartOutboundChatContactCommandInput/) / [Output](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/Package/-aws-sdk-client-connect/Interface/StartOutboundChatContactCommandOutput/)
 
 </details>
 <details>

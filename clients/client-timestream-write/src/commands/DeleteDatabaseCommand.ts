@@ -97,14 +97,16 @@ export class DeleteDatabaseCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: TimestreamWriteClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
       getEndpointPlugin(config, Command.getEndpointParameterInstructions()),
-      getEndpointDiscoveryPlugin(config, { clientStack: cs, isDiscoveredEndpointRequired: true, options: o }),
+      getEndpointDiscoveryPlugin(config, {
+        clientStack: cs,
+        isDiscoveredEndpointRequired: true,
+        options: o,
+      }),
     ];
   })
   .s("Timestream_20181101", "DeleteDatabase", {})
@@ -112,4 +114,16 @@ export class DeleteDatabaseCommand extends $Command
   .f(void 0, void 0)
   .ser(se_DeleteDatabaseCommand)
   .de(de_DeleteDatabaseCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: DeleteDatabaseRequest;
+      output: {};
+    };
+    sdk: {
+      input: DeleteDatabaseCommandInput;
+      output: DeleteDatabaseCommandOutput;
+    };
+  };
+}

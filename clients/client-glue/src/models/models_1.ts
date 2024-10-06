@@ -7,31 +7,28 @@ import {
   Action,
   AuthenticationConfiguration,
   AuthenticationConfigurationInput,
+  AuthenticationConfigurationInputFilterSensitiveLog,
   Blueprint,
   Column,
   ConnectionsList,
   Crawler,
   CrawlerTargets,
-  CreateCsvClassifierRequest,
-  CreateGrokClassifierRequest,
-  CreateJsonClassifierRequest,
-  CsvHeaderOption,
-  CsvSerdeOption,
-  DataFormat,
   DataQualityAnalyzerResult,
+  DataQualityAnalyzerResultFilterSensitiveLog,
   DataQualityObservation,
+  DataQualityObservationFilterSensitiveLog,
   DataQualityRuleResult,
+  DataQualityRuleResultFilterSensitiveLog,
   DataSource,
   DevEndpoint,
   ErrorDetail,
   EventBatchingCondition,
   GlueTable,
+  InclusionAnnotationValue,
   JobRun,
   LakeFormationConfiguration,
   LineageConfiguration,
-  Partition,
   PartitionInput,
-  PartitionValueList,
   Predicate,
   RecrawlPolicy,
   SchemaChangePolicy,
@@ -39,10 +36,374 @@ import {
   StorageDescriptor,
   TableOptimizerConfiguration,
   TableOptimizerType,
-  TaskStatusType,
   TriggerType,
   WorkerType,
 } from "./models_0";
+
+/**
+ * @public
+ */
+export interface CancelDataQualityRulesetEvaluationRunRequest {
+  /**
+   * <p>The unique run identifier associated with this run.</p>
+   * @public
+   */
+  RunId: string | undefined;
+}
+
+/**
+ * @public
+ */
+export interface CancelDataQualityRulesetEvaluationRunResponse {}
+
+/**
+ * @public
+ */
+export interface CancelMLTaskRunRequest {
+  /**
+   * <p>The unique identifier of the machine learning transform.</p>
+   * @public
+   */
+  TransformId: string | undefined;
+
+  /**
+   * <p>A unique identifier for the task run.</p>
+   * @public
+   */
+  TaskRunId: string | undefined;
+}
+
+/**
+ * @public
+ * @enum
+ */
+export const TaskStatusType = {
+  FAILED: "FAILED",
+  RUNNING: "RUNNING",
+  STARTING: "STARTING",
+  STOPPED: "STOPPED",
+  STOPPING: "STOPPING",
+  SUCCEEDED: "SUCCEEDED",
+  TIMEOUT: "TIMEOUT",
+} as const;
+
+/**
+ * @public
+ */
+export type TaskStatusType = (typeof TaskStatusType)[keyof typeof TaskStatusType];
+
+/**
+ * @public
+ */
+export interface CancelMLTaskRunResponse {
+  /**
+   * <p>The unique identifier of the machine learning transform.</p>
+   * @public
+   */
+  TransformId?: string;
+
+  /**
+   * <p>The unique identifier for the task run.</p>
+   * @public
+   */
+  TaskRunId?: string;
+
+  /**
+   * <p>The status for this run.</p>
+   * @public
+   */
+  Status?: TaskStatusType;
+}
+
+/**
+ * @public
+ */
+export interface CancelStatementRequest {
+  /**
+   * <p>The Session ID of the statement to be cancelled.</p>
+   * @public
+   */
+  SessionId: string | undefined;
+
+  /**
+   * <p>The ID of the statement to be cancelled.</p>
+   * @public
+   */
+  Id: number | undefined;
+
+  /**
+   * <p>The origin of the request to cancel the statement.</p>
+   * @public
+   */
+  RequestOrigin?: string;
+}
+
+/**
+ * @public
+ */
+export interface CancelStatementResponse {}
+
+/**
+ * <p>The session is in an invalid state to perform a requested operation.</p>
+ * @public
+ */
+export class IllegalSessionStateException extends __BaseException {
+  readonly name: "IllegalSessionStateException" = "IllegalSessionStateException";
+  readonly $fault: "client" = "client";
+  /**
+   * <p>A message describing the problem.</p>
+   * @public
+   */
+  Message?: string;
+  /**
+   * @internal
+   */
+  constructor(opts: __ExceptionOptionType<IllegalSessionStateException, __BaseException>) {
+    super({
+      name: "IllegalSessionStateException",
+      $fault: "client",
+      ...opts,
+    });
+    Object.setPrototypeOf(this, IllegalSessionStateException.prototype);
+    this.Message = opts.Message;
+  }
+}
+
+/**
+ * @public
+ * @enum
+ */
+export const DataFormat = {
+  AVRO: "AVRO",
+  JSON: "JSON",
+  PROTOBUF: "PROTOBUF",
+} as const;
+
+/**
+ * @public
+ */
+export type DataFormat = (typeof DataFormat)[keyof typeof DataFormat];
+
+/**
+ * @public
+ */
+export interface CheckSchemaVersionValidityInput {
+  /**
+   * <p>The data format of the schema definition. Currently <code>AVRO</code>, <code>JSON</code> and <code>PROTOBUF</code> are supported.</p>
+   * @public
+   */
+  DataFormat: DataFormat | undefined;
+
+  /**
+   * <p>The definition of the schema that has to be validated.</p>
+   * @public
+   */
+  SchemaDefinition: string | undefined;
+}
+
+/**
+ * @public
+ */
+export interface CheckSchemaVersionValidityResponse {
+  /**
+   * <p>Return true, if the schema is valid and false otherwise.</p>
+   * @public
+   */
+  Valid?: boolean;
+
+  /**
+   * <p>A validation failure error message.</p>
+   * @public
+   */
+  Error?: string;
+}
+
+/**
+ * @public
+ */
+export interface CreateBlueprintRequest {
+  /**
+   * <p>The name of the blueprint.</p>
+   * @public
+   */
+  Name: string | undefined;
+
+  /**
+   * <p>A description of the blueprint.</p>
+   * @public
+   */
+  Description?: string;
+
+  /**
+   * <p>Specifies a path in Amazon S3 where the blueprint is published.</p>
+   * @public
+   */
+  BlueprintLocation: string | undefined;
+
+  /**
+   * <p>The tags to be applied to this blueprint.</p>
+   * @public
+   */
+  Tags?: Record<string, string>;
+}
+
+/**
+ * @public
+ */
+export interface CreateBlueprintResponse {
+  /**
+   * <p>Returns the name of the blueprint that was registered.</p>
+   * @public
+   */
+  Name?: string;
+}
+
+/**
+ * @public
+ * @enum
+ */
+export const CsvHeaderOption = {
+  ABSENT: "ABSENT",
+  PRESENT: "PRESENT",
+  UNKNOWN: "UNKNOWN",
+} as const;
+
+/**
+ * @public
+ */
+export type CsvHeaderOption = (typeof CsvHeaderOption)[keyof typeof CsvHeaderOption];
+
+/**
+ * @public
+ * @enum
+ */
+export const CsvSerdeOption = {
+  LazySimpleSerDe: "LazySimpleSerDe",
+  None: "None",
+  OpenCSVSerDe: "OpenCSVSerDe",
+} as const;
+
+/**
+ * @public
+ */
+export type CsvSerdeOption = (typeof CsvSerdeOption)[keyof typeof CsvSerdeOption];
+
+/**
+ * <p>Specifies a custom CSV classifier for <code>CreateClassifier</code> to create.</p>
+ * @public
+ */
+export interface CreateCsvClassifierRequest {
+  /**
+   * <p>The name of the classifier.</p>
+   * @public
+   */
+  Name: string | undefined;
+
+  /**
+   * <p>A custom symbol to denote what separates each column entry in the row.</p>
+   * @public
+   */
+  Delimiter?: string;
+
+  /**
+   * <p>A custom symbol to denote what combines content into a single column value. Must be different from the column delimiter.</p>
+   * @public
+   */
+  QuoteSymbol?: string;
+
+  /**
+   * <p>Indicates whether the CSV file contains a header.</p>
+   * @public
+   */
+  ContainsHeader?: CsvHeaderOption;
+
+  /**
+   * <p>A list of strings representing column names.</p>
+   * @public
+   */
+  Header?: string[];
+
+  /**
+   * <p>Specifies not to trim values before identifying the type of column values. The default value is true.</p>
+   * @public
+   */
+  DisableValueTrimming?: boolean;
+
+  /**
+   * <p>Enables the processing of files that contain only one column.</p>
+   * @public
+   */
+  AllowSingleColumn?: boolean;
+
+  /**
+   * <p>Enables the configuration of custom datatypes.</p>
+   * @public
+   */
+  CustomDatatypeConfigured?: boolean;
+
+  /**
+   * <p>Creates a list of supported custom datatypes.</p>
+   * @public
+   */
+  CustomDatatypes?: string[];
+
+  /**
+   * <p>Sets the SerDe for processing CSV in the classifier, which will be applied in the Data Catalog. Valid values are <code>OpenCSVSerDe</code>, <code>LazySimpleSerDe</code>, and <code>None</code>. You can specify the <code>None</code> value when you want the crawler to do the detection.</p>
+   * @public
+   */
+  Serde?: CsvSerdeOption;
+}
+
+/**
+ * <p>Specifies a <code>grok</code> classifier for <code>CreateClassifier</code>
+ *       to create.</p>
+ * @public
+ */
+export interface CreateGrokClassifierRequest {
+  /**
+   * <p>An identifier of the data format that the classifier matches,
+   *       such as Twitter, JSON, Omniture logs, Amazon CloudWatch Logs, and so on.</p>
+   * @public
+   */
+  Classification: string | undefined;
+
+  /**
+   * <p>The name of the new classifier.</p>
+   * @public
+   */
+  Name: string | undefined;
+
+  /**
+   * <p>The grok pattern used by this classifier.</p>
+   * @public
+   */
+  GrokPattern: string | undefined;
+
+  /**
+   * <p>Optional custom grok patterns used by this classifier.</p>
+   * @public
+   */
+  CustomPatterns?: string;
+}
+
+/**
+ * <p>Specifies a JSON classifier for <code>CreateClassifier</code> to create.</p>
+ * @public
+ */
+export interface CreateJsonClassifierRequest {
+  /**
+   * <p>The name of the classifier.</p>
+   * @public
+   */
+  Name: string | undefined;
+
+  /**
+   * <p>A <code>JsonPath</code> string defining the JSON data for the classifier to classify.
+   *       Glue supports a subset of JsonPath, as described in <a href="https://docs.aws.amazon.com/glue/latest/dg/custom-classifier.html#custom-classifier-json">Writing JsonPath Custom Classifiers</a>.</p>
+   * @public
+   */
+  JsonPath: string | undefined;
+}
 
 /**
  * <p>Specifies an XML classifier for <code>CreateClassifier</code> to create.</p>
@@ -115,6 +476,7 @@ export interface CreateClassifierResponse {}
  * @enum
  */
 export const ConnectionPropertyKey = {
+  CLUSTER_IDENTIFIER: "CLUSTER_IDENTIFIER",
   CONFIG_FILES: "CONFIG_FILES",
   CONNECTION_URL: "CONNECTION_URL",
   CONNECTOR_CLASS_NAME: "CONNECTOR_CLASS_NAME",
@@ -122,6 +484,7 @@ export const ConnectionPropertyKey = {
   CONNECTOR_URL: "CONNECTOR_URL",
   CUSTOM_JDBC_CERT: "CUSTOM_JDBC_CERT",
   CUSTOM_JDBC_CERT_STRING: "CUSTOM_JDBC_CERT_STRING",
+  DATABASE: "DATABASE",
   ENCRYPTED_KAFKA_CLIENT_KEYSTORE_PASSWORD: "ENCRYPTED_KAFKA_CLIENT_KEYSTORE_PASSWORD",
   ENCRYPTED_KAFKA_CLIENT_KEY_PASSWORD: "ENCRYPTED_KAFKA_CLIENT_KEY_PASSWORD",
   ENCRYPTED_KAFKA_SASL_PLAIN_PASSWORD: "ENCRYPTED_KAFKA_SASL_PLAIN_PASSWORD",
@@ -154,10 +517,12 @@ export const ConnectionPropertyKey = {
   KAFKA_SSL_ENABLED: "KAFKA_SSL_ENABLED",
   PASSWORD: "PASSWORD",
   PORT: "PORT",
+  REGION: "REGION",
   ROLE_ARN: "ROLE_ARN",
   SECRET_ID: "SECRET_ID",
   SKIP_CUSTOM_JDBC_CERT_VALIDATION: "SKIP_CUSTOM_JDBC_CERT_VALIDATION",
   USER_NAME: "USERNAME",
+  WORKGROUP_NAME: "WORKGROUP_NAME",
 } as const;
 
 /**
@@ -178,6 +543,8 @@ export const ConnectionType = {
   NETWORK: "NETWORK",
   SALESFORCE: "SALESFORCE",
   SFTP: "SFTP",
+  VIEW_VALIDATION_ATHENA: "VIEW_VALIDATION_ATHENA",
+  VIEW_VALIDATION_REDSHIFT: "VIEW_VALIDATION_REDSHIFT",
 } as const;
 
 /**
@@ -297,6 +664,14 @@ export interface ConnectionInput {
    *             </li>
    *             <li>
    *                <p>
+   *                   <code>VIEW_VALIDATION_REDSHIFT</code> - Designates a connection used for view validation by Amazon Redshift.</p>
+   *             </li>
+   *             <li>
+   *                <p>
+   *                   <code>VIEW_VALIDATION_ATHENA</code> - Designates a connection used for view validation by Amazon Athena.</p>
+   *             </li>
+   *             <li>
+   *                <p>
    *                   <code>NETWORK</code> - Designates a network connection to a data source within an Amazon Virtual Private Cloud environment (Amazon VPC).</p>
    *                <p>
    *                   <code>NETWORK</code> Connections do not require ConnectionParameters. Instead, provide a PhysicalConnectionRequirements.</p>
@@ -340,6 +715,12 @@ export interface ConnectionInput {
    * @public
    */
   ConnectionProperties: Partial<Record<ConnectionPropertyKey, string>> | undefined;
+
+  /**
+   * <p>This field is not currently used.</p>
+   * @public
+   */
+  AthenaProperties?: Record<string, string>;
 
   /**
    * <p>The physical connection requirements, such as virtual private cloud (VPC) and <code>SecurityGroup</code>, that are needed to successfully make this connection.</p>
@@ -878,6 +1259,12 @@ export interface CreateDataQualityRulesetRequest {
    * @public
    */
   TargetTable?: DataQualityTargetTable;
+
+  /**
+   * <p>The name of the security configuration created with the data quality encryption option.</p>
+   * @public
+   */
+  DataQualitySecurityConfiguration?: string;
 
   /**
    * <p>Used for idempotency and is recommended to be set to a random ID (such as a UUID) to avoid creating or starting multiple instances of the same resource.</p>
@@ -5476,10 +5863,36 @@ export interface Connection {
    *                <p>
    *                   <code>KAFKA_SASL_GSSAPI_PRINCIPAL</code> - The name of the Kerberos princial used by Glue. For more information, see <a href="https://kafka.apache.org/documentation/#security_sasl_kerberos_clientconfig">Kafka Documentation: Configuring Kafka Brokers</a>.</p>
    *             </li>
+   *             <li>
+   *                <p>
+   *                   <code>ROLE_ARN</code> - The role to be used for running queries.</p>
+   *             </li>
+   *             <li>
+   *                <p>
+   *                   <code>REGION</code> - The Amazon Web Services Region where queries will be run.</p>
+   *             </li>
+   *             <li>
+   *                <p>
+   *                   <code>WORKGROUP_NAME</code> - The name of an Amazon Redshift serverless workgroup or Amazon Athena workgroup in which queries will run.</p>
+   *             </li>
+   *             <li>
+   *                <p>
+   *                   <code>CLUSTER_IDENTIFIER</code> - The cluster identifier of an Amazon Redshift cluster in which queries will run.</p>
+   *             </li>
+   *             <li>
+   *                <p>
+   *                   <code>DATABASE</code> - The Amazon Redshift database that you are connecting to.</p>
+   *             </li>
    *          </ul>
    * @public
    */
   ConnectionProperties?: Partial<Record<ConnectionPropertyKey, string>>;
+
+  /**
+   * <p>This field is not currently used.</p>
+   * @public
+   */
+  AthenaProperties?: Record<string, string>;
 
   /**
    * <p>The physical connection requirements, such as virtual private cloud (VPC) and <code>SecurityGroup</code>, that are needed to make this connection successfully.</p>
@@ -6137,6 +6550,144 @@ export interface GetDataflowGraphResponse {
 /**
  * @public
  */
+export interface GetDataQualityModelRequest {
+  /**
+   * <p>The Statistic ID.</p>
+   * @public
+   */
+  StatisticId?: string;
+
+  /**
+   * <p>The Profile ID.</p>
+   * @public
+   */
+  ProfileId: string | undefined;
+}
+
+/**
+ * @public
+ * @enum
+ */
+export const DataQualityModelStatus = {
+  FAILED: "FAILED",
+  RUNNING: "RUNNING",
+  SUCCEEDED: "SUCCEEDED",
+} as const;
+
+/**
+ * @public
+ */
+export type DataQualityModelStatus = (typeof DataQualityModelStatus)[keyof typeof DataQualityModelStatus];
+
+/**
+ * @public
+ */
+export interface GetDataQualityModelResponse {
+  /**
+   * <p>The training status of the data quality model.</p>
+   * @public
+   */
+  Status?: DataQualityModelStatus;
+
+  /**
+   * <p>The timestamp when the data quality model training started.</p>
+   * @public
+   */
+  StartedOn?: Date;
+
+  /**
+   * <p>The timestamp when the data quality model training completed.</p>
+   * @public
+   */
+  CompletedOn?: Date;
+
+  /**
+   * <p>The training failure reason.</p>
+   * @public
+   */
+  FailureReason?: string;
+}
+
+/**
+ * @public
+ */
+export interface GetDataQualityModelResultRequest {
+  /**
+   * <p>The Statistic ID.</p>
+   * @public
+   */
+  StatisticId: string | undefined;
+
+  /**
+   * <p>The Profile ID.</p>
+   * @public
+   */
+  ProfileId: string | undefined;
+}
+
+/**
+ * <p>The statistic model result.</p>
+ * @public
+ */
+export interface StatisticModelResult {
+  /**
+   * <p>The lower bound.</p>
+   * @public
+   */
+  LowerBound?: number;
+
+  /**
+   * <p>The upper bound.</p>
+   * @public
+   */
+  UpperBound?: number;
+
+  /**
+   * <p>The predicted value.</p>
+   * @public
+   */
+  PredictedValue?: number;
+
+  /**
+   * <p>The actual value.</p>
+   * @public
+   */
+  ActualValue?: number;
+
+  /**
+   * <p>The date.</p>
+   * @public
+   */
+  Date?: Date;
+
+  /**
+   * <p>The inclusion annotation.</p>
+   * @public
+   */
+  InclusionAnnotation?: InclusionAnnotationValue;
+}
+
+/**
+ * @public
+ */
+export interface GetDataQualityModelResultResponse {
+  /**
+   * <p>The timestamp when the data quality model training completed.</p>
+   * @public
+   */
+  CompletedOn?: Date;
+
+  /**
+   * <p>A list of <code>StatisticModelResult</code>
+   *          </p>
+   * @public
+   */
+  Model?: StatisticModelResult[];
+}
+
+/**
+ * @public
+ */
 export interface GetDataQualityResultRequest {
   /**
    * <p>A unique result ID for the data quality result.</p>
@@ -6154,6 +6705,12 @@ export interface GetDataQualityResultResponse {
    * @public
    */
   ResultId?: string;
+
+  /**
+   * <p>The Profile ID for the data quality result.</p>
+   * @public
+   */
+  ProfileId?: string;
 
   /**
    * <p>An aggregate data quality score. Represents the ratio of rules that passed to the total number of rules.</p>
@@ -6320,6 +6877,12 @@ export interface GetDataQualityRuleRecommendationRunResponse {
    * @public
    */
   CreatedRulesetName?: string;
+
+  /**
+   * <p>The name of the security configuration created with the data quality encryption option.</p>
+   * @public
+   */
+  DataQualitySecurityConfiguration?: string;
 }
 
 /**
@@ -6378,6 +6941,12 @@ export interface GetDataQualityRulesetResponse {
    * @public
    */
   RecommendationRunId?: string;
+
+  /**
+   * <p>The name of the security configuration created with the data quality encryption option.</p>
+   * @public
+   */
+  DataQualitySecurityConfiguration?: string;
 }
 
 /**
@@ -7282,880 +7851,33 @@ export interface GetMLTaskRunsResponse {
 }
 
 /**
- * @public
+ * @internal
  */
-export interface GetMLTransformRequest {
-  /**
-   * <p>The unique identifier of the transform, generated at the time that the transform was
-   *       created.</p>
-   * @public
-   */
-  TransformId: string | undefined;
-}
+export const ConnectionInputFilterSensitiveLog = (obj: ConnectionInput): any => ({
+  ...obj,
+  ...(obj.AuthenticationConfiguration && {
+    AuthenticationConfiguration: AuthenticationConfigurationInputFilterSensitiveLog(obj.AuthenticationConfiguration),
+  }),
+});
 
 /**
- * <p>A structure containing the column name and column importance score for a column. </p>
- *          <p>Column importance helps you understand how columns contribute to your model, by identifying which columns in your records are more important than others.</p>
- * @public
+ * @internal
  */
-export interface ColumnImportance {
-  /**
-   * <p>The name of a column.</p>
-   * @public
-   */
-  ColumnName?: string;
-
-  /**
-   * <p>The column importance score for the column, as a decimal.</p>
-   * @public
-   */
-  Importance?: number;
-}
+export const CreateConnectionRequestFilterSensitiveLog = (obj: CreateConnectionRequest): any => ({
+  ...obj,
+  ...(obj.ConnectionInput && { ConnectionInput: ConnectionInputFilterSensitiveLog(obj.ConnectionInput) }),
+});
 
 /**
- * <p>The confusion matrix shows you what your transform is predicting accurately and what types of errors it is making.</p>
- *          <p>For more information, see <a href="https://en.wikipedia.org/wiki/Confusion_matrix">Confusion matrix</a> in Wikipedia.</p>
- * @public
+ * @internal
  */
-export interface ConfusionMatrix {
-  /**
-   * <p>The number of matches in the data that the transform correctly found, in the confusion matrix for your transform.</p>
-   * @public
-   */
-  NumTruePositives?: number;
-
-  /**
-   * <p>The number of nonmatches in the data that the transform incorrectly classified as a match,
-   *       in the confusion matrix for your transform.</p>
-   * @public
-   */
-  NumFalsePositives?: number;
-
-  /**
-   * <p>The number of nonmatches in the data that the transform correctly rejected, in the
-   *       confusion matrix for your transform.</p>
-   * @public
-   */
-  NumTrueNegatives?: number;
-
-  /**
-   * <p>The number of matches in the data that the transform didn't find, in the confusion matrix for your transform.</p>
-   * @public
-   */
-  NumFalseNegatives?: number;
-}
-
-/**
- * <p>The evaluation metrics for the find matches algorithm. The quality of your machine
- *       learning transform is measured by getting your transform to predict some matches and comparing
- *       the results to known matches from the same dataset. The quality metrics are based on a subset
- *       of your data, so they are not precise.</p>
- * @public
- */
-export interface FindMatchesMetrics {
-  /**
-   * <p>The area under the precision/recall curve (AUPRC) is a single number measuring the overall
-   *       quality of the transform, that is independent of the choice made for precision vs. recall.
-   *       Higher values indicate that you have a more attractive precision vs. recall tradeoff.</p>
-   *          <p>For more information, see <a href="https://en.wikipedia.org/wiki/Precision_and_recall">Precision and recall</a> in Wikipedia.</p>
-   * @public
-   */
-  AreaUnderPRCurve?: number;
-
-  /**
-   * <p>The precision metric indicates when often your transform is correct when it predicts a match. Specifically, it measures how well the transform finds true positives from the total true positives possible.</p>
-   *          <p>For more information, see <a href="https://en.wikipedia.org/wiki/Precision_and_recall">Precision and recall</a> in Wikipedia.</p>
-   * @public
-   */
-  Precision?: number;
-
-  /**
-   * <p>The recall metric indicates that for an actual match, how often your transform predicts
-   *       the match. Specifically, it measures how well the transform finds true positives from the
-   *       total records in the source data.</p>
-   *          <p>For more information, see <a href="https://en.wikipedia.org/wiki/Precision_and_recall">Precision and recall</a> in Wikipedia.</p>
-   * @public
-   */
-  Recall?: number;
-
-  /**
-   * <p>The maximum F1 metric indicates the transform's accuracy between 0 and 1, where 1 is the best accuracy.</p>
-   *          <p>For more information, see <a href="https://en.wikipedia.org/wiki/F1_score">F1 score</a> in Wikipedia.</p>
-   * @public
-   */
-  F1?: number;
-
-  /**
-   * <p>The confusion matrix shows you what your transform is predicting accurately and what types of errors it is making.</p>
-   *          <p>For more information, see <a href="https://en.wikipedia.org/wiki/Confusion_matrix">Confusion matrix</a> in Wikipedia.</p>
-   * @public
-   */
-  ConfusionMatrix?: ConfusionMatrix;
-
-  /**
-   * <p>A list of <code>ColumnImportance</code> structures containing column importance metrics, sorted in order of descending importance.</p>
-   * @public
-   */
-  ColumnImportances?: ColumnImportance[];
-}
-
-/**
- * <p>Evaluation metrics provide an estimate of the quality of your machine learning transform.</p>
- * @public
- */
-export interface EvaluationMetrics {
-  /**
-   * <p>The type of machine learning transform.</p>
-   * @public
-   */
-  TransformType: TransformType | undefined;
-
-  /**
-   * <p>The evaluation metrics for the find matches algorithm.</p>
-   * @public
-   */
-  FindMatchesMetrics?: FindMatchesMetrics;
-}
-
-/**
- * <p>A key-value pair representing a column and data type that this transform can
- *       run against. The <code>Schema</code> parameter of the <code>MLTransform</code> may contain up to 100 of these structures.</p>
- * @public
- */
-export interface SchemaColumn {
-  /**
-   * <p>The name of the column.</p>
-   * @public
-   */
-  Name?: string;
-
-  /**
-   * <p>The type of data in the column.</p>
-   * @public
-   */
-  DataType?: string;
-}
-
-/**
- * @public
- * @enum
- */
-export const TransformStatusType = {
-  DELETING: "DELETING",
-  NOT_READY: "NOT_READY",
-  READY: "READY",
-} as const;
-
-/**
- * @public
- */
-export type TransformStatusType = (typeof TransformStatusType)[keyof typeof TransformStatusType];
-
-/**
- * @public
- */
-export interface GetMLTransformResponse {
-  /**
-   * <p>The unique identifier of the transform, generated at the time that the transform was
-   *       created.</p>
-   * @public
-   */
-  TransformId?: string;
-
-  /**
-   * <p>The unique name given to the transform when it was created.</p>
-   * @public
-   */
-  Name?: string;
-
-  /**
-   * <p>A description of the transform.</p>
-   * @public
-   */
-  Description?: string;
-
-  /**
-   * <p>The last known status of the transform (to indicate whether it can be used or not). One of "NOT_READY", "READY", or "DELETING".</p>
-   * @public
-   */
-  Status?: TransformStatusType;
-
-  /**
-   * <p>The date and time when the transform was created.</p>
-   * @public
-   */
-  CreatedOn?: Date;
-
-  /**
-   * <p>The date and time when the transform was last modified.</p>
-   * @public
-   */
-  LastModifiedOn?: Date;
-
-  /**
-   * <p>A list of Glue table definitions used by the transform.</p>
-   * @public
-   */
-  InputRecordTables?: GlueTable[];
-
-  /**
-   * <p>The configuration parameters that are specific to the algorithm used.</p>
-   * @public
-   */
-  Parameters?: TransformParameters;
-
-  /**
-   * <p>The latest evaluation metrics.</p>
-   * @public
-   */
-  EvaluationMetrics?: EvaluationMetrics;
-
-  /**
-   * <p>The number of labels available for this transform.</p>
-   * @public
-   */
-  LabelCount?: number;
-
-  /**
-   * <p>The <code>Map<Column, Type></code> object that represents the schema that this
-   *       transform accepts. Has an upper bound of 100 columns.</p>
-   * @public
-   */
-  Schema?: SchemaColumn[];
-
-  /**
-   * <p>The name or Amazon Resource Name (ARN) of the IAM role with the required
-   *       permissions.</p>
-   * @public
-   */
-  Role?: string;
-
-  /**
-   * <p>This value determines which version of Glue this machine learning transform is compatible with. Glue 1.0 is recommended for most customers. If the value is not set, the Glue compatibility defaults to Glue 0.9.  For more information, see <a href="https://docs.aws.amazon.com/glue/latest/dg/release-notes.html#release-notes-versions">Glue Versions</a> in the developer guide.</p>
-   * @public
-   */
-  GlueVersion?: string;
-
-  /**
-   * <p>The number of Glue data processing units (DPUs) that are allocated to task runs for this transform. You can allocate from 2 to 100 DPUs; the default is 10. A DPU is a relative measure of
-   *       processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more
-   *       information, see the <a href="https://aws.amazon.com/glue/pricing/">Glue pricing
-   *         page</a>. </p>
-   *          <p>When the <code>WorkerType</code> field is set to a value other than <code>Standard</code>, the <code>MaxCapacity</code> field is set automatically and becomes read-only.</p>
-   * @public
-   */
-  MaxCapacity?: number;
-
-  /**
-   * <p>The type of predefined worker that is allocated when this task runs. Accepts a value of Standard, G.1X, or G.2X.</p>
-   *          <ul>
-   *             <li>
-   *                <p>For the <code>Standard</code> worker type, each worker provides 4 vCPU, 16 GB of memory and a 50GB disk, and 2 executors per worker.</p>
-   *             </li>
-   *             <li>
-   *                <p>For the <code>G.1X</code> worker type, each worker provides 4 vCPU, 16 GB of memory and a 64GB disk, and 1 executor per worker.</p>
-   *             </li>
-   *             <li>
-   *                <p>For the <code>G.2X</code> worker type, each worker provides 8 vCPU, 32 GB of memory and a 128GB disk, and 1 executor per worker.</p>
-   *             </li>
-   *          </ul>
-   * @public
-   */
-  WorkerType?: WorkerType;
-
-  /**
-   * <p>The number of workers of a defined <code>workerType</code> that are allocated when this task runs.</p>
-   * @public
-   */
-  NumberOfWorkers?: number;
-
-  /**
-   * <p>The timeout for a task run for this transform in minutes. This is the maximum time that a task run for this transform can consume resources before it is terminated and enters <code>TIMEOUT</code> status. The default is 2,880 minutes (48 hours).</p>
-   * @public
-   */
-  Timeout?: number;
-
-  /**
-   * <p>The maximum number of times to retry a task for this transform after a task run fails.</p>
-   * @public
-   */
-  MaxRetries?: number;
-
-  /**
-   * <p>The encryption-at-rest settings of the transform that apply to accessing user data. Machine learning transforms can access user data encrypted in Amazon S3 using KMS.</p>
-   * @public
-   */
-  TransformEncryption?: TransformEncryption;
-}
-
-/**
- * <p>The criteria used to filter the machine learning transforms.</p>
- * @public
- */
-export interface TransformFilterCriteria {
-  /**
-   * <p>A unique transform name that is used to filter the machine learning transforms.</p>
-   * @public
-   */
-  Name?: string;
-
-  /**
-   * <p>The type of machine learning transform that is used to filter the machine learning
-   *       transforms.</p>
-   * @public
-   */
-  TransformType?: TransformType;
-
-  /**
-   * <p>Filters the list of machine learning transforms by the last known status of the transforms (to indicate whether a transform can be used or not). One of "NOT_READY", "READY", or "DELETING".</p>
-   * @public
-   */
-  Status?: TransformStatusType;
-
-  /**
-   * <p>This value determines which version of Glue this machine learning transform is compatible with. Glue 1.0 is recommended for most customers. If the value is not set, the Glue compatibility defaults to Glue 0.9.  For more information, see <a href="https://docs.aws.amazon.com/glue/latest/dg/release-notes.html#release-notes-versions">Glue Versions</a> in the developer guide.</p>
-   * @public
-   */
-  GlueVersion?: string;
-
-  /**
-   * <p>The time and date before which the transforms were created.</p>
-   * @public
-   */
-  CreatedBefore?: Date;
-
-  /**
-   * <p>The time and date after which the transforms were created.</p>
-   * @public
-   */
-  CreatedAfter?: Date;
-
-  /**
-   * <p>Filter on transforms last modified before this date.</p>
-   * @public
-   */
-  LastModifiedBefore?: Date;
-
-  /**
-   * <p>Filter on transforms last modified after this date.</p>
-   * @public
-   */
-  LastModifiedAfter?: Date;
-
-  /**
-   * <p>Filters on datasets with a specific schema. The <code>Map<Column, Type></code>
-   *       object is an array of key-value pairs representing the schema this transform accepts, where
-   *         <code>Column</code> is the name of a column, and <code>Type</code> is the type of the data
-   *       such as an integer or string. Has an upper bound of 100 columns.</p>
-   * @public
-   */
-  Schema?: SchemaColumn[];
-}
-
-/**
- * @public
- * @enum
- */
-export const TransformSortColumnType = {
-  CREATED: "CREATED",
-  LAST_MODIFIED: "LAST_MODIFIED",
-  NAME: "NAME",
-  STATUS: "STATUS",
-  TRANSFORM_TYPE: "TRANSFORM_TYPE",
-} as const;
-
-/**
- * @public
- */
-export type TransformSortColumnType = (typeof TransformSortColumnType)[keyof typeof TransformSortColumnType];
-
-/**
- * <p>The sorting criteria that are associated with the machine learning transform.</p>
- * @public
- */
-export interface TransformSortCriteria {
-  /**
-   * <p>The column to be used in the sorting criteria that are associated with the machine
-   *       learning transform.</p>
-   * @public
-   */
-  Column: TransformSortColumnType | undefined;
-
-  /**
-   * <p>The sort direction to be used in the sorting criteria that are associated with the machine
-   *       learning transform.</p>
-   * @public
-   */
-  SortDirection: SortDirectionType | undefined;
-}
-
-/**
- * @public
- */
-export interface GetMLTransformsRequest {
-  /**
-   * <p>A paginated token to offset the results.</p>
-   * @public
-   */
-  NextToken?: string;
-
-  /**
-   * <p>The maximum number of results to return.</p>
-   * @public
-   */
-  MaxResults?: number;
-
-  /**
-   * <p>The filter transformation criteria.</p>
-   * @public
-   */
-  Filter?: TransformFilterCriteria;
-
-  /**
-   * <p>The sorting criteria.</p>
-   * @public
-   */
-  Sort?: TransformSortCriteria;
-}
-
-/**
- * <p>A structure for a machine learning transform.</p>
- * @public
- */
-export interface MLTransform {
-  /**
-   * <p>The unique transform ID that is generated for the machine learning transform. The ID is
-   *       guaranteed to be unique and does not change.</p>
-   * @public
-   */
-  TransformId?: string;
-
-  /**
-   * <p>A user-defined name for the machine learning transform. Names are not guaranteed unique
-   *       and can be changed at any time.</p>
-   * @public
-   */
-  Name?: string;
-
-  /**
-   * <p>A user-defined, long-form description text for the machine learning transform.
-   *       Descriptions are not guaranteed to be unique and can be changed at any time.</p>
-   * @public
-   */
-  Description?: string;
-
-  /**
-   * <p>The current status of the machine learning transform.</p>
-   * @public
-   */
-  Status?: TransformStatusType;
-
-  /**
-   * <p>A timestamp. The time and date that this machine learning transform was created.</p>
-   * @public
-   */
-  CreatedOn?: Date;
-
-  /**
-   * <p>A timestamp. The last point in time when this machine learning transform was modified.</p>
-   * @public
-   */
-  LastModifiedOn?: Date;
-
-  /**
-   * <p>A list of Glue table definitions used by the transform.</p>
-   * @public
-   */
-  InputRecordTables?: GlueTable[];
-
-  /**
-   * <p>A <code>TransformParameters</code> object. You can use parameters to tune (customize) the
-   *       behavior of the machine learning transform by specifying what data it learns from and your
-   *       preference on various tradeoffs (such as precious vs. recall, or accuracy vs. cost).</p>
-   * @public
-   */
-  Parameters?: TransformParameters;
-
-  /**
-   * <p>An <code>EvaluationMetrics</code> object. Evaluation metrics provide an estimate of the quality of your machine learning transform.</p>
-   * @public
-   */
-  EvaluationMetrics?: EvaluationMetrics;
-
-  /**
-   * <p>A count identifier for the labeling files generated by Glue for this transform. As you create a better transform, you can iteratively download, label, and upload the labeling file.</p>
-   * @public
-   */
-  LabelCount?: number;
-
-  /**
-   * <p>A map of key-value pairs representing the columns and data types that this transform can
-   *       run against. Has an upper bound of 100 columns.</p>
-   * @public
-   */
-  Schema?: SchemaColumn[];
-
-  /**
-   * <p>The name or Amazon Resource Name (ARN) of the IAM role with the required permissions. The required permissions include both Glue service role permissions to Glue resources, and Amazon S3 permissions required by the transform. </p>
-   *          <ul>
-   *             <li>
-   *                <p>This role needs Glue service role permissions to allow access to resources in Glue. See <a href="https://docs.aws.amazon.com/glue/latest/dg/attach-policy-iam-user.html">Attach a Policy to IAM Users That Access Glue</a>.</p>
-   *             </li>
-   *             <li>
-   *                <p>This role needs permission to your Amazon Simple Storage Service (Amazon S3) sources, targets, temporary directory, scripts, and any libraries used by the task run for this transform.</p>
-   *             </li>
-   *          </ul>
-   * @public
-   */
-  Role?: string;
-
-  /**
-   * <p>This value determines which version of Glue this machine learning transform is compatible with. Glue 1.0 is recommended for most customers. If the value is not set, the Glue compatibility defaults to Glue 0.9.  For more information, see <a href="https://docs.aws.amazon.com/glue/latest/dg/release-notes.html#release-notes-versions">Glue Versions</a> in the developer guide.</p>
-   * @public
-   */
-  GlueVersion?: string;
-
-  /**
-   * <p>The number of Glue data processing units (DPUs) that are allocated to task runs for this transform. You can allocate from 2 to 100 DPUs; the default is 10. A DPU is a relative measure of
-   *       processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more
-   *       information, see the <a href="http://aws.amazon.com/glue/pricing/">Glue pricing
-   *         page</a>. </p>
-   *          <p>
-   *             <code>MaxCapacity</code> is a mutually exclusive option with <code>NumberOfWorkers</code> and <code>WorkerType</code>.</p>
-   *          <ul>
-   *             <li>
-   *                <p>If either <code>NumberOfWorkers</code> or <code>WorkerType</code> is set, then <code>MaxCapacity</code> cannot be set.</p>
-   *             </li>
-   *             <li>
-   *                <p>If <code>MaxCapacity</code> is set then neither <code>NumberOfWorkers</code> or <code>WorkerType</code> can be set.</p>
-   *             </li>
-   *             <li>
-   *                <p>If <code>WorkerType</code> is set, then <code>NumberOfWorkers</code> is required (and vice versa).</p>
-   *             </li>
-   *             <li>
-   *                <p>
-   *                   <code>MaxCapacity</code> and <code>NumberOfWorkers</code> must both be at least 1.</p>
-   *             </li>
-   *          </ul>
-   *          <p>When the <code>WorkerType</code> field is set to a value other than <code>Standard</code>, the <code>MaxCapacity</code> field is set automatically and becomes read-only.</p>
-   * @public
-   */
-  MaxCapacity?: number;
-
-  /**
-   * <p>The type of predefined worker that is allocated when a task of this transform runs. Accepts a value of Standard, G.1X, or G.2X.</p>
-   *          <ul>
-   *             <li>
-   *                <p>For the <code>Standard</code> worker type, each worker provides 4 vCPU, 16 GB of memory and a 50GB disk, and 2 executors per worker.</p>
-   *             </li>
-   *             <li>
-   *                <p>For the <code>G.1X</code> worker type, each worker provides 4 vCPU, 16 GB of memory and a 64GB disk, and 1 executor per worker.</p>
-   *             </li>
-   *             <li>
-   *                <p>For the <code>G.2X</code> worker type, each worker provides 8 vCPU, 32 GB of memory and a 128GB disk, and 1 executor per worker.</p>
-   *             </li>
-   *          </ul>
-   *          <p>
-   *             <code>MaxCapacity</code> is a mutually exclusive option with <code>NumberOfWorkers</code> and <code>WorkerType</code>.</p>
-   *          <ul>
-   *             <li>
-   *                <p>If either <code>NumberOfWorkers</code> or <code>WorkerType</code> is set, then <code>MaxCapacity</code> cannot be set.</p>
-   *             </li>
-   *             <li>
-   *                <p>If <code>MaxCapacity</code> is set then neither <code>NumberOfWorkers</code> or <code>WorkerType</code> can be set.</p>
-   *             </li>
-   *             <li>
-   *                <p>If <code>WorkerType</code> is set, then <code>NumberOfWorkers</code> is required (and vice versa).</p>
-   *             </li>
-   *             <li>
-   *                <p>
-   *                   <code>MaxCapacity</code> and <code>NumberOfWorkers</code> must both be at least 1.</p>
-   *             </li>
-   *          </ul>
-   * @public
-   */
-  WorkerType?: WorkerType;
-
-  /**
-   * <p>The number of workers of a defined <code>workerType</code> that are allocated when a task of the transform runs.</p>
-   *          <p>If <code>WorkerType</code> is set, then <code>NumberOfWorkers</code> is required (and vice versa).</p>
-   * @public
-   */
-  NumberOfWorkers?: number;
-
-  /**
-   * <p>The timeout in minutes of the machine learning transform.</p>
-   * @public
-   */
-  Timeout?: number;
-
-  /**
-   * <p>The maximum number of times to retry after an <code>MLTaskRun</code> of the machine
-   *       learning transform fails.</p>
-   * @public
-   */
-  MaxRetries?: number;
-
-  /**
-   * <p>The encryption-at-rest settings of the transform that apply to accessing user data. Machine learning transforms can access user data encrypted in Amazon S3 using KMS.</p>
-   * @public
-   */
-  TransformEncryption?: TransformEncryption;
-}
-
-/**
- * @public
- */
-export interface GetMLTransformsResponse {
-  /**
-   * <p>A list of machine learning transforms.</p>
-   * @public
-   */
-  Transforms: MLTransform[] | undefined;
-
-  /**
-   * <p>A pagination token, if more results are available.</p>
-   * @public
-   */
-  NextToken?: string;
-}
-
-/**
- * @public
- */
-export interface GetPartitionRequest {
-  /**
-   * <p>The ID of the Data Catalog where the partition in question resides. If none is provided,
-   *       the Amazon Web Services account ID is used by default.</p>
-   * @public
-   */
-  CatalogId?: string;
-
-  /**
-   * <p>The name of the catalog database where the partition resides.</p>
-   * @public
-   */
-  DatabaseName: string | undefined;
-
-  /**
-   * <p>The name of the partition's table.</p>
-   * @public
-   */
-  TableName: string | undefined;
-
-  /**
-   * <p>The values that define the partition.</p>
-   * @public
-   */
-  PartitionValues: string[] | undefined;
-}
-
-/**
- * @public
- */
-export interface GetPartitionResponse {
-  /**
-   * <p>The requested information, in the form of a <code>Partition</code>
-   *       object.</p>
-   * @public
-   */
-  Partition?: Partition;
-}
-
-/**
- * @public
- */
-export interface GetPartitionIndexesRequest {
-  /**
-   * <p>The catalog ID where the table resides.</p>
-   * @public
-   */
-  CatalogId?: string;
-
-  /**
-   * <p>Specifies the name of a database from which you want to retrieve partition indexes.</p>
-   * @public
-   */
-  DatabaseName: string | undefined;
-
-  /**
-   * <p>Specifies the name of a table for which you want to retrieve the partition indexes.</p>
-   * @public
-   */
-  TableName: string | undefined;
-
-  /**
-   * <p>A continuation token, included if this is a continuation call.</p>
-   * @public
-   */
-  NextToken?: string;
-}
-
-/**
- * @public
- * @enum
- */
-export const BackfillErrorCode = {
-  ENCRYPTED_PARTITION_ERROR: "ENCRYPTED_PARTITION_ERROR",
-  INTERNAL_ERROR: "INTERNAL_ERROR",
-  INVALID_PARTITION_TYPE_DATA_ERROR: "INVALID_PARTITION_TYPE_DATA_ERROR",
-  MISSING_PARTITION_VALUE_ERROR: "MISSING_PARTITION_VALUE_ERROR",
-  UNSUPPORTED_PARTITION_CHARACTER_ERROR: "UNSUPPORTED_PARTITION_CHARACTER_ERROR",
-} as const;
-
-/**
- * @public
- */
-export type BackfillErrorCode = (typeof BackfillErrorCode)[keyof typeof BackfillErrorCode];
-
-/**
- * <p>A list of errors that can occur when registering partition indexes for an existing table.</p>
- *          <p>These errors give the details about why an index registration failed and provide a limited number of partitions in the response, so that you can fix the partitions at fault and try registering the index again. The most common set of errors that can occur are categorized as follows:</p>
- *          <ul>
- *             <li>
- *                <p>EncryptedPartitionError: The partitions are encrypted.</p>
- *             </li>
- *             <li>
- *                <p>InvalidPartitionTypeDataError: The partition value doesn't match the data type for that partition column.</p>
- *             </li>
- *             <li>
- *                <p>MissingPartitionValueError: The partitions are encrypted.</p>
- *             </li>
- *             <li>
- *                <p>UnsupportedPartitionCharacterError: Characters inside the partition value are not supported. For example: U+0000 , U+0001, U+0002.</p>
- *             </li>
- *             <li>
- *                <p>InternalError: Any error which does not belong to other error codes.</p>
- *             </li>
- *          </ul>
- * @public
- */
-export interface BackfillError {
-  /**
-   * <p>The error code for an error that occurred when registering partition indexes for an existing table.</p>
-   * @public
-   */
-  Code?: BackfillErrorCode;
-
-  /**
-   * <p>A list of a limited number of partitions in the response.</p>
-   * @public
-   */
-  Partitions?: PartitionValueList[];
-}
-
-/**
- * @public
- * @enum
- */
-export const PartitionIndexStatus = {
-  ACTIVE: "ACTIVE",
-  CREATING: "CREATING",
-  DELETING: "DELETING",
-  FAILED: "FAILED",
-} as const;
-
-/**
- * @public
- */
-export type PartitionIndexStatus = (typeof PartitionIndexStatus)[keyof typeof PartitionIndexStatus];
-
-/**
- * <p>A partition key pair consisting of a name and a type.</p>
- * @public
- */
-export interface KeySchemaElement {
-  /**
-   * <p>The name of a partition key.</p>
-   * @public
-   */
-  Name: string | undefined;
-
-  /**
-   * <p>The type of a partition key.</p>
-   * @public
-   */
-  Type: string | undefined;
-}
-
-/**
- * <p>A descriptor for a partition index in a table.</p>
- * @public
- */
-export interface PartitionIndexDescriptor {
-  /**
-   * <p>The name of the partition index.</p>
-   * @public
-   */
-  IndexName: string | undefined;
-
-  /**
-   * <p>A list of one or more keys, as <code>KeySchemaElement</code> structures, for the partition index.</p>
-   * @public
-   */
-  Keys: KeySchemaElement[] | undefined;
-
-  /**
-   * <p>The status of the partition index. </p>
-   *          <p>The possible statuses are:</p>
-   *          <ul>
-   *             <li>
-   *                <p>CREATING: The index is being created. When an index is in a CREATING state, the index or its table cannot be deleted.</p>
-   *             </li>
-   *             <li>
-   *                <p>ACTIVE: The index creation succeeds.</p>
-   *             </li>
-   *             <li>
-   *                <p>FAILED: The index creation fails. </p>
-   *             </li>
-   *             <li>
-   *                <p>DELETING: The index is deleted from the list of indexes.</p>
-   *             </li>
-   *          </ul>
-   * @public
-   */
-  IndexStatus: PartitionIndexStatus | undefined;
-
-  /**
-   * <p>A list of errors that can occur when registering partition indexes for an existing table.</p>
-   * @public
-   */
-  BackfillErrors?: BackfillError[];
-}
-
-/**
- * @public
- */
-export interface GetPartitionIndexesResponse {
-  /**
-   * <p>A list of index descriptors.</p>
-   * @public
-   */
-  PartitionIndexDescriptorList?: PartitionIndexDescriptor[];
-
-  /**
-   * <p>A continuation token, present if the current list segment is not the last.</p>
-   * @public
-   */
-  NextToken?: string;
-}
-
-/**
- * <p>Defines a non-overlapping region of a table's partitions, allowing
- *       multiple requests to be run in parallel.</p>
- * @public
- */
-export interface Segment {
-  /**
-   * <p>The zero-based index number of the segment. For example, if the total number of segments
-   *       is 4, <code>SegmentNumber</code> values range from 0 through 3.</p>
-   * @public
-   */
-  SegmentNumber: number | undefined;
-
-  /**
-   * <p>The total number of segments.</p>
-   * @public
-   */
-  TotalSegments: number | undefined;
-}
+export const GetDataQualityResultResponseFilterSensitiveLog = (obj: GetDataQualityResultResponse): any => ({
+  ...obj,
+  ...(obj.RuleResults && { RuleResults: obj.RuleResults.map((item) => DataQualityRuleResultFilterSensitiveLog(item)) }),
+  ...(obj.AnalyzerResults && {
+    AnalyzerResults: obj.AnalyzerResults.map((item) => DataQualityAnalyzerResultFilterSensitiveLog(item)),
+  }),
+  ...(obj.Observations && {
+    Observations: obj.Observations.map((item) => DataQualityObservationFilterSensitiveLog(item)),
+  }),
+});

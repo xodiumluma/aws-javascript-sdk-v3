@@ -69,6 +69,8 @@ export interface GetReferenceMetadataCommandOutput extends GetReferenceMetadataR
  * //       },
  * //     },
  * //   },
+ * //   creationType: "STRING_VALUE",
+ * //   creationJobId: "STRING_VALUE",
  * // };
  *
  * ```
@@ -110,9 +112,7 @@ export class GetReferenceMetadataCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: OmicsClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -124,4 +124,16 @@ export class GetReferenceMetadataCommand extends $Command
   .f(void 0, void 0)
   .ser(se_GetReferenceMetadataCommand)
   .de(de_GetReferenceMetadataCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: GetReferenceMetadataRequest;
+      output: GetReferenceMetadataResponse;
+    };
+    sdk: {
+      input: GetReferenceMetadataCommandInput;
+      output: GetReferenceMetadataCommandOutput;
+    };
+  };
+}

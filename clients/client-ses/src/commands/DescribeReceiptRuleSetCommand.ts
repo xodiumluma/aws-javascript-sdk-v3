@@ -63,6 +63,7 @@ export interface DescribeReceiptRuleSetCommandOutput extends DescribeReceiptRule
  * //             BucketName: "STRING_VALUE", // required
  * //             ObjectKeyPrefix: "STRING_VALUE",
  * //             KmsKeyArn: "STRING_VALUE",
+ * //             IamRoleArn: "STRING_VALUE",
  * //           },
  * //           BounceAction: { // BounceAction
  * //             TopicArn: "STRING_VALUE",
@@ -158,9 +159,7 @@ export class DescribeReceiptRuleSetCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: SESClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -172,4 +171,16 @@ export class DescribeReceiptRuleSetCommand extends $Command
   .f(void 0, void 0)
   .ser(se_DescribeReceiptRuleSetCommand)
   .de(de_DescribeReceiptRuleSetCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: DescribeReceiptRuleSetRequest;
+      output: DescribeReceiptRuleSetResponse;
+    };
+    sdk: {
+      input: DescribeReceiptRuleSetCommandInput;
+      output: DescribeReceiptRuleSetCommandOutput;
+    };
+  };
+}

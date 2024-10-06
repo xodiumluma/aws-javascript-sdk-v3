@@ -38,6 +38,10 @@ import { CreateTrustStoreCommandInput, CreateTrustStoreCommandOutput } from "../
 import { DeleteListenerCommandInput, DeleteListenerCommandOutput } from "../commands/DeleteListenerCommand";
 import { DeleteLoadBalancerCommandInput, DeleteLoadBalancerCommandOutput } from "../commands/DeleteLoadBalancerCommand";
 import { DeleteRuleCommandInput, DeleteRuleCommandOutput } from "../commands/DeleteRuleCommand";
+import {
+  DeleteSharedTrustStoreAssociationCommandInput,
+  DeleteSharedTrustStoreAssociationCommandOutput,
+} from "../commands/DeleteSharedTrustStoreAssociationCommand";
 import { DeleteTargetGroupCommandInput, DeleteTargetGroupCommandOutput } from "../commands/DeleteTargetGroupCommand";
 import { DeleteTrustStoreCommandInput, DeleteTrustStoreCommandOutput } from "../commands/DeleteTrustStoreCommand";
 import { DeregisterTargetsCommandInput, DeregisterTargetsCommandOutput } from "../commands/DeregisterTargetsCommand";
@@ -45,6 +49,10 @@ import {
   DescribeAccountLimitsCommandInput,
   DescribeAccountLimitsCommandOutput,
 } from "../commands/DescribeAccountLimitsCommand";
+import {
+  DescribeListenerAttributesCommandInput,
+  DescribeListenerAttributesCommandOutput,
+} from "../commands/DescribeListenerAttributesCommand";
 import {
   DescribeListenerCertificatesCommandInput,
   DescribeListenerCertificatesCommandOutput,
@@ -88,6 +96,7 @@ import {
   DescribeTrustStoresCommandInput,
   DescribeTrustStoresCommandOutput,
 } from "../commands/DescribeTrustStoresCommand";
+import { GetResourcePolicyCommandInput, GetResourcePolicyCommandOutput } from "../commands/GetResourcePolicyCommand";
 import {
   GetTrustStoreCaCertificatesBundleCommandInput,
   GetTrustStoreCaCertificatesBundleCommandOutput,
@@ -96,6 +105,10 @@ import {
   GetTrustStoreRevocationContentCommandInput,
   GetTrustStoreRevocationContentCommandOutput,
 } from "../commands/GetTrustStoreRevocationContentCommand";
+import {
+  ModifyListenerAttributesCommandInput,
+  ModifyListenerAttributesCommandOutput,
+} from "../commands/ModifyListenerAttributesCommand";
 import { ModifyListenerCommandInput, ModifyListenerCommandOutput } from "../commands/ModifyListenerCommand";
 import {
   ModifyLoadBalancerAttributesCommandInput,
@@ -152,12 +165,15 @@ import {
   CreateTargetGroupOutput,
   CreateTrustStoreInput,
   CreateTrustStoreOutput,
+  DeleteAssociationSameAccountException,
   DeleteListenerInput,
   DeleteListenerOutput,
   DeleteLoadBalancerInput,
   DeleteLoadBalancerOutput,
   DeleteRuleInput,
   DeleteRuleOutput,
+  DeleteSharedTrustStoreAssociationInput,
+  DeleteSharedTrustStoreAssociationOutput,
   DeleteTargetGroupInput,
   DeleteTargetGroupOutput,
   DeleteTrustStoreInput,
@@ -166,6 +182,8 @@ import {
   DeregisterTargetsOutput,
   DescribeAccountLimitsInput,
   DescribeAccountLimitsOutput,
+  DescribeListenerAttributesInput,
+  DescribeListenerAttributesOutput,
   DescribeListenerCertificatesInput,
   DescribeListenerCertificatesOutput,
   DescribeListenersInput,
@@ -201,6 +219,8 @@ import {
   DuplicateTrustStoreNameException,
   FixedResponseActionConfig,
   ForwardActionConfig,
+  GetResourcePolicyInput,
+  GetResourcePolicyOutput,
   GetTrustStoreCaCertificatesBundleInput,
   GetTrustStoreCaCertificatesBundleOutput,
   GetTrustStoreRevocationContentInput,
@@ -220,6 +240,7 @@ import {
   InvalidTargetException,
   Limit,
   Listener,
+  ListenerAttribute,
   ListenerNotFoundException,
   LoadBalancer,
   LoadBalancerAddress,
@@ -227,6 +248,8 @@ import {
   LoadBalancerNotFoundException,
   LoadBalancerState,
   Matcher,
+  ModifyListenerAttributesInput,
+  ModifyListenerAttributesOutput,
   ModifyListenerInput,
   ModifyListenerOutput,
   ModifyLoadBalancerAttributesInput,
@@ -255,6 +278,7 @@ import {
   RemoveTrustStoreRevocationsInput,
   RemoveTrustStoreRevocationsOutput,
   ResourceInUseException,
+  ResourceNotFoundException,
   RevocationContent,
   RevocationContentNotFoundException,
   RevocationIdNotFoundException,
@@ -300,6 +324,7 @@ import {
   TooManyUniqueTargetGroupsPerLoadBalancerException,
   TrustStore,
   TrustStoreAssociation,
+  TrustStoreAssociationNotFoundException,
   TrustStoreInUseException,
   TrustStoreNotFoundException,
   TrustStoreNotReadyException,
@@ -495,6 +520,23 @@ export const se_DeleteRuleCommand = async (
 };
 
 /**
+ * serializeAws_queryDeleteSharedTrustStoreAssociationCommand
+ */
+export const se_DeleteSharedTrustStoreAssociationCommand = async (
+  input: DeleteSharedTrustStoreAssociationCommandInput,
+  context: __SerdeContext
+): Promise<__HttpRequest> => {
+  const headers: __HeaderBag = SHARED_HEADERS;
+  let body: any;
+  body = buildFormUrlencodedString({
+    ...se_DeleteSharedTrustStoreAssociationInput(input, context),
+    [_A]: _DSTSA,
+    [_V]: _,
+  });
+  return buildHttpRpcRequest(context, headers, "/", undefined, body);
+};
+
+/**
  * serializeAws_queryDeleteTargetGroupCommand
  */
 export const se_DeleteTargetGroupCommand = async (
@@ -557,6 +599,23 @@ export const se_DescribeAccountLimitsCommand = async (
   body = buildFormUrlencodedString({
     ...se_DescribeAccountLimitsInput(input, context),
     [_A]: _DAL,
+    [_V]: _,
+  });
+  return buildHttpRpcRequest(context, headers, "/", undefined, body);
+};
+
+/**
+ * serializeAws_queryDescribeListenerAttributesCommand
+ */
+export const se_DescribeListenerAttributesCommand = async (
+  input: DescribeListenerAttributesCommandInput,
+  context: __SerdeContext
+): Promise<__HttpRequest> => {
+  const headers: __HeaderBag = SHARED_HEADERS;
+  let body: any;
+  body = buildFormUrlencodedString({
+    ...se_DescribeListenerAttributesInput(input, context),
+    [_A]: _DLA,
     [_V]: _,
   });
   return buildHttpRpcRequest(context, headers, "/", undefined, body);
@@ -784,6 +843,23 @@ export const se_DescribeTrustStoresCommand = async (
 };
 
 /**
+ * serializeAws_queryGetResourcePolicyCommand
+ */
+export const se_GetResourcePolicyCommand = async (
+  input: GetResourcePolicyCommandInput,
+  context: __SerdeContext
+): Promise<__HttpRequest> => {
+  const headers: __HeaderBag = SHARED_HEADERS;
+  let body: any;
+  body = buildFormUrlencodedString({
+    ...se_GetResourcePolicyInput(input, context),
+    [_A]: _GRP,
+    [_V]: _,
+  });
+  return buildHttpRpcRequest(context, headers, "/", undefined, body);
+};
+
+/**
  * serializeAws_queryGetTrustStoreCaCertificatesBundleCommand
  */
 export const se_GetTrustStoreCaCertificatesBundleCommand = async (
@@ -829,6 +905,23 @@ export const se_ModifyListenerCommand = async (
   body = buildFormUrlencodedString({
     ...se_ModifyListenerInput(input, context),
     [_A]: _ML,
+    [_V]: _,
+  });
+  return buildHttpRpcRequest(context, headers, "/", undefined, body);
+};
+
+/**
+ * serializeAws_queryModifyListenerAttributesCommand
+ */
+export const se_ModifyListenerAttributesCommand = async (
+  input: ModifyListenerAttributesCommandInput,
+  context: __SerdeContext
+): Promise<__HttpRequest> => {
+  const headers: __HeaderBag = SHARED_HEADERS;
+  let body: any;
+  body = buildFormUrlencodedString({
+    ...se_ModifyListenerAttributesInput(input, context),
+    [_A]: _MLA,
     [_V]: _,
   });
   return buildHttpRpcRequest(context, headers, "/", undefined, body);
@@ -1276,6 +1369,26 @@ export const de_DeleteRuleCommand = async (
 };
 
 /**
+ * deserializeAws_queryDeleteSharedTrustStoreAssociationCommand
+ */
+export const de_DeleteSharedTrustStoreAssociationCommand = async (
+  output: __HttpResponse,
+  context: __SerdeContext
+): Promise<DeleteSharedTrustStoreAssociationCommandOutput> => {
+  if (output.statusCode >= 300) {
+    return de_CommandError(output, context);
+  }
+  const data: any = await parseBody(output.body, context);
+  let contents: any = {};
+  contents = de_DeleteSharedTrustStoreAssociationOutput(data.DeleteSharedTrustStoreAssociationResult, context);
+  const response: DeleteSharedTrustStoreAssociationCommandOutput = {
+    $metadata: deserializeMetadata(output),
+    ...contents,
+  };
+  return response;
+};
+
+/**
  * deserializeAws_queryDeleteTargetGroupCommand
  */
 export const de_DeleteTargetGroupCommand = async (
@@ -1349,6 +1462,26 @@ export const de_DescribeAccountLimitsCommand = async (
   let contents: any = {};
   contents = de_DescribeAccountLimitsOutput(data.DescribeAccountLimitsResult, context);
   const response: DescribeAccountLimitsCommandOutput = {
+    $metadata: deserializeMetadata(output),
+    ...contents,
+  };
+  return response;
+};
+
+/**
+ * deserializeAws_queryDescribeListenerAttributesCommand
+ */
+export const de_DescribeListenerAttributesCommand = async (
+  output: __HttpResponse,
+  context: __SerdeContext
+): Promise<DescribeListenerAttributesCommandOutput> => {
+  if (output.statusCode >= 300) {
+    return de_CommandError(output, context);
+  }
+  const data: any = await parseBody(output.body, context);
+  let contents: any = {};
+  contents = de_DescribeListenerAttributesOutput(data.DescribeListenerAttributesResult, context);
+  const response: DescribeListenerAttributesCommandOutput = {
     $metadata: deserializeMetadata(output),
     ...contents,
   };
@@ -1616,6 +1749,26 @@ export const de_DescribeTrustStoresCommand = async (
 };
 
 /**
+ * deserializeAws_queryGetResourcePolicyCommand
+ */
+export const de_GetResourcePolicyCommand = async (
+  output: __HttpResponse,
+  context: __SerdeContext
+): Promise<GetResourcePolicyCommandOutput> => {
+  if (output.statusCode >= 300) {
+    return de_CommandError(output, context);
+  }
+  const data: any = await parseBody(output.body, context);
+  let contents: any = {};
+  contents = de_GetResourcePolicyOutput(data.GetResourcePolicyResult, context);
+  const response: GetResourcePolicyCommandOutput = {
+    $metadata: deserializeMetadata(output),
+    ...contents,
+  };
+  return response;
+};
+
+/**
  * deserializeAws_queryGetTrustStoreCaCertificatesBundleCommand
  */
 export const de_GetTrustStoreCaCertificatesBundleCommand = async (
@@ -1669,6 +1822,26 @@ export const de_ModifyListenerCommand = async (
   let contents: any = {};
   contents = de_ModifyListenerOutput(data.ModifyListenerResult, context);
   const response: ModifyListenerCommandOutput = {
+    $metadata: deserializeMetadata(output),
+    ...contents,
+  };
+  return response;
+};
+
+/**
+ * deserializeAws_queryModifyListenerAttributesCommand
+ */
+export const de_ModifyListenerAttributesCommand = async (
+  output: __HttpResponse,
+  context: __SerdeContext
+): Promise<ModifyListenerAttributesCommandOutput> => {
+  if (output.statusCode >= 300) {
+    return de_CommandError(output, context);
+  }
+  const data: any = await parseBody(output.body, context);
+  let contents: any = {};
+  contents = de_ModifyListenerAttributesOutput(data.ModifyListenerAttributesResult, context);
+  const response: ModifyListenerAttributesCommandOutput = {
     $metadata: deserializeMetadata(output),
     ...contents,
   };
@@ -2077,6 +2250,12 @@ const de_CommandError = async (output: __HttpResponse, context: __SerdeContext):
     case "TooManyTrustStores":
     case "com.amazonaws.elasticloadbalancingv2#TooManyTrustStoresException":
       throw await de_TooManyTrustStoresExceptionRes(parsedOutput, context);
+    case "AssociationNotFound":
+    case "com.amazonaws.elasticloadbalancingv2#TrustStoreAssociationNotFoundException":
+      throw await de_TrustStoreAssociationNotFoundExceptionRes(parsedOutput, context);
+    case "DeleteAssociationSameAccount":
+    case "com.amazonaws.elasticloadbalancingv2#DeleteAssociationSameAccountException":
+      throw await de_DeleteAssociationSameAccountExceptionRes(parsedOutput, context);
     case "TrustStoreInUse":
     case "com.amazonaws.elasticloadbalancingv2#TrustStoreInUseException":
       throw await de_TrustStoreInUseExceptionRes(parsedOutput, context);
@@ -2089,6 +2268,9 @@ const de_CommandError = async (output: __HttpResponse, context: __SerdeContext):
     case "RevocationIdNotFound":
     case "com.amazonaws.elasticloadbalancingv2#RevocationIdNotFoundException":
       throw await de_RevocationIdNotFoundExceptionRes(parsedOutput, context);
+    case "ResourceNotFound":
+    case "com.amazonaws.elasticloadbalancingv2#ResourceNotFoundException":
+      throw await de_ResourceNotFoundExceptionRes(parsedOutput, context);
     default:
       const parsedBody = parsedOutput.body;
       return throwDefaultError({
@@ -2173,6 +2355,22 @@ const de_CertificateNotFoundExceptionRes = async (
   const body = parsedOutput.body;
   const deserialized: any = de_CertificateNotFoundException(body.Error, context);
   const exception = new CertificateNotFoundException({
+    $metadata: deserializeMetadata(parsedOutput),
+    ...deserialized,
+  });
+  return __decorateServiceException(exception, body);
+};
+
+/**
+ * deserializeAws_queryDeleteAssociationSameAccountExceptionRes
+ */
+const de_DeleteAssociationSameAccountExceptionRes = async (
+  parsedOutput: any,
+  context: __SerdeContext
+): Promise<DeleteAssociationSameAccountException> => {
+  const body = parsedOutput.body;
+  const deserialized: any = de_DeleteAssociationSameAccountException(body.Error, context);
+  const exception = new DeleteAssociationSameAccountException({
     $metadata: deserializeMetadata(parsedOutput),
     ...deserialized,
   });
@@ -2500,6 +2698,22 @@ const de_ResourceInUseExceptionRes = async (
 };
 
 /**
+ * deserializeAws_queryResourceNotFoundExceptionRes
+ */
+const de_ResourceNotFoundExceptionRes = async (
+  parsedOutput: any,
+  context: __SerdeContext
+): Promise<ResourceNotFoundException> => {
+  const body = parsedOutput.body;
+  const deserialized: any = de_ResourceNotFoundException(body.Error, context);
+  const exception = new ResourceNotFoundException({
+    $metadata: deserializeMetadata(parsedOutput),
+    ...deserialized,
+  });
+  return __decorateServiceException(exception, body);
+};
+
+/**
  * deserializeAws_queryRevocationContentNotFoundExceptionRes
  */
 const de_RevocationContentNotFoundExceptionRes = async (
@@ -2797,6 +3011,22 @@ const de_TooManyUniqueTargetGroupsPerLoadBalancerExceptionRes = async (
   const body = parsedOutput.body;
   const deserialized: any = de_TooManyUniqueTargetGroupsPerLoadBalancerException(body.Error, context);
   const exception = new TooManyUniqueTargetGroupsPerLoadBalancerException({
+    $metadata: deserializeMetadata(parsedOutput),
+    ...deserialized,
+  });
+  return __decorateServiceException(exception, body);
+};
+
+/**
+ * deserializeAws_queryTrustStoreAssociationNotFoundExceptionRes
+ */
+const de_TrustStoreAssociationNotFoundExceptionRes = async (
+  parsedOutput: any,
+  context: __SerdeContext
+): Promise<TrustStoreAssociationNotFoundException> => {
+  const body = parsedOutput.body;
+  const deserialized: any = de_TrustStoreAssociationNotFoundException(body.Error, context);
+  const exception = new TrustStoreAssociationNotFoundException({
     $metadata: deserializeMetadata(parsedOutput),
     ...deserialized,
   });
@@ -3487,6 +3717,23 @@ const se_DeleteRuleInput = (input: DeleteRuleInput, context: __SerdeContext): an
 };
 
 /**
+ * serializeAws_queryDeleteSharedTrustStoreAssociationInput
+ */
+const se_DeleteSharedTrustStoreAssociationInput = (
+  input: DeleteSharedTrustStoreAssociationInput,
+  context: __SerdeContext
+): any => {
+  const entries: any = {};
+  if (input[_TSA] != null) {
+    entries[_TSA] = input[_TSA];
+  }
+  if (input[_RAe] != null) {
+    entries[_RAe] = input[_RAe];
+  }
+  return entries;
+};
+
+/**
  * serializeAws_queryDeleteTargetGroupInput
  */
 const se_DeleteTargetGroupInput = (input: DeleteTargetGroupInput, context: __SerdeContext): any => {
@@ -3539,6 +3786,17 @@ const se_DescribeAccountLimitsInput = (input: DescribeAccountLimitsInput, contex
   }
   if (input[_PS] != null) {
     entries[_PS] = input[_PS];
+  }
+  return entries;
+};
+
+/**
+ * serializeAws_queryDescribeListenerAttributesInput
+ */
+const se_DescribeListenerAttributesInput = (input: DescribeListenerAttributesInput, context: __SerdeContext): any => {
+  const entries: any = {};
+  if (input[_LA] != null) {
+    entries[_LA] = input[_LA];
   }
   return entries;
 };
@@ -3919,6 +4177,17 @@ const se_ForwardActionConfig = (input: ForwardActionConfig, context: __SerdeCont
 };
 
 /**
+ * serializeAws_queryGetResourcePolicyInput
+ */
+const se_GetResourcePolicyInput = (input: GetResourcePolicyInput, context: __SerdeContext): any => {
+  const entries: any = {};
+  if (input[_RAe] != null) {
+    entries[_RAe] = input[_RAe];
+  }
+  return entries;
+};
+
+/**
  * serializeAws_queryGetTrustStoreCaCertificatesBundleInput
  */
 const se_GetTrustStoreCaCertificatesBundleInput = (
@@ -4017,6 +4286,39 @@ const se_ListenerArns = (input: string[], context: __SerdeContext): any => {
       continue;
     }
     entries[`member.${counter}`] = entry;
+    counter++;
+  }
+  return entries;
+};
+
+/**
+ * serializeAws_queryListenerAttribute
+ */
+const se_ListenerAttribute = (input: ListenerAttribute, context: __SerdeContext): any => {
+  const entries: any = {};
+  if (input[_K] != null) {
+    entries[_K] = input[_K];
+  }
+  if (input[_Val] != null) {
+    entries[_Val] = input[_Val];
+  }
+  return entries;
+};
+
+/**
+ * serializeAws_queryListenerAttributes
+ */
+const se_ListenerAttributes = (input: ListenerAttribute[], context: __SerdeContext): any => {
+  const entries: any = {};
+  let counter = 1;
+  for (const entry of input) {
+    if (entry === null) {
+      continue;
+    }
+    const memberEntries = se_ListenerAttribute(entry, context);
+    Object.entries(memberEntries).forEach(([key, value]) => {
+      entries[`member.${counter}.${key}`] = value;
+    });
     counter++;
   }
   return entries;
@@ -4132,6 +4434,27 @@ const se_Matcher = (input: Matcher, context: __SerdeContext): any => {
   }
   if (input[_GC] != null) {
     entries[_GC] = input[_GC];
+  }
+  return entries;
+};
+
+/**
+ * serializeAws_queryModifyListenerAttributesInput
+ */
+const se_ModifyListenerAttributesInput = (input: ModifyListenerAttributesInput, context: __SerdeContext): any => {
+  const entries: any = {};
+  if (input[_LA] != null) {
+    entries[_LA] = input[_LA];
+  }
+  if (input[_At] != null) {
+    const memberEntries = se_ListenerAttributes(input[_At], context);
+    if (input[_At]?.length === 0) {
+      entries.Attributes = [];
+    }
+    Object.entries(memberEntries).forEach(([key, value]) => {
+      const loc = `Attributes.${key}`;
+      entries[loc] = value;
+    });
   }
   return entries;
 };
@@ -4344,6 +4667,9 @@ const se_MutualAuthenticationAttributes = (input: MutualAuthenticationAttributes
   }
   if (input[_ICCE] != null) {
     entries[_ICCE] = input[_ICCE];
+  }
+  if (input[_TSAS] != null) {
+    entries[_TSAS] = input[_TSAS];
   }
   return entries;
 };
@@ -5590,6 +5916,20 @@ const de_CreateTrustStoreOutput = (output: any, context: __SerdeContext): Create
 };
 
 /**
+ * deserializeAws_queryDeleteAssociationSameAccountException
+ */
+const de_DeleteAssociationSameAccountException = (
+  output: any,
+  context: __SerdeContext
+): DeleteAssociationSameAccountException => {
+  const contents: any = {};
+  if (output[_Me] != null) {
+    contents[_Me] = __expectString(output[_Me]);
+  }
+  return contents;
+};
+
+/**
  * deserializeAws_queryDeleteListenerOutput
  */
 const de_DeleteListenerOutput = (output: any, context: __SerdeContext): DeleteListenerOutput => {
@@ -5609,6 +5949,17 @@ const de_DeleteLoadBalancerOutput = (output: any, context: __SerdeContext): Dele
  * deserializeAws_queryDeleteRuleOutput
  */
 const de_DeleteRuleOutput = (output: any, context: __SerdeContext): DeleteRuleOutput => {
+  const contents: any = {};
+  return contents;
+};
+
+/**
+ * deserializeAws_queryDeleteSharedTrustStoreAssociationOutput
+ */
+const de_DeleteSharedTrustStoreAssociationOutput = (
+  output: any,
+  context: __SerdeContext
+): DeleteSharedTrustStoreAssociationOutput => {
   const contents: any = {};
   return contents;
 };
@@ -5649,6 +6000,22 @@ const de_DescribeAccountLimitsOutput = (output: any, context: __SerdeContext): D
   }
   if (output[_NM] != null) {
     contents[_NM] = __expectString(output[_NM]);
+  }
+  return contents;
+};
+
+/**
+ * deserializeAws_queryDescribeListenerAttributesOutput
+ */
+const de_DescribeListenerAttributesOutput = (
+  output: any,
+  context: __SerdeContext
+): DescribeListenerAttributesOutput => {
+  const contents: any = {};
+  if (output.Attributes === "") {
+    contents[_At] = [];
+  } else if (output[_At] != null && output[_At][_m] != null) {
+    contents[_At] = de_ListenerAttributes(__getArrayIfSingleItem(output[_At][_m]), context);
   }
   return contents;
 };
@@ -5996,6 +6363,17 @@ const de_ForwardActionConfig = (output: any, context: __SerdeContext): ForwardAc
 };
 
 /**
+ * deserializeAws_queryGetResourcePolicyOutput
+ */
+const de_GetResourcePolicyOutput = (output: any, context: __SerdeContext): GetResourcePolicyOutput => {
+  const contents: any = {};
+  if (output[_Pol] != null) {
+    contents[_Pol] = __expectString(output[_Pol]);
+  }
+  return contents;
+};
+
+/**
  * deserializeAws_queryGetTrustStoreCaCertificatesBundleOutput
  */
 const de_GetTrustStoreCaCertificatesBundleOutput = (
@@ -6257,6 +6635,31 @@ const de_Listener = (output: any, context: __SerdeContext): Listener => {
 };
 
 /**
+ * deserializeAws_queryListenerAttribute
+ */
+const de_ListenerAttribute = (output: any, context: __SerdeContext): ListenerAttribute => {
+  const contents: any = {};
+  if (output[_K] != null) {
+    contents[_K] = __expectString(output[_K]);
+  }
+  if (output[_Val] != null) {
+    contents[_Val] = __expectString(output[_Val]);
+  }
+  return contents;
+};
+
+/**
+ * deserializeAws_queryListenerAttributes
+ */
+const de_ListenerAttributes = (output: any, context: __SerdeContext): ListenerAttribute[] => {
+  return (output || [])
+    .filter((e: any) => e != null)
+    .map((entry: any) => {
+      return de_ListenerAttribute(entry, context);
+    });
+};
+
+/**
  * deserializeAws_queryListenerNotFoundException
  */
 const de_ListenerNotFoundException = (output: any, context: __SerdeContext): ListenerNotFoundException => {
@@ -6461,6 +6864,19 @@ const de_Matcher = (output: any, context: __SerdeContext): Matcher => {
 };
 
 /**
+ * deserializeAws_queryModifyListenerAttributesOutput
+ */
+const de_ModifyListenerAttributesOutput = (output: any, context: __SerdeContext): ModifyListenerAttributesOutput => {
+  const contents: any = {};
+  if (output.Attributes === "") {
+    contents[_At] = [];
+  } else if (output[_At] != null && output[_At][_m] != null) {
+    contents[_At] = de_ListenerAttributes(__getArrayIfSingleItem(output[_At][_m]), context);
+  }
+  return contents;
+};
+
+/**
  * deserializeAws_queryModifyListenerOutput
  */
 const de_ModifyListenerOutput = (output: any, context: __SerdeContext): ModifyListenerOutput => {
@@ -6557,6 +6973,9 @@ const de_MutualAuthenticationAttributes = (output: any, context: __SerdeContext)
   }
   if (output[_ICCE] != null) {
     contents[_ICCE] = __parseBoolean(output[_ICCE]);
+  }
+  if (output[_TSAS] != null) {
+    contents[_TSAS] = __expectString(output[_TSAS]);
   }
   return contents;
 };
@@ -6702,6 +7121,17 @@ const de_RemoveTrustStoreRevocationsOutput = (
  * deserializeAws_queryResourceInUseException
  */
 const de_ResourceInUseException = (output: any, context: __SerdeContext): ResourceInUseException => {
+  const contents: any = {};
+  if (output[_Me] != null) {
+    contents[_Me] = __expectString(output[_Me]);
+  }
+  return contents;
+};
+
+/**
+ * deserializeAws_queryResourceNotFoundException
+ */
+const de_ResourceNotFoundException = (output: any, context: __SerdeContext): ResourceNotFoundException => {
   const contents: any = {};
   if (output[_Me] != null) {
     contents[_Me] = __expectString(output[_Me]);
@@ -7435,6 +7865,20 @@ const de_TrustStoreAssociation = (output: any, context: __SerdeContext): TrustSt
 };
 
 /**
+ * deserializeAws_queryTrustStoreAssociationNotFoundException
+ */
+const de_TrustStoreAssociationNotFoundException = (
+  output: any,
+  context: __SerdeContext
+): TrustStoreAssociationNotFoundException => {
+  const contents: any = {};
+  if (output[_Me] != null) {
+    contents[_Me] = __expectString(output[_Me]);
+  }
+  return contents;
+};
+
+/**
  * deserializeAws_queryTrustStoreAssociations
  */
 const de_TrustStoreAssociations = (output: any, context: __SerdeContext): TrustStoreAssociation[] => {
@@ -7611,6 +8055,7 @@ const _D = "Description";
 const _DA = "DefaultActions";
 const _DAL = "DescribeAccountLimits";
 const _DL = "DeleteListener";
+const _DLA = "DescribeListenerAttributes";
 const _DLB = "DeleteLoadBalancer";
 const _DLBA = "DescribeLoadBalancerAttributes";
 const _DLBe = "DescribeLoadBalancers";
@@ -7621,6 +8066,7 @@ const _DR = "DeleteRule";
 const _DRe = "DescribeRules";
 const _DS = "DurationSeconds";
 const _DSSLP = "DescribeSSLPolicies";
+const _DSTSA = "DeleteSharedTrustStoreAssociation";
 const _DT = "DeregisterTargets";
 const _DTG = "DeleteTargetGroup";
 const _DTGA = "DescribeTargetGroupAttributes";
@@ -7637,6 +8083,7 @@ const _F = "Field";
 const _FC = "ForwardConfig";
 const _FRC = "FixedResponseConfig";
 const _GC = "GrpcCode";
+const _GRP = "GetResourcePolicy";
 const _GTSCCB = "GetTrustStoreCaCertificatesBundle";
 const _GTSRC = "GetTrustStoreRevocationContent";
 const _H = "Host";
@@ -7677,6 +8124,7 @@ const _MA = "MutualAuthentication";
 const _MB = "MessageBody";
 const _MIE = "MitigationInEffect";
 const _ML = "ModifyListener";
+const _MLA = "ModifyListenerAttributes";
 const _MLBA = "ModifyLoadBalancerAttributes";
 const _MR = "ModifyRule";
 const _MTG = "ModifyTargetGroup";
@@ -7701,6 +8149,7 @@ const _PS = "PageSize";
 const _PV = "ProtocolVersion";
 const _Pa = "Path";
 const _Po = "Port";
+const _Pol = "Policy";
 const _Pr = "Priority";
 const _Q = "Query";
 const _QSC = "QueryStringConfig";
@@ -7759,6 +8208,7 @@ const _TK = "TagKeys";
 const _TRE = "TotalRevokedEntries";
 const _TS = "TrustStores";
 const _TSA = "TrustStoreArn";
+const _TSAS = "TrustStoreAssociationStatus";
 const _TSAr = "TrustStoreArns";
 const _TSAru = "TrustStoreAssociations";
 const _TSR = "TrustStoreRevocations";

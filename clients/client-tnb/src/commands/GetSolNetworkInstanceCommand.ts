@@ -52,7 +52,7 @@ export interface GetSolNetworkInstanceCommandOutput extends GetSolNetworkInstanc
  * //   nsInstanceDescription: "STRING_VALUE", // required
  * //   nsdId: "STRING_VALUE", // required
  * //   nsdInfoId: "STRING_VALUE", // required
- * //   nsState: "INSTANTIATED" || "NOT_INSTANTIATED" || "IMPAIRED" || "STOPPED" || "DELETED" || "INSTANTIATE_IN_PROGRESS" || "UPDATE_IN_PROGRESS" || "TERMINATE_IN_PROGRESS",
+ * //   nsState: "INSTANTIATED" || "NOT_INSTANTIATED" || "UPDATED" || "IMPAIRED" || "UPDATE_FAILED" || "STOPPED" || "DELETED" || "INSTANTIATE_IN_PROGRESS" || "INTENT_TO_UPDATE_IN_PROGRESS" || "UPDATE_IN_PROGRESS" || "TERMINATE_IN_PROGRESS",
  * //   lcmOpInfo: { // LcmOperationInfo
  * //     nsLcmOpOccId: "STRING_VALUE", // required
  * //   },
@@ -86,7 +86,8 @@ export interface GetSolNetworkInstanceCommandOutput extends GetSolNetworkInstanc
  *  <p>Exception caused by throttling.</p>
  *
  * @throws {@link ValidationException} (client fault)
- *  <p>Unable to process the request because the client provided input failed to satisfy request constraints.</p>
+ *  <p>Unable to process the request because the client provided input failed to satisfy
+ *          request constraints.</p>
  *
  * @throws {@link TnbServiceException}
  * <p>Base exception class for all service exceptions from Tnb service.</p>
@@ -101,9 +102,7 @@ export class GetSolNetworkInstanceCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: TnbClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -115,4 +114,16 @@ export class GetSolNetworkInstanceCommand extends $Command
   .f(void 0, GetSolNetworkInstanceOutputFilterSensitiveLog)
   .ser(se_GetSolNetworkInstanceCommand)
   .de(de_GetSolNetworkInstanceCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: GetSolNetworkInstanceInput;
+      output: GetSolNetworkInstanceOutput;
+    };
+    sdk: {
+      input: GetSolNetworkInstanceCommandInput;
+      output: GetSolNetworkInstanceCommandOutput;
+    };
+  };
+}

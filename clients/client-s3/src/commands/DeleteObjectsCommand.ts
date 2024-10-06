@@ -1,5 +1,6 @@
 // smithy-typescript generated code
 import { getFlexibleChecksumsPlugin } from "@aws-sdk/middleware-flexible-checksums";
+import { getThrow200ExceptionsPlugin } from "@aws-sdk/middleware-sdk-s3";
 import { getEndpointPlugin } from "@smithy/middleware-endpoint";
 import { getSerdePlugin } from "@smithy/middleware-serde";
 import { Command as $Command } from "@smithy/smithy-client";
@@ -310,6 +311,7 @@ export class DeleteObjectsCommand extends $Command
         requestAlgorithmMember: "ChecksumAlgorithm",
         requestChecksumRequired: true,
       }),
+      getThrow200ExceptionsPlugin(config),
     ];
   })
   .s("AmazonS3", "DeleteObjects", {})
@@ -317,4 +319,16 @@ export class DeleteObjectsCommand extends $Command
   .f(void 0, void 0)
   .ser(se_DeleteObjectsCommand)
   .de(de_DeleteObjectsCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: DeleteObjectsRequest;
+      output: DeleteObjectsOutput;
+    };
+    sdk: {
+      input: DeleteObjectsCommandInput;
+      output: DeleteObjectsCommandOutput;
+    };
+  };
+}

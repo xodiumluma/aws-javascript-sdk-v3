@@ -85,7 +85,8 @@ export interface ListSolNetworkPackagesCommandOutput extends ListSolNetworkPacka
  *  <p>Exception caused by throttling.</p>
  *
  * @throws {@link ValidationException} (client fault)
- *  <p>Unable to process the request because the client provided input failed to satisfy request constraints.</p>
+ *  <p>Unable to process the request because the client provided input failed to satisfy
+ *          request constraints.</p>
  *
  * @throws {@link TnbServiceException}
  * <p>Base exception class for all service exceptions from Tnb service.</p>
@@ -100,9 +101,7 @@ export class ListSolNetworkPackagesCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: TnbClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -114,4 +113,16 @@ export class ListSolNetworkPackagesCommand extends $Command
   .f(void 0, void 0)
   .ser(se_ListSolNetworkPackagesCommand)
   .de(de_ListSolNetworkPackagesCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: ListSolNetworkPackagesInput;
+      output: ListSolNetworkPackagesOutput;
+    };
+    sdk: {
+      input: ListSolNetworkPackagesCommandInput;
+      output: ListSolNetworkPackagesCommandOutput;
+    };
+  };
+}

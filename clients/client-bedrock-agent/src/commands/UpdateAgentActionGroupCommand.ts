@@ -71,6 +71,7 @@ export interface UpdateAgentActionGroupCommandOutput extends UpdateAgentActionGr
  *             required: true || false,
  *           },
  *         },
+ *         requireConfirmation: "ENABLED" || "DISABLED",
  *       },
  *     ],
  *   },
@@ -111,6 +112,7 @@ export interface UpdateAgentActionGroupCommandOutput extends UpdateAgentActionGr
  * //               required: true || false,
  * //             },
  * //           },
+ * //           requireConfirmation: "ENABLED" || "DISABLED",
  * //         },
  * //       ],
  * //     },
@@ -160,9 +162,7 @@ export class UpdateAgentActionGroupCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: BedrockAgentClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -174,4 +174,16 @@ export class UpdateAgentActionGroupCommand extends $Command
   .f(UpdateAgentActionGroupRequestFilterSensitiveLog, UpdateAgentActionGroupResponseFilterSensitiveLog)
   .ser(se_UpdateAgentActionGroupCommand)
   .de(de_UpdateAgentActionGroupCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: UpdateAgentActionGroupRequest;
+      output: UpdateAgentActionGroupResponse;
+    };
+    sdk: {
+      input: UpdateAgentActionGroupCommandInput;
+      output: UpdateAgentActionGroupCommandOutput;
+    };
+  };
+}

@@ -88,6 +88,10 @@ import {
   Metric,
   MetricDataQuery,
   MetricStat,
+  MonitoredRequestCountMetricDataQueries,
+  RequestBasedServiceLevelIndicator,
+  RequestBasedServiceLevelIndicatorConfig,
+  RequestBasedServiceLevelIndicatorMetricConfig,
   ResourceNotFoundException,
   RollingInterval,
   ServiceLevelIndicator,
@@ -143,6 +147,7 @@ export const se_CreateServiceLevelObjectiveCommand = async (
       Description: [],
       Goal: (_) => se_Goal(_, context),
       Name: [],
+      RequestBasedSliConfig: (_) => se_RequestBasedServiceLevelIndicatorConfig(_, context),
       SliConfig: (_) => se_ServiceLevelIndicatorConfig(_, context),
       Tags: (_) => _json(_),
     })
@@ -438,6 +443,7 @@ export const se_UpdateServiceLevelObjectiveCommand = async (
     take(input, {
       Description: [],
       Goal: (_) => se_Goal(_, context),
+      RequestBasedSliConfig: (_) => se_RequestBasedServiceLevelIndicatorConfig(_, context),
       SliConfig: (_) => se_ServiceLevelIndicatorConfig(_, context),
     })
   );
@@ -522,6 +528,7 @@ export const de_GetServiceCommand = async (
   const data: Record<string, any> = __expectNonNull(__expectObject(await parseBody(output.body, context)), "body");
   const doc = take(data, {
     EndTime: (_) => __expectNonNull(__parseEpochTimestamp(__expectNumber(_))),
+    LogGroupReferences: _json,
     Service: _json,
     StartTime: (_) => __expectNonNull(__parseEpochTimestamp(__expectNumber(_))),
   });
@@ -960,6 +967,24 @@ const se_Interval = (input: Interval, context: __SerdeContext): any => {
 
 // se_MetricStat omitted.
 
+// se_MonitoredRequestCountMetricDataQueries omitted.
+
+/**
+ * serializeAws_restJson1RequestBasedServiceLevelIndicatorConfig
+ */
+const se_RequestBasedServiceLevelIndicatorConfig = (
+  input: RequestBasedServiceLevelIndicatorConfig,
+  context: __SerdeContext
+): any => {
+  return take(input, {
+    ComparisonOperator: [],
+    MetricThreshold: __serializeFloat,
+    RequestBasedSliMetricConfig: _json,
+  });
+};
+
+// se_RequestBasedServiceLevelIndicatorMetricConfig omitted.
+
 // se_RollingInterval omitted.
 
 /**
@@ -1032,6 +1057,8 @@ const de_Interval = (output: any, context: __SerdeContext): Interval => {
   return { $unknown: Object.entries(output)[0] };
 };
 
+// de_LogGroupReferences omitted.
+
 // de_Metric omitted.
 
 // de_MetricDataQueries omitted.
@@ -1043,6 +1070,24 @@ const de_Interval = (output: any, context: __SerdeContext): Interval => {
 // de_MetricReferences omitted.
 
 // de_MetricStat omitted.
+
+// de_MonitoredRequestCountMetricDataQueries omitted.
+
+/**
+ * deserializeAws_restJson1RequestBasedServiceLevelIndicator
+ */
+const de_RequestBasedServiceLevelIndicator = (
+  output: any,
+  context: __SerdeContext
+): RequestBasedServiceLevelIndicator => {
+  return take(output, {
+    ComparisonOperator: __expectString,
+    MetricThreshold: __limitedParseDouble,
+    RequestBasedSliMetric: _json,
+  }) as any;
+};
+
+// de_RequestBasedServiceLevelIndicatorMetric omitted.
 
 // de_RollingInterval omitted.
 
@@ -1077,9 +1122,11 @@ const de_ServiceLevelObjective = (output: any, context: __SerdeContext): Service
     Arn: __expectString,
     CreatedTime: (_: any) => __expectNonNull(__parseEpochTimestamp(__expectNumber(_))),
     Description: __expectString,
+    EvaluationType: __expectString,
     Goal: (_: any) => de_Goal(_, context),
     LastUpdatedTime: (_: any) => __expectNonNull(__parseEpochTimestamp(__expectNumber(_))),
     Name: __expectString,
+    RequestBasedSli: (_: any) => de_RequestBasedServiceLevelIndicator(_, context),
     Sli: (_: any) => de_ServiceLevelIndicator(_, context),
   }) as any;
 };
@@ -1094,11 +1141,15 @@ const de_ServiceLevelObjectiveBudgetReport = (
   return take(output, {
     Arn: __expectString,
     Attainment: __limitedParseDouble,
+    BudgetRequestsRemaining: __expectInt32,
     BudgetSecondsRemaining: __expectInt32,
     BudgetStatus: __expectString,
+    EvaluationType: __expectString,
     Goal: (_: any) => de_Goal(_, context),
     Name: __expectString,
+    RequestBasedSli: (_: any) => de_RequestBasedServiceLevelIndicator(_, context),
     Sli: (_: any) => de_ServiceLevelIndicator(_, context),
+    TotalBudgetRequests: __expectInt32,
     TotalBudgetSeconds: __expectInt32,
   }) as any;
 };
@@ -1170,13 +1221,6 @@ const deserializeMetadata = (output: __HttpResponse): __ResponseMetadata => ({
 // Encode Uint8Array data into string with utf-8.
 const collectBodyString = (streamBody: any, context: __SerdeContext): Promise<string> =>
   collectBody(streamBody, context).then((body) => context.utf8Encoder(body));
-
-const isSerializableHeaderValue = (value: any): boolean =>
-  value !== undefined &&
-  value !== null &&
-  value !== "" &&
-  (!Object.getOwnPropertyNames(value).includes("length") || value.length != 0) &&
-  (!Object.getOwnPropertyNames(value).includes("size") || value.size != 0);
 
 const _ET = "EndTime";
 const _MR = "MaxResults";

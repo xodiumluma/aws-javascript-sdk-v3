@@ -67,6 +67,8 @@ export interface ValidateStateMachineDefinitionCommandOutput
  * const input = { // ValidateStateMachineDefinitionInput
  *   definition: "STRING_VALUE", // required
  *   type: "STANDARD" || "EXPRESS",
+ *   severity: "ERROR" || "WARNING",
+ *   maxResults: Number("int"),
  * };
  * const command = new ValidateStateMachineDefinitionCommand(input);
  * const response = await client.send(command);
@@ -74,12 +76,13 @@ export interface ValidateStateMachineDefinitionCommandOutput
  * //   result: "OK" || "FAIL", // required
  * //   diagnostics: [ // ValidateStateMachineDefinitionDiagnosticList // required
  * //     { // ValidateStateMachineDefinitionDiagnostic
- * //       severity: "ERROR", // required
+ * //       severity: "ERROR" || "WARNING", // required
  * //       code: "STRING_VALUE", // required
  * //       message: "STRING_VALUE", // required
  * //       location: "STRING_VALUE",
  * //     },
  * //   ],
+ * //   truncated: true || false,
  * // };
  *
  * ```
@@ -106,9 +109,7 @@ export class ValidateStateMachineDefinitionCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: SFNClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -120,4 +121,16 @@ export class ValidateStateMachineDefinitionCommand extends $Command
   .f(ValidateStateMachineDefinitionInputFilterSensitiveLog, void 0)
   .ser(se_ValidateStateMachineDefinitionCommand)
   .de(de_ValidateStateMachineDefinitionCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: ValidateStateMachineDefinitionInput;
+      output: ValidateStateMachineDefinitionOutput;
+    };
+    sdk: {
+      input: ValidateStateMachineDefinitionCommandInput;
+      output: ValidateStateMachineDefinitionCommandOutput;
+    };
+  };
+}

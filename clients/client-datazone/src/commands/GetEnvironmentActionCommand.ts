@@ -6,7 +6,7 @@ import { MetadataBearer as __MetadataBearer } from "@smithy/types";
 
 import { DataZoneClientResolvedConfig, ServiceInputTypes, ServiceOutputTypes } from "../DataZoneClient";
 import { commonParams } from "../endpoint/EndpointParameters";
-import { GetEnvironmentActionInput, GetEnvironmentActionOutput } from "../models/models_0";
+import { GetEnvironmentActionInput, GetEnvironmentActionOutput } from "../models/models_1";
 import { de_GetEnvironmentActionCommand, se_GetEnvironmentActionCommand } from "../protocols/Aws_restJson1";
 
 /**
@@ -94,9 +94,7 @@ export class GetEnvironmentActionCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: DataZoneClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -108,4 +106,16 @@ export class GetEnvironmentActionCommand extends $Command
   .f(void 0, void 0)
   .ser(se_GetEnvironmentActionCommand)
   .de(de_GetEnvironmentActionCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: GetEnvironmentActionInput;
+      output: GetEnvironmentActionOutput;
+    };
+    sdk: {
+      input: GetEnvironmentActionCommandInput;
+      output: GetEnvironmentActionCommandOutput;
+    };
+  };
+}

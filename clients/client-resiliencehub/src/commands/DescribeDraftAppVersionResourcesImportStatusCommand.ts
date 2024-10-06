@@ -41,7 +41,7 @@ export interface DescribeDraftAppVersionResourcesImportStatusCommandOutput
  *          <note>
  *             <p>If you get a 404 error with
  *           <code>ResourceImportStatusNotFoundAppMetadataException</code>, you must call
- *           <code>importResourcesToDraftAppVersion</code>  after creating the application and before
+ *           <code>importResourcesToDraftAppVersion</code> after creating the application and before
  *         calling <code>describeDraftAppVersionResourcesImportStatus</code> to obtain the
  *         status.</p>
  *          </note>
@@ -103,9 +103,7 @@ export class DescribeDraftAppVersionResourcesImportStatusCommand extends $Comman
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: ResiliencehubClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -117,4 +115,16 @@ export class DescribeDraftAppVersionResourcesImportStatusCommand extends $Comman
   .f(void 0, void 0)
   .ser(se_DescribeDraftAppVersionResourcesImportStatusCommand)
   .de(de_DescribeDraftAppVersionResourcesImportStatusCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: DescribeDraftAppVersionResourcesImportStatusRequest;
+      output: DescribeDraftAppVersionResourcesImportStatusResponse;
+    };
+    sdk: {
+      input: DescribeDraftAppVersionResourcesImportStatusCommandInput;
+      output: DescribeDraftAppVersionResourcesImportStatusCommandOutput;
+    };
+  };
+}

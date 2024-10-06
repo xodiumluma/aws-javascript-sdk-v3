@@ -29,6 +29,10 @@ export interface DeleteQueueCommandOutput extends DeleteQueueResponse, __Metadat
 
 /**
  * <p>Deletes a queue.</p>
+ *          <important>
+ *             <p>You can't recover the jobs in a queue if you delete the queue. Deleting the queue
+ *             also deletes the jobs in that queue.</p>
+ *          </important>
  * @example
  * Use a bare-bones client and the command you need to make an API call.
  * ```javascript
@@ -84,9 +88,7 @@ export class DeleteQueueCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: DeadlineClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -98,4 +100,16 @@ export class DeleteQueueCommand extends $Command
   .f(void 0, void 0)
   .ser(se_DeleteQueueCommand)
   .de(de_DeleteQueueCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: DeleteQueueRequest;
+      output: {};
+    };
+    sdk: {
+      input: DeleteQueueCommandInput;
+      output: DeleteQueueCommandOutput;
+    };
+  };
+}

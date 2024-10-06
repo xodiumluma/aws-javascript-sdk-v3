@@ -28,8 +28,7 @@ export interface ListSopRecommendationsCommandInput extends ListSopRecommendatio
 export interface ListSopRecommendationsCommandOutput extends ListSopRecommendationsResponse, __MetadataBearer {}
 
 /**
- * <p>Lists the standard operating procedure (SOP) recommendations for the Resilience Hub
- *       applications.</p>
+ * <p>Lists the standard operating procedure (SOP) recommendations for the Resilience Hub applications.</p>
  * @example
  * Use a bare-bones client and the command you need to make an API call.
  * ```javascript
@@ -114,9 +113,7 @@ export class ListSopRecommendationsCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: ResiliencehubClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -128,4 +125,16 @@ export class ListSopRecommendationsCommand extends $Command
   .f(void 0, void 0)
   .ser(se_ListSopRecommendationsCommand)
   .de(de_ListSopRecommendationsCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: ListSopRecommendationsRequest;
+      output: ListSopRecommendationsResponse;
+    };
+    sdk: {
+      input: ListSopRecommendationsCommandInput;
+      output: ListSopRecommendationsCommandOutput;
+    };
+  };
+}

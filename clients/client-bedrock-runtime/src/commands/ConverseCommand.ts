@@ -31,8 +31,9 @@ export interface ConverseCommandOutput extends ConverseResponse, __MetadataBeare
  * <p>Sends messages to the specified Amazon Bedrock model. <code>Converse</code> provides
  *          a consistent interface that works with all models that
  *          support messages. This allows you to write code once and use it with different models.
- *          Should a model have unique inference parameters, you can also pass those unique parameters
+ *          If a model has unique inference parameters, you can also pass those unique parameters
  *          to the model.</p>
+ *          <p>Amazon Bedrock doesn't store any text, images, or documents that you provide as content. The data is only used to generate the response.</p>
  *          <p>For information about the Converse API, see <i>Use the Converse API</i> in the <i>Amazon Bedrock User Guide</i>.
  *             To use a guardrail, see  <i>Use a guardrail with the Converse API</i> in the <i>Amazon Bedrock User Guide</i>.
  *             To use a tool with a model, see <i>Tool use (Function calling)</i> in the <i>Amazon Bedrock User Guide</i>
@@ -251,6 +252,7 @@ export interface ConverseCommandOutput extends ConverseResponse, __MetadataBeare
  * //               { // GuardrailContentFilter
  * //                 type: "INSULTS" || "HATE" || "SEXUAL" || "VIOLENCE" || "MISCONDUCT" || "PROMPT_ATTACK", // required
  * //                 confidence: "NONE" || "LOW" || "MEDIUM" || "HIGH", // required
+ * //                 filterStrength: "NONE" || "LOW" || "MEDIUM" || "HIGH",
  * //                 action: "BLOCKED", // required
  * //               },
  * //             ],
@@ -297,6 +299,23 @@ export interface ConverseCommandOutput extends ConverseResponse, __MetadataBeare
  * //               },
  * //             ],
  * //           },
+ * //           invocationMetrics: { // GuardrailInvocationMetrics
+ * //             guardrailProcessingLatency: Number("long"),
+ * //             usage: { // GuardrailUsage
+ * //               topicPolicyUnits: Number("int"), // required
+ * //               contentPolicyUnits: Number("int"), // required
+ * //               wordPolicyUnits: Number("int"), // required
+ * //               sensitiveInformationPolicyUnits: Number("int"), // required
+ * //               sensitiveInformationPolicyFreeUnits: Number("int"), // required
+ * //               contextualGroundingPolicyUnits: Number("int"), // required
+ * //             },
+ * //             guardrailCoverage: { // GuardrailCoverage
+ * //               textCharacters: { // GuardrailTextCharactersCoverage
+ * //                 guarded: Number("int"),
+ * //                 total: Number("int"),
+ * //               },
+ * //             },
+ * //           },
  * //         },
  * //       },
  * //       outputAssessments: { // GuardrailAssessmentListMap
@@ -316,6 +335,7 @@ export interface ConverseCommandOutput extends ConverseResponse, __MetadataBeare
  * //                 {
  * //                   type: "INSULTS" || "HATE" || "SEXUAL" || "VIOLENCE" || "MISCONDUCT" || "PROMPT_ATTACK", // required
  * //                   confidence: "NONE" || "LOW" || "MEDIUM" || "HIGH", // required
+ * //                   filterStrength: "NONE" || "LOW" || "MEDIUM" || "HIGH",
  * //                   action: "BLOCKED", // required
  * //                 },
  * //               ],
@@ -362,6 +382,23 @@ export interface ConverseCommandOutput extends ConverseResponse, __MetadataBeare
  * //                 },
  * //               ],
  * //             },
+ * //             invocationMetrics: {
+ * //               guardrailProcessingLatency: Number("long"),
+ * //               usage: {
+ * //                 topicPolicyUnits: Number("int"), // required
+ * //                 contentPolicyUnits: Number("int"), // required
+ * //                 wordPolicyUnits: Number("int"), // required
+ * //                 sensitiveInformationPolicyUnits: Number("int"), // required
+ * //                 sensitiveInformationPolicyFreeUnits: Number("int"), // required
+ * //                 contextualGroundingPolicyUnits: Number("int"), // required
+ * //               },
+ * //               guardrailCoverage: {
+ * //                 textCharacters: {
+ * //                   guarded: Number("int"),
+ * //                   total: Number("int"),
+ * //                 },
+ * //               },
+ * //             },
  * //           },
  * //         ],
  * //       },
@@ -387,7 +424,10 @@ export interface ConverseCommandOutput extends ConverseResponse, __MetadataBeare
  *  <p>The request failed due to an error while processing the model.</p>
  *
  * @throws {@link ModelNotReadyException} (client fault)
- *  <p>The model specified in the request is not ready to serve inference requests.</p>
+ *  <p>The model specified in the request is not ready to serve inference requests. The AWS SDK
+ *            will automatically retry the operation up to 5 times. For information about configuring
+ *            automatic retries, see <a href="https://docs.aws.amazon.com/sdkref/latest/guide/feature-retry-behavior.html">Retry behavior</a> in the <i>AWS SDKs and Tools</i>
+ *            reference guide.</p>
  *
  * @throws {@link ModelTimeoutException} (client fault)
  *  <p>The request took too long to process. Processing time exceeded the model timeout length.</p>
@@ -395,8 +435,11 @@ export interface ConverseCommandOutput extends ConverseResponse, __MetadataBeare
  * @throws {@link ResourceNotFoundException} (client fault)
  *  <p>The specified resource ARN was not found. Check the ARN and try your request again.</p>
  *
+ * @throws {@link ServiceUnavailableException} (server fault)
+ *  <p>The service isn't currently available. Try again later.</p>
+ *
  * @throws {@link ThrottlingException} (client fault)
- *  <p>The number of requests exceeds the limit. Resubmit your request later.</p>
+ *  <p>Your request was throttled because of service-wide limitations. Resubmit your request later or in a different region. You can also purchase <a href="https://docs.aws.amazon.com/bedrock/latest/userguide/prov-throughput.html">Provisioned Throughput</a> to increase the rate or number of tokens you can process.</p>
  *
  * @throws {@link ValidationException} (client fault)
  *  <p>Input validation failed. Check your request parameters and retry the request.</p>
@@ -414,9 +457,7 @@ export class ConverseCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: BedrockRuntimeClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -428,4 +469,16 @@ export class ConverseCommand extends $Command
   .f(void 0, void 0)
   .ser(se_ConverseCommand)
   .de(de_ConverseCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: ConverseRequest;
+      output: ConverseResponse;
+    };
+    sdk: {
+      input: ConverseCommandInput;
+      output: ConverseCommandOutput;
+    };
+  };
+}

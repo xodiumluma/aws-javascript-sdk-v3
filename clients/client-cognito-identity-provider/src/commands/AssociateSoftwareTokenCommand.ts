@@ -48,8 +48,8 @@ export interface AssociateSoftwareTokenCommandOutput extends AssociateSoftwareTo
  *                 token and your user pool doesn't require MFA, the user can then authenticate with
  *                 user name and password credentials alone. If your user pool requires TOTP MFA, Amazon Cognito
  *                 generates an <code>MFA_SETUP</code> or <code>SOFTWARE_TOKEN_SETUP</code> challenge
- *                 each time your user signs. Complete setup with <code>AssociateSoftwareToken</code>
- *                 and <code>VerifySoftwareToken</code>.</p>
+ *                 each time your user signs in. Complete setup with
+ *                     <code>AssociateSoftwareToken</code> and <code>VerifySoftwareToken</code>.</p>
  *             <p>After you set up software token MFA for your user, Amazon Cognito generates a
  *                     <code>SOFTWARE_TOKEN_MFA</code> challenge when they authenticate. Respond to
  *                 this challenge with your user's TOTP.</p>
@@ -124,9 +124,7 @@ export class AssociateSoftwareTokenCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: CognitoIdentityProviderClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -138,4 +136,16 @@ export class AssociateSoftwareTokenCommand extends $Command
   .f(AssociateSoftwareTokenRequestFilterSensitiveLog, AssociateSoftwareTokenResponseFilterSensitiveLog)
   .ser(se_AssociateSoftwareTokenCommand)
   .de(de_AssociateSoftwareTokenCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: AssociateSoftwareTokenRequest;
+      output: AssociateSoftwareTokenResponse;
+    };
+    sdk: {
+      input: AssociateSoftwareTokenCommandInput;
+      output: AssociateSoftwareTokenCommandOutput;
+    };
+  };
+}

@@ -188,6 +188,23 @@ export type GuardrailContentFilterConfidence =
  * @public
  * @enum
  */
+export const GuardrailContentFilterStrength = {
+  HIGH: "HIGH",
+  LOW: "LOW",
+  MEDIUM: "MEDIUM",
+  NONE: "NONE",
+} as const;
+
+/**
+ * @public
+ */
+export type GuardrailContentFilterStrength =
+  (typeof GuardrailContentFilterStrength)[keyof typeof GuardrailContentFilterStrength];
+
+/**
+ * @public
+ * @enum
+ */
 export const GuardrailContentFilterType = {
   HATE: "HATE",
   INSULTS: "INSULTS",
@@ -218,6 +235,12 @@ export interface GuardrailContentFilter {
    * @public
    */
   confidence: GuardrailContentFilterConfidence | undefined;
+
+  /**
+   * <p>The filter strength setting for the guardrail content filter.</p>
+   * @public
+   */
+  filterStrength?: GuardrailContentFilterStrength;
 
   /**
    * <p>The guardrail action.</p>
@@ -308,6 +331,102 @@ export interface GuardrailContextualGroundingPolicyAssessment {
    * @public
    */
   filters?: GuardrailContextualGroundingFilter[];
+}
+
+/**
+ * <p>The guardrail coverage for the text characters.</p>
+ * @public
+ */
+export interface GuardrailTextCharactersCoverage {
+  /**
+   * <p>The text characters that were guarded by the guardrail coverage.</p>
+   * @public
+   */
+  guarded?: number;
+
+  /**
+   * <p>The total text characters by the guardrail coverage.</p>
+   * @public
+   */
+  total?: number;
+}
+
+/**
+ * <p>The action of the guardrail coverage details.</p>
+ * @public
+ */
+export interface GuardrailCoverage {
+  /**
+   * <p>The text characters of the guardrail coverage details.</p>
+   * @public
+   */
+  textCharacters?: GuardrailTextCharactersCoverage;
+}
+
+/**
+ * <p>The details on the use of the guardrail.</p>
+ * @public
+ */
+export interface GuardrailUsage {
+  /**
+   * <p>The topic policy units processed by the guardrail.</p>
+   * @public
+   */
+  topicPolicyUnits: number | undefined;
+
+  /**
+   * <p>The content policy units processed by the guardrail.</p>
+   * @public
+   */
+  contentPolicyUnits: number | undefined;
+
+  /**
+   * <p>The word policy units processed by the guardrail.</p>
+   * @public
+   */
+  wordPolicyUnits: number | undefined;
+
+  /**
+   * <p>The sensitive information policy units processed by the guardrail.</p>
+   * @public
+   */
+  sensitiveInformationPolicyUnits: number | undefined;
+
+  /**
+   * <p>The sensitive information policy free units processed by the guardrail.</p>
+   * @public
+   */
+  sensitiveInformationPolicyFreeUnits: number | undefined;
+
+  /**
+   * <p>The contextual grounding policy units processed by the guardrail.</p>
+   * @public
+   */
+  contextualGroundingPolicyUnits: number | undefined;
+}
+
+/**
+ * <p>The invocation metrics for the guardrail.</p>
+ * @public
+ */
+export interface GuardrailInvocationMetrics {
+  /**
+   * <p>The processing latency details for the guardrail invocation metrics.</p>
+   * @public
+   */
+  guardrailProcessingLatency?: number;
+
+  /**
+   * <p>The usage details for the guardrail invocation metrics.</p>
+   * @public
+   */
+  usage?: GuardrailUsage;
+
+  /**
+   * <p>The coverage details for the guardrail invocation metrics.</p>
+   * @public
+   */
+  guardrailCoverage?: GuardrailCoverage;
 }
 
 /**
@@ -622,6 +741,12 @@ export interface GuardrailAssessment {
    * @public
    */
   contextualGroundingPolicy?: GuardrailContextualGroundingPolicyAssessment;
+
+  /**
+   * <p>The invocation metrics for the guardrail assessment.</p>
+   * @public
+   */
+  invocationMetrics?: GuardrailInvocationMetrics;
 }
 
 /**
@@ -634,48 +759,6 @@ export interface GuardrailOutputContent {
    * @public
    */
   text?: string;
-}
-
-/**
- * <p>The details on the use of the guardrail.</p>
- * @public
- */
-export interface GuardrailUsage {
-  /**
-   * <p>The topic policy units processed by the guardrail.</p>
-   * @public
-   */
-  topicPolicyUnits: number | undefined;
-
-  /**
-   * <p>The content policy units processed by the guardrail.</p>
-   * @public
-   */
-  contentPolicyUnits: number | undefined;
-
-  /**
-   * <p>The word policy units processed by the guardrail.</p>
-   * @public
-   */
-  wordPolicyUnits: number | undefined;
-
-  /**
-   * <p>The sensitive information policy units processed by the guardrail.</p>
-   * @public
-   */
-  sensitiveInformationPolicyUnits: number | undefined;
-
-  /**
-   * <p>The sensitive information policy free units processed by the guardrail.</p>
-   * @public
-   */
-  sensitiveInformationPolicyFreeUnits: number | undefined;
-
-  /**
-   * <p>The contextual grounding policy units processed by the guardrail.</p>
-   * @public
-   */
-  contextualGroundingPolicyUnits: number | undefined;
 }
 
 /**
@@ -705,6 +788,12 @@ export interface ApplyGuardrailResponse {
    * @public
    */
   assessments: GuardrailAssessment[] | undefined;
+
+  /**
+   * <p>The guardrail coverage details in the apply guardrail response.</p>
+   * @public
+   */
+  guardrailCoverage?: GuardrailCoverage;
 }
 
 /**
@@ -748,7 +837,7 @@ export class ResourceNotFoundException extends __BaseException {
 }
 
 /**
- * <p>The number of requests exceeds the service quota. Resubmit your request later.</p>
+ * <p>Your request exceeds the service quota for your account. You can view your quotas at <a href="https://docs.aws.amazon.com/servicequotas/latest/userguide/gs-request-quota.html">Viewing service quotas</a>. You can resubmit your request later.</p>
  * @public
  */
 export class ServiceQuotaExceededException extends __BaseException {
@@ -768,7 +857,7 @@ export class ServiceQuotaExceededException extends __BaseException {
 }
 
 /**
- * <p>The number of requests exceeds the limit. Resubmit your request later.</p>
+ * <p>Your request was throttled because of service-wide limitations. Resubmit your request later or in a different region. You can also purchase <a href="https://docs.aws.amazon.com/bedrock/latest/userguide/prov-throughput.html">Provisioned Throughput</a> to increase the rate or number of tokens you can process.</p>
  * @public
  */
 export class ThrottlingException extends __BaseException {
@@ -1780,10 +1869,13 @@ export interface ToolConfiguration {
 export interface ConverseRequest {
   /**
    * <p>The identifier for the model that you want to call.</p>
-   *          <p>The <code>modelId</code> to provide depends on the type of model that you use:</p>
+   *          <p>The <code>modelId</code> to provide depends on the type of model or throughput that you use:</p>
    *          <ul>
    *             <li>
    *                <p>If you use a base model, specify the model ID or its ARN. For a list of model IDs for base models, see <a href="https://docs.aws.amazon.com/bedrock/latest/userguide/model-ids.html#model-ids-arns">Amazon Bedrock base model IDs (on-demand throughput)</a> in the Amazon Bedrock User Guide.</p>
+   *             </li>
+   *             <li>
+   *                <p>If you use an inference profile, specify the inference profile ID or its ARN. For a list of inference profile IDs, see <a href="https://docs.aws.amazon.com/bedrock/latest/userguide/cross-region-inference-support.html">Supported Regions and models for cross-region inference</a> in the Amazon Bedrock User Guide.</p>
    *             </li>
    *             <li>
    *                <p>If you use a provisioned model, specify the ARN of the Provisioned Throughput. For more information, see <a href="https://docs.aws.amazon.com/bedrock/latest/userguide/prov-thru-use.html">Run inference using a Provisioned Throughput</a> in the Amazon Bedrock User Guide.</p>
@@ -1792,6 +1884,7 @@ export interface ConverseRequest {
    *                <p>If you use a custom model, first purchase Provisioned Throughput for it. Then specify the ARN of the resulting provisioned model. For more information, see <a href="https://docs.aws.amazon.com/bedrock/latest/userguide/model-customization-use.html">Use a custom model in Amazon Bedrock</a> in the Amazon Bedrock User Guide.</p>
    *             </li>
    *          </ul>
+   *          <p>The Converse API doesn't support <a href="https://docs.aws.amazon.com/bedrock/latest/userguide/model-customization-import-model.html">imported models</a>.</p>
    * @public
    */
   modelId: string | undefined;
@@ -2065,12 +2158,16 @@ export class ModelErrorException extends __BaseException {
 }
 
 /**
- * <p>The model specified in the request is not ready to serve inference requests.</p>
+ * <p>The model specified in the request is not ready to serve inference requests. The AWS SDK
+ *            will automatically retry the operation up to 5 times. For information about configuring
+ *            automatic retries, see <a href="https://docs.aws.amazon.com/sdkref/latest/guide/feature-retry-behavior.html">Retry behavior</a> in the <i>AWS SDKs and Tools</i>
+ *            reference guide.</p>
  * @public
  */
 export class ModelNotReadyException extends __BaseException {
   readonly name: "ModelNotReadyException" = "ModelNotReadyException";
   readonly $fault: "client" = "client";
+  $retryable = {};
   /**
    * @internal
    */
@@ -2101,6 +2198,26 @@ export class ModelTimeoutException extends __BaseException {
       ...opts,
     });
     Object.setPrototypeOf(this, ModelTimeoutException.prototype);
+  }
+}
+
+/**
+ * <p>The service isn't currently available. Try again later.</p>
+ * @public
+ */
+export class ServiceUnavailableException extends __BaseException {
+  readonly name: "ServiceUnavailableException" = "ServiceUnavailableException";
+  readonly $fault: "server" = "server";
+  /**
+   * @internal
+   */
+  constructor(opts: __ExceptionOptionType<ServiceUnavailableException, __BaseException>) {
+    super({
+      name: "ServiceUnavailableException",
+      $fault: "server",
+      ...opts,
+    });
+    Object.setPrototypeOf(this, ServiceUnavailableException.prototype);
   }
 }
 
@@ -2158,10 +2275,13 @@ export interface GuardrailStreamConfiguration {
 export interface ConverseStreamRequest {
   /**
    * <p>The ID for the model.</p>
-   *          <p>The <code>modelId</code> to provide depends on the type of model that you use:</p>
+   *          <p>The <code>modelId</code> to provide depends on the type of model or throughput that you use:</p>
    *          <ul>
    *             <li>
    *                <p>If you use a base model, specify the model ID or its ARN. For a list of model IDs for base models, see <a href="https://docs.aws.amazon.com/bedrock/latest/userguide/model-ids.html#model-ids-arns">Amazon Bedrock base model IDs (on-demand throughput)</a> in the Amazon Bedrock User Guide.</p>
+   *             </li>
+   *             <li>
+   *                <p>If you use an inference profile, specify the inference profile ID or its ARN. For a list of inference profile IDs, see <a href="https://docs.aws.amazon.com/bedrock/latest/userguide/cross-region-inference-support.html">Supported Regions and models for cross-region inference</a> in the Amazon Bedrock User Guide.</p>
    *             </li>
    *             <li>
    *                <p>If you use a provisioned model, specify the ARN of the Provisioned Throughput. For more information, see <a href="https://docs.aws.amazon.com/bedrock/latest/userguide/prov-thru-use.html">Run inference using a Provisioned Throughput</a> in the Amazon Bedrock User Guide.</p>
@@ -2170,6 +2290,7 @@ export interface ConverseStreamRequest {
    *                <p>If you use a custom model, first purchase Provisioned Throughput for it. Then specify the ARN of the resulting provisioned model. For more information, see <a href="https://docs.aws.amazon.com/bedrock/latest/userguide/model-customization-use.html">Use a custom model in Amazon Bedrock</a> in the Amazon Bedrock User Guide.</p>
    *             </li>
    *          </ul>
+   *          <p>The Converse API doesn't support <a href="https://docs.aws.amazon.com/bedrock/latest/userguide/model-customization-import-model.html">imported models</a>.</p>
    * @public
    */
   modelId: string | undefined;
@@ -2533,6 +2654,7 @@ export type ConverseStreamOutput =
   | ConverseStreamOutput.MessageStopMember
   | ConverseStreamOutput.MetadataMember
   | ConverseStreamOutput.ModelStreamErrorExceptionMember
+  | ConverseStreamOutput.ServiceUnavailableExceptionMember
   | ConverseStreamOutput.ThrottlingExceptionMember
   | ConverseStreamOutput.ValidationExceptionMember
   | ConverseStreamOutput.$UnknownMember;
@@ -2556,6 +2678,7 @@ export namespace ConverseStreamOutput {
     modelStreamErrorException?: never;
     validationException?: never;
     throttlingException?: never;
+    serviceUnavailableException?: never;
     $unknown?: never;
   }
 
@@ -2574,6 +2697,7 @@ export namespace ConverseStreamOutput {
     modelStreamErrorException?: never;
     validationException?: never;
     throttlingException?: never;
+    serviceUnavailableException?: never;
     $unknown?: never;
   }
 
@@ -2592,6 +2716,7 @@ export namespace ConverseStreamOutput {
     modelStreamErrorException?: never;
     validationException?: never;
     throttlingException?: never;
+    serviceUnavailableException?: never;
     $unknown?: never;
   }
 
@@ -2610,6 +2735,7 @@ export namespace ConverseStreamOutput {
     modelStreamErrorException?: never;
     validationException?: never;
     throttlingException?: never;
+    serviceUnavailableException?: never;
     $unknown?: never;
   }
 
@@ -2628,6 +2754,7 @@ export namespace ConverseStreamOutput {
     modelStreamErrorException?: never;
     validationException?: never;
     throttlingException?: never;
+    serviceUnavailableException?: never;
     $unknown?: never;
   }
 
@@ -2646,6 +2773,7 @@ export namespace ConverseStreamOutput {
     modelStreamErrorException?: never;
     validationException?: never;
     throttlingException?: never;
+    serviceUnavailableException?: never;
     $unknown?: never;
   }
 
@@ -2664,6 +2792,7 @@ export namespace ConverseStreamOutput {
     modelStreamErrorException?: never;
     validationException?: never;
     throttlingException?: never;
+    serviceUnavailableException?: never;
     $unknown?: never;
   }
 
@@ -2682,6 +2811,7 @@ export namespace ConverseStreamOutput {
     modelStreamErrorException: ModelStreamErrorException;
     validationException?: never;
     throttlingException?: never;
+    serviceUnavailableException?: never;
     $unknown?: never;
   }
 
@@ -2700,6 +2830,7 @@ export namespace ConverseStreamOutput {
     modelStreamErrorException?: never;
     validationException: ValidationException;
     throttlingException?: never;
+    serviceUnavailableException?: never;
     $unknown?: never;
   }
 
@@ -2718,6 +2849,26 @@ export namespace ConverseStreamOutput {
     modelStreamErrorException?: never;
     validationException?: never;
     throttlingException: ThrottlingException;
+    serviceUnavailableException?: never;
+    $unknown?: never;
+  }
+
+  /**
+   * <p>The service isn't currently available. Try again later.</p>
+   * @public
+   */
+  export interface ServiceUnavailableExceptionMember {
+    messageStart?: never;
+    contentBlockStart?: never;
+    contentBlockDelta?: never;
+    contentBlockStop?: never;
+    messageStop?: never;
+    metadata?: never;
+    internalServerException?: never;
+    modelStreamErrorException?: never;
+    validationException?: never;
+    throttlingException?: never;
+    serviceUnavailableException: ServiceUnavailableException;
     $unknown?: never;
   }
 
@@ -2735,6 +2886,7 @@ export namespace ConverseStreamOutput {
     modelStreamErrorException?: never;
     validationException?: never;
     throttlingException?: never;
+    serviceUnavailableException?: never;
     $unknown: [string, any];
   }
 
@@ -2749,6 +2901,7 @@ export namespace ConverseStreamOutput {
     modelStreamErrorException: (value: ModelStreamErrorException) => T;
     validationException: (value: ValidationException) => T;
     throttlingException: (value: ThrottlingException) => T;
+    serviceUnavailableException: (value: ServiceUnavailableException) => T;
     _: (name: string, value: any) => T;
   }
 
@@ -2765,6 +2918,8 @@ export namespace ConverseStreamOutput {
       return visitor.modelStreamErrorException(value.modelStreamErrorException);
     if (value.validationException !== undefined) return visitor.validationException(value.validationException);
     if (value.throttlingException !== undefined) return visitor.throttlingException(value.throttlingException);
+    if (value.serviceUnavailableException !== undefined)
+      return visitor.serviceUnavailableException(value.serviceUnavailableException);
     return visitor._(value.$unknown[0], value.$unknown[1]);
   };
 }
@@ -2829,6 +2984,9 @@ export interface InvokeModelRequest {
    *             </li>
    *             <li>
    *                <p>If you use a custom model, first purchase Provisioned Throughput for it. Then specify the ARN of the resulting provisioned model. For more information, see <a href="https://docs.aws.amazon.com/bedrock/latest/userguide/model-customization-use.html">Use a custom model in Amazon Bedrock</a> in the Amazon Bedrock User Guide.</p>
+   *             </li>
+   *             <li>
+   *                <p>If you use an <a href="https://docs.aws.amazon.com/bedrock/latest/userguide/model-customization-import-model.html">imported model</a>, specify the ARN of the imported model. You can get the model ARN from a successful call to <a href="https://docs.aws.amazon.com/bedrock/latest/APIReference/API_CreateModelImportJob.html">CreateModelImportJob</a> or from the Imported models page in the Amazon Bedrock console.</p>
    *             </li>
    *          </ul>
    * @public
@@ -2921,6 +3079,9 @@ export interface InvokeModelWithResponseStreamRequest {
    *             <li>
    *                <p>If you use a custom model, first purchase Provisioned Throughput for it. Then specify the ARN of the resulting provisioned model. For more information, see <a href="https://docs.aws.amazon.com/bedrock/latest/userguide/model-customization-use.html">Use a custom model in Amazon Bedrock</a> in the Amazon Bedrock User Guide.</p>
    *             </li>
+   *             <li>
+   *                <p>If you use an <a href="https://docs.aws.amazon.com/bedrock/latest/userguide/model-customization-import-model.html">imported model</a>, specify the ARN of the imported model. You can get the model ARN from a successful call to <a href="https://docs.aws.amazon.com/bedrock/latest/APIReference/API_CreateModelImportJob.html">CreateModelImportJob</a> or from the Imported models page in the Amazon Bedrock console.</p>
+   *             </li>
    *          </ul>
    * @public
    */
@@ -2979,6 +3140,7 @@ export type ResponseStream =
   | ResponseStream.InternalServerExceptionMember
   | ResponseStream.ModelStreamErrorExceptionMember
   | ResponseStream.ModelTimeoutExceptionMember
+  | ResponseStream.ServiceUnavailableExceptionMember
   | ResponseStream.ThrottlingExceptionMember
   | ResponseStream.ValidationExceptionMember
   | ResponseStream.$UnknownMember;
@@ -2998,6 +3160,7 @@ export namespace ResponseStream {
     validationException?: never;
     throttlingException?: never;
     modelTimeoutException?: never;
+    serviceUnavailableException?: never;
     $unknown?: never;
   }
 
@@ -3012,6 +3175,7 @@ export namespace ResponseStream {
     validationException?: never;
     throttlingException?: never;
     modelTimeoutException?: never;
+    serviceUnavailableException?: never;
     $unknown?: never;
   }
 
@@ -3026,6 +3190,7 @@ export namespace ResponseStream {
     validationException?: never;
     throttlingException?: never;
     modelTimeoutException?: never;
+    serviceUnavailableException?: never;
     $unknown?: never;
   }
 
@@ -3040,11 +3205,12 @@ export namespace ResponseStream {
     validationException: ValidationException;
     throttlingException?: never;
     modelTimeoutException?: never;
+    serviceUnavailableException?: never;
     $unknown?: never;
   }
 
   /**
-   * <p>The number or frequency of requests exceeds the limit. Resubmit your request later.</p>
+   * <p>Your request was throttled because of service-wide limitations. Resubmit your request later or in a different region. You can also purchase <a href="https://docs.aws.amazon.com/bedrock/latest/userguide/prov-throughput.html">Provisioned Throughput</a> to increase the rate or number of tokens you can process.</p>
    * @public
    */
   export interface ThrottlingExceptionMember {
@@ -3054,6 +3220,7 @@ export namespace ResponseStream {
     validationException?: never;
     throttlingException: ThrottlingException;
     modelTimeoutException?: never;
+    serviceUnavailableException?: never;
     $unknown?: never;
   }
 
@@ -3068,6 +3235,22 @@ export namespace ResponseStream {
     validationException?: never;
     throttlingException?: never;
     modelTimeoutException: ModelTimeoutException;
+    serviceUnavailableException?: never;
+    $unknown?: never;
+  }
+
+  /**
+   * <p>The service isn't currently available. Try again later.</p>
+   * @public
+   */
+  export interface ServiceUnavailableExceptionMember {
+    chunk?: never;
+    internalServerException?: never;
+    modelStreamErrorException?: never;
+    validationException?: never;
+    throttlingException?: never;
+    modelTimeoutException?: never;
+    serviceUnavailableException: ServiceUnavailableException;
     $unknown?: never;
   }
 
@@ -3081,6 +3264,7 @@ export namespace ResponseStream {
     validationException?: never;
     throttlingException?: never;
     modelTimeoutException?: never;
+    serviceUnavailableException?: never;
     $unknown: [string, any];
   }
 
@@ -3091,6 +3275,7 @@ export namespace ResponseStream {
     validationException: (value: ValidationException) => T;
     throttlingException: (value: ThrottlingException) => T;
     modelTimeoutException: (value: ModelTimeoutException) => T;
+    serviceUnavailableException: (value: ServiceUnavailableException) => T;
     _: (name: string, value: any) => T;
   }
 
@@ -3103,6 +3288,8 @@ export namespace ResponseStream {
     if (value.validationException !== undefined) return visitor.validationException(value.validationException);
     if (value.throttlingException !== undefined) return visitor.throttlingException(value.throttlingException);
     if (value.modelTimeoutException !== undefined) return visitor.modelTimeoutException(value.modelTimeoutException);
+    if (value.serviceUnavailableException !== undefined)
+      return visitor.serviceUnavailableException(value.serviceUnavailableException);
     return visitor._(value.$unknown[0], value.$unknown[1]);
   };
 }
@@ -3138,6 +3325,8 @@ export const ConverseStreamOutputFilterSensitiveLog = (obj: ConverseStreamOutput
   if (obj.modelStreamErrorException !== undefined) return { modelStreamErrorException: obj.modelStreamErrorException };
   if (obj.validationException !== undefined) return { validationException: obj.validationException };
   if (obj.throttlingException !== undefined) return { throttlingException: obj.throttlingException };
+  if (obj.serviceUnavailableException !== undefined)
+    return { serviceUnavailableException: obj.serviceUnavailableException };
   if (obj.$unknown !== undefined) return { [obj.$unknown[0]]: "UNKNOWN" };
 };
 
@@ -3193,6 +3382,8 @@ export const ResponseStreamFilterSensitiveLog = (obj: ResponseStream): any => {
   if (obj.validationException !== undefined) return { validationException: obj.validationException };
   if (obj.throttlingException !== undefined) return { throttlingException: obj.throttlingException };
   if (obj.modelTimeoutException !== undefined) return { modelTimeoutException: obj.modelTimeoutException };
+  if (obj.serviceUnavailableException !== undefined)
+    return { serviceUnavailableException: obj.serviceUnavailableException };
   if (obj.$unknown !== undefined) return { [obj.$unknown[0]]: "UNKNOWN" };
 };
 

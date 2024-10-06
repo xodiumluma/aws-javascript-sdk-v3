@@ -29,7 +29,7 @@ export interface DescribeStaleSecurityGroupsCommandOutput extends DescribeStaleS
 
 /**
  * <p>Describes the stale security group rules for security groups in a specified VPC.
- *           Rules are stale when they reference a deleted security group in the same VPC or peered VPC. Rules can also be stale if they reference a security group in a peer VPC for which the VPC peering connection has
+ *           Rules are stale when they reference a deleted security group in a peered VPC. Rules can also be stale if they reference a security group in a peer VPC for which the VPC peering connection has
  *           been deleted.</p>
  * @example
  * Use a bare-bones client and the command you need to make an API call.
@@ -66,12 +66,12 @@ export interface DescribeStaleSecurityGroupsCommandOutput extends DescribeStaleS
  * //           UserIdGroupPairs: [ // UserIdGroupPairSet
  * //             { // UserIdGroupPair
  * //               Description: "STRING_VALUE",
- * //               GroupId: "STRING_VALUE",
- * //               GroupName: "STRING_VALUE",
- * //               PeeringStatus: "STRING_VALUE",
  * //               UserId: "STRING_VALUE",
+ * //               GroupName: "STRING_VALUE",
+ * //               GroupId: "STRING_VALUE",
  * //               VpcId: "STRING_VALUE",
  * //               VpcPeeringConnectionId: "STRING_VALUE",
+ * //               PeeringStatus: "STRING_VALUE",
  * //             },
  * //           ],
  * //         },
@@ -90,12 +90,12 @@ export interface DescribeStaleSecurityGroupsCommandOutput extends DescribeStaleS
  * //           UserIdGroupPairs: [
  * //             {
  * //               Description: "STRING_VALUE",
- * //               GroupId: "STRING_VALUE",
- * //               GroupName: "STRING_VALUE",
- * //               PeeringStatus: "STRING_VALUE",
  * //               UserId: "STRING_VALUE",
+ * //               GroupName: "STRING_VALUE",
+ * //               GroupId: "STRING_VALUE",
  * //               VpcId: "STRING_VALUE",
  * //               VpcPeeringConnectionId: "STRING_VALUE",
+ * //               PeeringStatus: "STRING_VALUE",
  * //             },
  * //           ],
  * //         },
@@ -126,9 +126,7 @@ export class DescribeStaleSecurityGroupsCommand extends $Command
     ServiceInputTypes,
     ServiceOutputTypes
   >()
-  .ep({
-    ...commonParams,
-  })
+  .ep(commonParams)
   .m(function (this: any, Command: any, cs: any, config: EC2ClientResolvedConfig, o: any) {
     return [
       getSerdePlugin(config, this.serialize, this.deserialize),
@@ -140,4 +138,16 @@ export class DescribeStaleSecurityGroupsCommand extends $Command
   .f(void 0, void 0)
   .ser(se_DescribeStaleSecurityGroupsCommand)
   .de(de_DescribeStaleSecurityGroupsCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: DescribeStaleSecurityGroupsRequest;
+      output: DescribeStaleSecurityGroupsResult;
+    };
+    sdk: {
+      input: DescribeStaleSecurityGroupsCommandInput;
+      output: DescribeStaleSecurityGroupsCommandOutput;
+    };
+  };
+}

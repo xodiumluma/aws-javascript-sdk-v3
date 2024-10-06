@@ -44,7 +44,7 @@ export interface CancelImportTaskCommandOutput extends CancelImportTaskOutput, _
  * //   graphId: "STRING_VALUE",
  * //   taskId: "STRING_VALUE", // required
  * //   source: "STRING_VALUE", // required
- * //   format: "CSV" || "OPEN_CYPHER",
+ * //   format: "CSV" || "OPEN_CYPHER" || "NTRIPLES",
  * //   roleArn: "STRING_VALUE", // required
  * //   status: "INITIALIZING" || "EXPORTING" || "ANALYZING_DATA" || "IMPORTING" || "REPROVISIONING" || "ROLLING_BACK" || "SUCCEEDED" || "FAILED" || "CANCELLING" || "CANCELLED", // required
  * // };
@@ -100,4 +100,16 @@ export class CancelImportTaskCommand extends $Command
   .f(void 0, void 0)
   .ser(se_CancelImportTaskCommand)
   .de(de_CancelImportTaskCommand)
-  .build() {}
+  .build() {
+  /** @internal type navigation helper, not in runtime. */
+  protected declare static __types: {
+    api: {
+      input: CancelImportTaskInput;
+      output: CancelImportTaskOutput;
+    };
+    sdk: {
+      input: CancelImportTaskCommandInput;
+      output: CancelImportTaskCommandOutput;
+    };
+  };
+}
